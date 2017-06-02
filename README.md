@@ -23,3 +23,5 @@ Also you can configure other searching parameters and run it. If some searching 
 will receive goods from each pages **aliexpress.com**.
 # Config
 System config is **Config.ini** file. Change it if need.
+# Notice
+You can download only **_Result** folder for using Windows application.
