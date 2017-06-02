@@ -21,3 +21,5 @@ There is exist two type of fields: searcher for aliexpress and searcher in insid
 In searching fields for aliexpress you set common texts. If you need search results fron other texts you can separate all text with '**;**'
 Also you can configure other searching parameters and run it. If some searching text  is already in cache then system will read all goods from local cache-file otherwise
 will receive goods from each pages **aliexpress.com**.
+# Config
+System config is **Config.ini** file. Change it if need.
