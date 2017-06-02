@@ -15,9 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServiceInstaller", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{94F1915A-6FDC-4985-B3C5-E3DEB92A2D30}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\Console_view.png = ..\..\Console_view.png
+		Console_view.png = Console_view.png
 		README.md = README.md
-		..\..\Web_view.png = ..\..\Web_view.png
+		Web_view.png = Web_view.png
 	EndProjectSection
 EndProject
 Global
