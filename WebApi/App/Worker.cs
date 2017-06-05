@@ -166,7 +166,7 @@ namespace WebApi.App
                 var list = new List<Searcher>(aliEngineArray.Count);
                 foreach (var aliEngine in aliEngineArray)
                 {
-                    Searcher s = Searchers?.FirstOrDefault(a => a.AliEngine == aliEngine);
+                    var s = Searchers?.FirstOrDefault(a => a.AliEngine == aliEngine);
                     if (s == null)
                     {
                         //from cache
@@ -192,7 +192,7 @@ namespace WebApi.App
         {
             try
             {
-                foreach (var s in Searchers) //fot statistics
+                foreach (var s in Searchers) //first start for statistics
                 {
                     if (s.CountItems == null)//!+todo when pause than next s.Start 
                         s.Start(isOneCycle: true);
@@ -213,10 +213,7 @@ namespace WebApi.App
                 if (Searchers != null)
                 {
                     foreach (var s in Searchers)
-                    {
                         s.Stop();
-                        CacheSearcher(s);
-                    }
                 }
             }
             catch (Exception ex) { Catch.Set(ex); }
