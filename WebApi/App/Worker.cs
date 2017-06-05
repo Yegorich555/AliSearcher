@@ -229,7 +229,7 @@ namespace WebApi.App
             {
                 if (!Config.Pathes.WriteAllow)
                     return;
-                if (Config.CacheTime < 1 || item == null)
+                if (Config.CacheTime < 1 || item == null || item.Goods.IsEmpty())
                     return;
                 if (!Directory.Exists(Config.Pathes.Cache))
                     Directory.CreateDirectory(Config.Pathes.Cache);
