@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Entity\AliEngine.cs" />
     <Compile Include="Entity\ExceptionCatch.cs" />
+    <Compile Include="Entity\FindStruct.cs" />
     <Compile Include="Entity\GeneralExtensions.cs" />
     <Compile Include="Entity\Goods.cs" />
     <Compile Include="Entity\HtmlResponseResult.cs" />

@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin.FileSystems;
+﻿using Microsoft.Owin.Cors;
+using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
 using Newtonsoft.Json.Serialization;
 using Owin;
@@ -17,8 +18,9 @@ namespace WebApi.App_Start
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             RouteConfig.RegisterRoutes(config.Routes);
+            appBuilder.UseCors(CorsOptions.AllowAll);
             appBuilder.UseWebApi(config);
-
+   
             if (Debugger.IsAttached)          
             {
                 var path = Config.Pathes.App;

@@ -149,7 +149,7 @@ namespace WebApi.App
         public static string BaseAddress { get => "http://localhost:" + BasePort; }
         public static int BasePort { get; private set; } = 8080;
         public static bool AdminRights { get; private set; }
-
+        //public static List<CookieChrome> Cookies { get; set; }
 
     }
 }

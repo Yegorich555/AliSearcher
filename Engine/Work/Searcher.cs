@@ -273,13 +273,14 @@ namespace Engine.Work
                 if (cPage >= CountPages)
                     waitItems = CountItems - Goods.Count - ItemsPerPage * n;
 
-                var url = Url + cPage;
+                //var url = Url + cPage;
+                var url = AliEngine.SetUrlPage(cPage); // todo
                 t[n] = Task<ParseHtmlResult>.Run(() =>
                 {
                     var response = GetResponse(url);
                     if (response.Html.IsEmpty())
                     {
-                        ExceptionCatch.Set("Error get response from " + url + ". Status code " + (int)response.StatusCode +" ("+ response.StatusCode + ")");
+                        ExceptionCatch.Set("Error get response from " + url + ". Status code " + (int)response.StatusCode + " (" + response.StatusCode + ")");
                         //while (!Paused)
                         //{
                         //    Thread.Sleep(5000);
@@ -488,44 +489,5 @@ namespace Engine.Work
         #endregion
 
         #endregion
-    }
-
-    internal static class Extensions
-    {
-        public static FindStruct FindValue(this string html,
-            string searchText,
-            int startIndex,
-            int endIndex,
-            string endText = "\"",
-            int indexAdd = 1)
-        {
-            var indexOf = html.IndexOfRange(searchText, startIndex, endIndex);
-            if (indexOf < 0)
-                return new FindStruct(null, startIndex);
-
-            startIndex = html.IndexOf(searchText, startIndex) + searchText.Length + indexAdd;
-            var lastIndex = html.IndexOf(endText, startIndex);
-            var str = html.Substring(startIndex, lastIndex - startIndex);
-            return new FindStruct(str, ++lastIndex);
-        }
-    }
-
-    internal struct FindStruct
-    {
-        public FindStruct(string text, int startIndex)
-        {
-            Text = text;
-            StartIndex = startIndex;
-            NotOk = false;
-        }
-        public string Text { get; set; }
-        public int StartIndex { get; set; }
-        public bool NotOk { get; set; }
-
-
-        public override string ToString()
-        {
-            return StartIndex.ToString() + "; " + Text;
-        }
     }
 }

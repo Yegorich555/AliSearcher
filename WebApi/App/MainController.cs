@@ -13,7 +13,7 @@ namespace WebApi.Controllers
 {
     public class MainController : ApiController
     {
-        Worker worker { get; } = Worker.Instance;
+        Worker Worker { get; } = Worker.Instance;
 
         [HttpGet]
         [ActionName("GetView")]
@@ -29,7 +29,7 @@ namespace WebApi.Controllers
         [ActionName("GetLastValues")]
         public object LastValues()
         {
-            var model = worker.LastSearchModel;
+            var model = Worker.LastSearchModel;
             return new
             {
                 Model = model,
@@ -44,8 +44,8 @@ namespace WebApi.Controllers
             if (model == null || string.IsNullOrWhiteSpace(model.AliSearchText))
                 return null;
 
-            worker.Search(model);
-            return SearchStatus(worker.LastSearchModel);
+            Worker.Search(model);
+            return SearchStatus(Worker.LastSearchModel);
         }
 
         const int pageSize = 48;
@@ -53,7 +53,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var searchStatusItems = GetStatusSearch(worker.Searchers);
+                var searchStatusItems = GetStatusSearch(Worker.Searchers);
                 var item = searchStatusItems?.FirstOrDefault(a => !a.IsCanceled);
                 bool cancelled = item == null;
 
@@ -67,7 +67,7 @@ namespace WebApi.Controllers
                         model.Page = 1;
 
                     //sort by second properties
-                    goods = worker.ListGoods
+                    goods = Worker.ListGoods
                             .MaxPrice(model.ResMaxPrice)
                             .MinPrice(model.ResMinPrice)
                             .WhereMaxQuantity(model.MaxQuantity)
@@ -144,6 +144,26 @@ namespace WebApi.Controllers
             }
 
             return list;
+        }
+
+        [HttpPost]
+        [ActionName("SetCookies")]
+        public bool SetCookies(List<CookieChrome> cookies)
+        {
+            //var cookies = ActionContext.Request.Headers.GetCookies();
+            if (cookies == null || cookies.Count < 1 || cookies[0]?.Name == null)
+                return false;
+            try
+            {
+                Worker.SetCookies(cookies);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Catch.Set(ex);
+                return false;
+            }
+
         }
     }
 }
