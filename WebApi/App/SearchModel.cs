@@ -11,9 +11,9 @@ namespace WebApi.App
         public List<string> AliSearchHist { get; set; } = new List<string>();
         public SubFloat? AliMinPrice { get; set; }
         public SubFloat? AliMaxPrice { get; set; }
-        public string Currency { get; set; }
-        public string ShipCountry { get; set; }
-
+        public string Currency { get; set; } = "USD";
+        public string ShipCountry { get; set; } = "BY";
+                  
         public string ResSearchText { get; set; }
         public string ResExcludeText { get; set; }
         public SubFloat? ResMinPrice { get; set; }
@@ -22,6 +22,8 @@ namespace WebApi.App
         public int? MaxQuantity { get; set; }
         public int? MinOrders { get; set; }
         public SubFloat? MinRating { get; set; }
+        public string Url { get; set; } //for custom search
+
 
         [JsonIgnore]
         public int Page { get; set; } = 1;
@@ -29,6 +31,8 @@ namespace WebApi.App
         internal bool IsEqualByAli(SearchModel value)
         {
             if (value == null)
+                return false;
+            if (!Url.IsEqual(value.Url))
                 return false;
             //compare price
             if (AliMinPrice != value.AliMinPrice)
@@ -63,7 +67,8 @@ namespace WebApi.App
             if ((object)v1 == null || (object)v2 == null)
                 return true;
 
-            return v1.AliMaxPrice != v2.AliMaxPrice ||
+            return !v1.Url.IsEqual(v2.Url) ||
+                   v1.AliMaxPrice != v2.AliMaxPrice ||
                    v1.AliMinPrice != v2.AliMinPrice ||
                    v1.ResMinPrice != v2.ResMinPrice ||
                    v1.ResMaxPrice != v2.ResMaxPrice ||

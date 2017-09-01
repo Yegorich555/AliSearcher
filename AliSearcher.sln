@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{E2A1F2DA-E5B4-4666-A495-F1AB24C6E215}"
 EndProject
@@ -12,6 +12,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsService", "WindowsService\WindowsService.csproj", "{7CC44132-6EE9-441C-973C-4471F5F0D404}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServiceInstaller", "WindowsServiceInstaller\WindowsServiceInstaller.csproj", "{E00E6FEB-6937-46A0-A099-34311D5329CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{94F1915A-6FDC-4985-B3C5-E3DEB92A2D30}"
+	ProjectSection(SolutionItems) = preProject
+		Console_view.png = Console_view.png
+		README.md = README.md
+		Web_view.png = Web_view.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

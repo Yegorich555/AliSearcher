@@ -15,18 +15,23 @@ namespace Engine.Entity
                 SearchText = SearchText,
                 ShipCountry = ShipCountry,
                 SortType = SortType,
-                Currency = Currency
+                Currency = Currency,
+                CustomUrl = CustomUrl
             };
             return tmp;
         }
 
-        [Name("minPrice")]
+        const string _minPrice = "minPrice";
+        const string _maxPrice = "maxPrice";
+        const string _searchText = "SearchText";
+
+        [Name(_minPrice)]
         public SubFloat? MinPrice { get; set; } = new SubFloat(0);
 
-        [Name("maxPrice")]
+        [Name(_maxPrice)]
         public SubFloat? MaxPrice { get; set; } = new SubFloat(20);
 
-        [Name("SearchText")]
+        [Name(_searchText)]
         public string SearchText { get; set; } = "led strip 5060";
 
         [Name("ShipCountry")]
@@ -37,14 +42,45 @@ namespace Engine.Entity
 
         public string Currency { get; set; } = "USD";
 
+        string currentUrl;
+
+        string customUrl;
+        public string CustomUrl
+        {
+            get
+            {
+                return customUrl;
+            }
+            set
+            {
+                if (!value.IsEmpty())
+                {
+                    value = value.ReplaceBetween(_minPrice, "&", null);
+                    value = value.ReplaceBetween(_maxPrice, "&", null);
+                    customUrl = value; //for first SerUrlPage
+                    value = SetUrlPage(1);
+                    SearchText = value.FindValue(_searchText, 0, -1, "&").Text;
+                }
+                customUrl = value;
+            }
+        }
+
+        CookieContainer cookies;
         public CookieContainer Cookies
         {
             get
             {
-                var container = new CookieContainer();
-                container.Add(new Cookie("aep_usuc_f", "region=" + ShipCountry.ToStringNull() + "&site=glo&b_locale=en_US&c_tp=" + Currency.ToStringNull(), "/", ".aliexpress.com"));
-                container.Add(new Cookie("intl_locale", "en_US", "/", ".aliexpress.com"));
-                return container;
+                if (cookies == null)
+                {
+                    cookies = new CookieContainer();
+                    cookies.Add(new Cookie("aep_usuc_f", "region=" + ShipCountry.ToStringNull() + "&site=glo&b_locale=en_US&c_tp=" + Currency.ToStringNull(), "/", ".aliexpress.com"));
+                    cookies.Add(new Cookie("intl_locale", "en_US", "/", ".aliexpress.com"));
+                }
+                return cookies;
+            }
+            set
+            {
+                cookies = value;
             }
         }
 
@@ -55,7 +91,8 @@ namespace Engine.Entity
             if ((object)v1 == null || (object)v2 == null)
                 return false;
 
-            return v1.SearchText.IsEqual(v2.SearchText) &&
+            return v1.CustomUrl.IsEqual(v2.CustomUrl) &&
+                   v1.SearchText.IsEqual(v2.SearchText) &&
                    v1.Currency.IsEqual(v2.Currency) &&
                    v1.ShipCountry.IsEqual(v2.ShipCountry) &&
                    v1.MinPrice == v2.MinPrice &&
@@ -82,6 +119,7 @@ namespace Engine.Entity
         {
             var str = new StringBuilder();
             const string sep = "; ";
+            str.Append(CustomUrl); str.Append(sep);
             str.Append(SearchText); str.Append(sep);
             str.Append(MinPrice.ToString()); str.Append(sep);
             str.Append(MaxPrice.ToString()); str.Append(sep);
@@ -91,29 +129,65 @@ namespace Engine.Entity
             return str.ToString();
         }
 
+        public string SetUrlPage(int pageNumber)
+        {
+            if (currentUrl.IsEmpty())
+                ToUrl();
+            if (!CustomUrl.IsEmpty())
+                return currentUrl.ReplaceBetween("{", "}", pageNumber);
+            else
+                return currentUrl + pageNumber;
+
+        }
+
         public string ToUrl(SubFloat? shiftedMinValue = null)
         {
-            var str = new StringBuilder(@"https://www.aliexpress.com/wholesale?site=glo&tc=af&g=y");
-            //var str = new StringBuilder(@"https://www.aliexpress.com/wholesale?tc=af&g=y");
-            foreach (var prop in GetType().GetProperties())
+            var str = new StringBuilder();
+            if (!CustomUrl.IsEmpty())
             {
-                var attrs = prop.GetCustomAttributes(typeof(NameAttribute), false);
-                if (attrs.Length < 1)
-                    continue;
-                var attr = attrs[0] as NameAttribute;
-                str.Append("&");
-                str.Append(attr.Name);
-                str.Append("=");
-                object value;
+                str.Append(CustomUrl);
+                if (MinPrice.HasValue && MinPrice.Value != 0)
+                {
+                    str.Append("&");
+                    str.Append(_minPrice);
+                    str.Append("=");
+                    str.Append(MinPrice);
+                }
 
-                if (shiftedMinValue != null && attr.Name.IsEqual("minPrice"))
-                    value = shiftedMinValue;
-                else
-                    value = prop.GetValue(this);
-                str.Append(value.ToStringNull());
+                if (MaxPrice.HasValue && MaxPrice.Value != 0)
+                {
+                    str.Append("&");
+                    str.Append(_maxPrice);
+                    str.Append("=");
+                    str.Append(MaxPrice);
+                }
             }
-            str.Append("&page=");
-            return str.ToString();
+            else
+            {
+                str.Append(@"https://www.aliexpress.com/wholesale?site=glo&tc=af&g=y");
+                //var str = new StringBuilder(@"https://www.aliexpress.com/wholesale?tc=af&g=y");
+                foreach (var prop in GetType().GetProperties())
+                {
+                    var attrs = prop.GetCustomAttributes(typeof(NameAttribute), false);
+                    if (attrs.Length < 1)
+                        continue;
+                    var attr = attrs[0] as NameAttribute;
+                    str.Append("&");
+                    str.Append(attr.Name);
+                    str.Append("=");
+                    object value;
+
+                    if (shiftedMinValue != null && attr.Name.IsEqual(_minPrice))
+                        value = shiftedMinValue;
+                    else
+                        value = prop.GetValue(this);
+                    str.Append(value.ToStringNull());
+                }
+                str.Append("&page=");
+            }
+
+            currentUrl = str.ToString();
+            return currentUrl;
         }
 
     }

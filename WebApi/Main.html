@@ -79,6 +79,7 @@
             </div>
             <input autofocus type="text" class="form-control" ng-model="vm.sm.aliSearchText" placeholder='Search text in aliexpress.com, for example "led strip; led 5060"' uib-typeahead="s for s in vm.sm.aliSearchHist | filter:$viewValue | limitTo:20" typeahead-popup-template-url="thPopup.html"
                 typeahead-focus-on-select="false" typeahead-focus-first="false">
+            <input type="text" class="form-control" ng-model="vm.sm.url" placeholder='url for custom search'>
 
             <table class="table" ng-show="vm.searchResult">
                 <thead class="search-header">

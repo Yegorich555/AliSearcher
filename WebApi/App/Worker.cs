@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace WebApi.App
@@ -96,9 +97,46 @@ namespace WebApi.App
                         yield return item;
             }
         }
+
+        CookieContainer cookies;
+        public CookieContainer Cookies
+        {
+            get
+            {
+                if (cookies == null)
+                    cookies = InitCookies();
+                return cookies;
+            }
+            private set
+            {
+                cookies = value;
+            }
+        }
+
         #endregion
 
         #region Methods
+
+        public void SetCookies(IEnumerable<CookieChrome> collection)
+        {
+            try
+            {
+                var container = InitCookies();
+                foreach (var item in collection)
+                    container.Add(new Cookie(item.Name, item.Value, item.Path, item.Domain));
+
+                Cookies = container;
+            }
+            catch (Exception ex) { Catch.Set(ex); }
+        }
+
+        public CookieContainer InitCookies()
+        {
+            var container = new CookieContainer();
+            container.Add(new Cookie("aep_usuc_f", "region=" + LastSearchModel.ShipCountry.ToStringNull() + "&site=glo&b_locale=en_US&c_tp=" + LastSearchModel.Currency.ToStringNull(), "/", ".aliexpress.com"));
+            container.Add(new Cookie("intl_locale", "en_US", "/", ".aliexpress.com"));
+            return container;
+        }
 
         public static void Init()
         {
@@ -132,18 +170,31 @@ namespace WebApi.App
                 //var saveModel
                 if (Searchers == null || !model.IsEqualByAli(LastSearchModel))
                 {
-                    var arr = model.AliSearchText.SplitExt(';');
+                    IEnumerable<string> arr;
+                    var customUrl = !model.Url.IsEmpty();
+                    if (!customUrl)
+                        arr = model.AliSearchText.SplitExt(';');
+                    else
+                        arr = model.Url.SplitExt(';');
+
                     var list = new List<AliEngine>();
                     foreach (var item in arr)
                     {
                         var aliEngine = new AliEngine
                         {
-                            SearchText = item.Trim(),
                             Currency = model.Currency,
                             MinPrice = model.AliMinPrice,
                             MaxPrice = model.AliMaxPrice,
-                            ShipCountry = model.ShipCountry
+                            ShipCountry = model.ShipCountry,
+                            Cookies = Cookies
                         };
+
+                        var tmp = item.Trim();
+                        if (customUrl)
+                            aliEngine.CustomUrl = tmp;
+                        else
+                            aliEngine.SearchText = tmp;
+
                         list.Add(aliEngine);
                     }
 
@@ -166,7 +217,7 @@ namespace WebApi.App
                 var list = new List<Searcher>(aliEngineArray.Count);
                 foreach (var aliEngine in aliEngineArray)
                 {
-                    Searcher s = Searchers?.FirstOrDefault(a => a.AliEngine == aliEngine);
+                    var s = Searchers?.FirstOrDefault(a => a.AliEngine == aliEngine);
                     if (s == null)
                     {
                         //from cache
@@ -192,7 +243,7 @@ namespace WebApi.App
         {
             try
             {
-                foreach (var s in Searchers) //fot statistics
+                foreach (var s in Searchers) //first start for statistics
                 {
                     if (s.CountItems == null)//!+todo when pause than next s.Start 
                         s.Start(isOneCycle: true);
@@ -213,10 +264,7 @@ namespace WebApi.App
                 if (Searchers != null)
                 {
                     foreach (var s in Searchers)
-                    {
                         s.Stop();
-                        CacheSearcher(s);
-                    }
                 }
             }
             catch (Exception ex) { Catch.Set(ex); }
@@ -229,7 +277,7 @@ namespace WebApi.App
             {
                 if (!Config.Pathes.WriteAllow)
                     return;
-                if (Config.CacheTime < 1 || item == null)
+                if (Config.CacheTime < 1 || item == null || item.Goods.IsEmpty())
                     return;
                 if (!Directory.Exists(Config.Pathes.Cache))
                     Directory.CreateDirectory(Config.Pathes.Cache);
