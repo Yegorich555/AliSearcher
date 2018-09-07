@@ -26,7 +26,7 @@
         function getLast() {
             return http({
                 method: 'GET',
-                url: 'http://localhost:8080/api/main/getLastValues'
+                url: '/api/main/getLastValues'
             })
         }
 
@@ -40,7 +40,7 @@
         function search(searchModel) {
             return http({
                 method: 'get',
-                url: 'http://localhost:8080/api/main/search',
+                url: '/api/main/search',
                 params: searchModel
             })
         }
@@ -48,7 +48,7 @@
         function getException() {
             return http({
                     method: 'get',
-                    url: 'http://localhost:8080/api/admin/lastException'
+                    url: '/api/admin/lastException'
                 })
                 .then();
         }
@@ -57,7 +57,7 @@
             $rootScope.serverException = null;
             return http({
                 method: 'post',
-                url: 'http://localhost:8080/api/admin/resetException'
+                url: '/api/admin/resetException'
             });
         }
 
