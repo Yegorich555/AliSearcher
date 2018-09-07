@@ -115,7 +115,7 @@
                         <td>
                             <span ng-hide="s.isSummary || vm.canceled">{{s.pageLoadSpeed}} ms</span>
                         </td>
-                        <td><span ng-hide="vm.canceled">{{s.lostTime}}<span></td>
+                        <td><span ng-hide="vm.canceled">{{s.lostTime}}</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -194,7 +194,7 @@
                 <div class="store-info">
                     <a href="{{good.storeFeedbackLink}}">
                         <div uib-tooltip="Rating: {{good.storeRating}}; Feedback {{good.storePositiveFeedback}}%">
-                            <span class="glyphicon" ng-repeat="i in [1,2,3,4,5]" ng-class="good.storeRating>i ? 'glyphicon-star' :'glyphicon-star-empty'"></span>
+                            <span class="glyphicon" ng-repeat="i in [1,2,3,4,5]" ng-class="good.storeRating>=i ? 'glyphicon-star' :'glyphicon-star-empty'"></span>
                         </div>
                         <!--<span uib-rating ng-model="good.storeRating" max="5.0" read-only="true"></span> -->
                         <div>{{good.storeFeedbackCount}} | Orders {{good.storeOrderCount}}</div>
