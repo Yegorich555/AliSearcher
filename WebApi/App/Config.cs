@@ -147,7 +147,7 @@ namespace WebApi.App
         public static bool AutoClearOldCache { get; private set; } = true;
         public static bool AutoContinueSearches { get; private set; }
         public static string BaseAddress { get => "http://localhost:" + BasePort; }
-        public static int BasePort { get; private set; } = 8080;
+        public static int BasePort { get; private set; } = 8090;
         public static bool AdminRights { get; private set; }
         //public static List<CookieChrome> Cookies { get; set; }
 

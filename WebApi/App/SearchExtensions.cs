@@ -46,15 +46,15 @@ namespace WebApi.App
                 case SortModes.MinToMaxPieces:
                     return collection.OrderBy(a => a.UnitPrice).ThenBy(a => a.PriceTotal.ValueMin);
                 case SortModes.MaxToMinPieces:
-                    return collection.OrderByDescending(a => a.UnitPrice).ThenByDescending(a => a.PriceTotal.ValueMin);
+                    return collection.OrderByDescending(a => a.UnitPrice).ThenBy(a => a.PriceTotal.ValueMin);
                 case SortModes.SellerRatingMinToMax:
                     return collection.OrderBy(a => a.StoreRating).ThenBy(a => a.PriceTotal.ValueMin);
                 case SortModes.SellerRatingMaxToMin:
-                    return collection.OrderByDescending(a => a.StoreRating).ThenByDescending(a => a.PriceTotal.ValueMin);
+                    return collection.OrderByDescending(a => a.StoreRating).ThenBy(a => a.PriceTotal.ValueMin);
                 case SortModes.NumOrdersMinToMax:
                     return collection.OrderBy(a => a.StoreOrderCount).ThenBy(a => a.PriceTotal.ValueMin);
                 case SortModes.NumOrdersMaxToMin:
-                    return collection.OrderByDescending(a => a.StoreOrderCount).ThenByDescending(a => a.PriceTotal.ValueMin);
+                    return collection.OrderByDescending(a => a.StoreOrderCount).ThenBy(a => a.PriceTotal.ValueMin);
             }
             return collection;
         }

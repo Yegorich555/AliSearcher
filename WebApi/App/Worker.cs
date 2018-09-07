@@ -133,7 +133,7 @@ namespace WebApi.App
         public CookieContainer InitCookies()
         {
             var container = new CookieContainer();
-            container.Add(new Cookie("aep_usuc_f", "region=" + LastSearchModel.ShipCountry.ToStringNull() + "&site=glo&b_locale=en_US&c_tp=" + LastSearchModel.Currency.ToStringNull(), "/", ".aliexpress.com"));
+            container.Add(new Cookie("aep_usuc_f", "region=" + LastSearchModel?.ShipCountry.ToStringNull() + "&site=glo&b_locale=en_US&c_tp=" + LastSearchModel?.Currency.ToStringNull(), "/", ".aliexpress.com"));
             container.Add(new Cookie("intl_locale", "en_US", "/", ".aliexpress.com"));
             return container;
         }
