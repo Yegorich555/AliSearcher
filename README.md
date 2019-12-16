@@ -1,5 +1,7 @@
 # AliSearcher
 Search engine and WebApi for extension of searcher Aliexpress.com
+# Issues
+Aliexpress pages were changed and in this case html-parser doesn't work. I hope I'll found enough time and fix this soon.
 # Why?
 Search engine in aliexpress is very bad. For example you want find cheapest goods (microcontroller 'atmega8' for example) with max quainty no more than 20 pieces. 
 In aliexpress.com for it you need make next steps:
