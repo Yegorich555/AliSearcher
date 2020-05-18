@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "AliSearcherCookies",
+  "description": "Extension for AliSearcher",
+  "version": "1.0",
+  "icons": {
+    "19": "icon.png"
+  },
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "scripts": ["start.js", "main.js", "jquery-3.1.1.min.js"]
+  },
+  "permissions": ["cookies", "tabs", "http://*/*", "https://*/*", "webRequest"]
+}

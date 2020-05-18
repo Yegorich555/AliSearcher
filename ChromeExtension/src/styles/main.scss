@@ -1,0 +1,46 @@
+$basicTextColor: var(--basicTextColor, #3b3e45);
+$basicBackColor: var(--basicBackColor, #e6e6e6);
+$focusFrameColor: var(--focusFrameColor, #f18a1c);
+$borderRadius: 0;
+
+#aliSearcher {
+  font: 14px "OpenSans", Arial, sans-serif;
+  color: $basicTextColor;
+  background: $basicBackColor;
+
+  ::placeholder {
+    text-overflow: ellipsis;
+  }
+
+  *:focus {
+    outline: 2px solid $focusFrameColor;
+    outline-offset: -2px;
+  }
+
+  input,
+  textarea,
+  button {
+    color: inherit;
+    font: inherit;
+    border-radius: $borderRadius;
+    padding: 0;
+    margin: 0;
+  }
+
+  button,
+  [tabIndex="0"] {
+    cursor: pointer;
+  }
+
+  button[disabled],
+  input[disabled] {
+    cursor: default;
+    cursor: not-allowed;
+  }
+
+  input[placeholder]:not([type="textarea"]) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
