@@ -1,4 +1,4 @@
-import "./styles/main.scss";
+import "./styles/content.scss";
 import ReactDom from "react-dom";
 import React, { Component } from "react";
 
@@ -6,7 +6,7 @@ class AppContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      errorCode: null,
+      errorCode: null
     };
   }
 
@@ -26,7 +26,7 @@ class AppContainer extends Component {
     );
   }
 }
-let el = document.createElement("div");
+const el = document.createElement("div");
 el.id = "aliSearcher";
 document.body.prepend(el);
 

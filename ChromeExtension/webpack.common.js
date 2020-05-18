@@ -34,7 +34,10 @@ module.exports = function(env, argv) {
       children: false // disable console.info for node_modules/*
     },
     // entryPoint for webpack; it can be object with key-value pairs for multibuild (https://webpack.js.org/concepts/entry-points/)
-    entry: path.resolve(srcPath, "main.jsx"),
+    entry: {
+      content: path.resolve(srcPath, "content.jsx"),
+      background: path.resolve(srcPath, "background.js")
+    },
     output: {
       path: destPath,
       filename: "[name].js",
@@ -198,15 +201,7 @@ module.exports = function(env, argv) {
       new HtmlWebpackPlugin({
         // it creates *.html with injecting js and css into template
         template: path.resolve(srcPath, "index.html"),
-        minify: isDevMode
-          ? false
-          : {
-              removeComments: true,
-              collapseWhitespace: true,
-              removeAttributeQuotes: true,
-              collapseBooleanAttributes: true,
-              removeScriptTypeAttributes: true
-            }
+        minify: false
       }),
       new MiniCssExtractPlugin({
         // it extracts css-code from js into splitted file

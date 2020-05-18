@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "AliSearcherCookies",
-  "description": "Extension for AliSearcher",
+  "name": "AliSearcher",
+  "description": "Rich searcher for aliexpress",
   "version": "1.0",
   "icons": {
     "19": "icon.png"
@@ -10,7 +10,8 @@
     "default_icon": "icon.png"
   },
   "background": {
-    "scripts": ["start.js", "main.js", "jquery-3.1.1.min.js"]
+    "scripts": ["background.js"]
   },
-  "permissions": ["cookies", "tabs", "http://*/*", "https://*/*", "webRequest"]
+  "permissions": ["tabs", "\u003Call_urls>", "unlimitedStorage"],
+  "web_accessible_resources": ["*.css"]
 }

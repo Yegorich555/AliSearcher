@@ -18,11 +18,11 @@ module.exports = {
   env: {
     es6: true,
     node: true,
-    browser: true
+    browser: true,
+    webextensions: true
   },
   globals: {
-    DEV_SERVER: true,
-    API_DOMAIN: true
+    DEV_SERVER: true
   },
   plugins: ["json", "prettier"],
   rules: {
@@ -61,7 +61,7 @@ module.exports = {
   settings: {
     "import/resolver": {
       alias: {
-        map: Object.keys(pathAlias).map(key => [key, pathAlias[key]]),
+        map: Object.keys(pathAlias).map((key) => [key, pathAlias[key]]),
         extensions: [".ts", ".js", ".jsx", ".tsx", ".json"]
       }
     }
