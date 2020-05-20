@@ -1,6 +1,4 @@
-const messages = {
-  TOGGLE_PANEL: 1
-};
+import messages from "./messages";
 
 function handleExtensionClick(tab) {
   chrome.tabs.insertCSS(tab.id, { file: "content.css" });
@@ -15,5 +13,15 @@ function handleExtensionClick(tab) {
     }
   );
 }
+
+// function t(t) {
+//   chrome.browserAction.setPopup({ tabId: e.id, popup: t });
+// }
+// function r(t) {
+//   chrome.browserAction.setIcon({
+//     path: chrome.extension.getURL(t),
+//     tabId: e.id
+//   });
+// }
 
 chrome.browserAction.onClicked.addListener(handleExtensionClick);

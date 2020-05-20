@@ -36,6 +36,7 @@ module.exports = {
     "react/jsx-props-no-spreading": 0,
     "react/jsx-curly-newline": 0, //it conflicts with prettier
     "react/jsx-wrap-multilines": ["error", { arrow: true, return: true, declaration: true }],
+    "react/button-has-type": 0,
     "no-underscore-dangle": 0,
     "no-unused-expressions": ["error", { allowShortCircuit: true }],
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",

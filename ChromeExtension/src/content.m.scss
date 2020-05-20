@@ -1,0 +1,23 @@
+.content {
+  position: relative;
+}
+
+.btnPanel {
+  display: flex;
+  > * {
+    padding: 8px;
+    + * {
+      border-left: 1px solid gray;
+    }
+  }
+
+  .btnMax {
+  }
+
+  .btnClose {
+  }
+}
+
+.error {
+  color: red;
+}
