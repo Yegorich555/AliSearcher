@@ -38,10 +38,18 @@ class AppContainer extends Component<any, any> {
   };
 
   handleSearchClick = () => {
-    search.go(
-      window.location.href
-      // "https://www.aliexpress.com/af/hc%25252d12.html?trafficChannel=af&d=y&CatId=0&SearchText=hc-12&ltype=affiliate&SortType=price_asc&minPrice=2&maxPrice=20&page=1&groupsort=1"
-    );
+    search
+      .go()
+      .then(items => console.warn("items", items))
+      .catch(err => console.error(err));
+  };
+
+  componentDidMount = () => {
+    DEV_SERVER &&
+      search
+        .go()
+        .then(items => console.warn("items", items))
+        .catch(err => console.error(err));
   };
 
   renderContent = () => {
@@ -64,9 +72,7 @@ class AppContainer extends Component<any, any> {
             Close
           </button>
         </div>
-        {this.state.error ? (
-          <div className={styles.error}>Got error</div>
-        ) : null}
+        {this.state.error ? <div className={styles.error}>Got error</div> : null}
         {this.state.isMax ? this.renderContent() : null}
       </>
     );
@@ -83,11 +89,12 @@ document.body.prepend(elEntry);
 ReactDom.render(<AppContainer />, elEntry);
 ReactDom.render(<AppContainer />, elEntry);
 
-chrome.runtime.onMessage.addListener(message => {
-  switch (message) {
-    case messages.TOGGLE_PANEL:
-      toggle();
-      break;
-    default:
-  }
-});
+chrome.runtime.onMessage &&
+  chrome.runtime.onMessage.addListener(message => {
+    switch (message) {
+      case messages.TOGGLE_PANEL:
+        toggle();
+        break;
+      default:
+    }
+  });
