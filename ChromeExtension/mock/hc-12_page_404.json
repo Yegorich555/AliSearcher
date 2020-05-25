@@ -1,0 +1,356 @@
+{
+  "abtest": {
+    "searchProductListPageSize40": false,
+    "searchProductListPageSize50": false,
+    "affiliateToMainSearch": false,
+    "searchProductListPageSize60": false
+  },
+  "breadCrumb": {
+    "keywords": "hc 12",
+    "links": [
+      {
+        "text": "All Categories",
+        "url": "//www.aliexpress.com/all-wholesale-products.html"
+      }
+    ],
+    "resultCount": "201",
+    "resultText": "Results"
+  },
+  "exposureParams": {
+    "attribute": "",
+    "category_id": "0",
+    "deliver": "all",
+    "enKeyword": "hc 12",
+    "i18n_language": "hc 12",
+    "isTranslated": "true",
+    "keyword": "hc 12",
+    "localKeyword": "hc 12",
+    "sale_items": "f",
+    "ship_to": "BY",
+    "sort_by": "default",
+    "top_cate": "400103",
+    "top_rate_tab": "f"
+  },
+  "leafCategoryIds": "400103,200215223,14190101,200000415",
+  "p4pObjectConfig": {
+    "bcfg": {
+      "allPid": "801_0000_0102",
+      "currencyType": "USD",
+      "urlPrefix": "//hz.cobra.aliexpress.com/p4pforlist.html",
+      "dcatid": "400103,200215223,14190101,200000415",
+      "dl": "r",
+      "pid": "807_0000_0108",
+      "discountPid": "801_0000_0112",
+      "popularPid": "801_0000_0122",
+      "pageType": "affiliate_keyword",
+      "popularViewMorePid": "801_0000_1123",
+      "keyword": "hc 12",
+      "hotViewMorePid": "801_0000_1124",
+      "offset": 15,
+      "p4pId": "1408f05e-d9a5-432a-b87b-31653b9c979d",
+      "mt": "e",
+      "ip": "93.171.160.69",
+      "categoryBrowse": "0",
+      "count": 5,
+      "allViewMorePid": "801_0000_1121",
+      "site": "glo",
+      "hotPid": "801_0000_0132",
+      "pageIndex": 5,
+      "discountViewMorePid": "801_0000_1122"
+    }
+  },
+  "premium": false,
+  "refineAttribute": [
+    {
+      "attributeId": 351,
+      "attributeName": "Type",
+      "attributeValues": [
+        { "attributeValueId": 4286, "attributeValueName": "Voltage Regulator" },
+        { "attributeValueId": 4287, "attributeValueName": "Logic ICs" },
+        { "attributeValueId": 4289, "attributeValueName": "Drive IC" },
+        { "attributeValueId": 4, "attributeValueName": "Other" }
+      ],
+      "attributeValuesDisplayStyle": "normal",
+      "attributeValuesSupportMultiSelect": true,
+      "enforceTop": false,
+      "selected": false
+    },
+    {
+      "attributeId": 577,
+      "attributeName": "Application",
+      "attributeValues": [
+        { "attributeValueId": 132, "attributeValueName": "Alarm" },
+        { "attributeValueId": 265, "attributeValueName": "Computer" },
+        { "attributeValueId": 268, "attributeValueName": "TV" },
+        { "attributeValueId": 1281, "attributeValueName": "Mobile Phone" },
+        { "attributeValueId": 1366, "attributeValueName": "Speaker" },
+        { "attributeValueId": 4290, "attributeValueName": "Electric Toy" },
+        { "attributeValueId": 4, "attributeValueName": "Other" }
+      ],
+      "attributeValuesDisplayStyle": "normal",
+      "attributeValuesSupportMultiSelect": true,
+      "enforceTop": false,
+      "selected": false
+    }
+  ],
+  "refineBrand": {
+    "attributeId": 2,
+    "attributeName": "Brands",
+    "attributeValuesDisplayStyle": "two_column",
+    "attributeValuesSupportMultiSelect": false,
+    "brandAttributeValues": [
+      {
+        "brandId": 201609832,
+        "brandValueIds": "201995823,201680831,201609832,201996845",
+        "imagePath": "//ae01.alicdn.com/kf/HTB1aARMQFXXXXXwaXXX760XFXXX3.png",
+        "name": "KKMOON"
+      },
+      {
+        "brandId": 203490020,
+        "brandValueIds": "203490020",
+        "imagePath": "//ae01.alicdn.com/kf/HTB12QCiRxjaK1RjSZKzq6xVwXXaT.jpg_Q50.jpg",
+        "name": "Aideepen"
+      }
+    ]
+  },
+  "refineCategory": [
+    {
+      "categoryEnName": "Electronic Components & Supplies",
+      "categoryId": 502,
+      "categoryName": "Electronic Components & Supplies",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=502",
+      "childCategories": [
+        {
+          "categoryEnName": "Integrated Circuits",
+          "categoryId": 400103,
+          "categoryName": "Integrated Circuits",
+          "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=400103",
+          "leafCategory": true
+        }
+      ],
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Toys & Hobbies",
+      "categoryId": 26,
+      "categoryName": "Toys & Hobbies",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=26",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Beauty & Health",
+      "categoryId": 66,
+      "categoryName": "Beauty & Health",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=66",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Consumer Electronics",
+      "categoryId": 44,
+      "categoryName": "Consumer Electronics",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=44",
+      "childCategories": [
+        {
+          "categoryEnName": "Replacement Parts & Accessories",
+          "categoryId": 200215223,
+          "categoryName": "Replacement Parts & Accessories",
+          "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=200215223",
+          "leafCategory": true
+        }
+      ],
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Apparel Accessories",
+      "categoryId": 205776616,
+      "categoryName": "Apparel Accessories",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=205776616",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Home Improvement",
+      "categoryId": 13,
+      "categoryName": "Home Improvement",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=13",
+      "childCategories": [
+        {
+          "categoryEnName": "Connectors",
+          "categoryId": 14190101,
+          "categoryName": "Connectors",
+          "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=14190101",
+          "leafCategory": true
+        }
+      ],
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Automobiles & Motorcycles",
+      "categoryId": 34,
+      "categoryName": "Automobiles & Motorcycles",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=34",
+      "childCategories": [
+        {
+          "categoryEnName": "Theft Protection",
+          "categoryId": 200000415,
+          "categoryName": "Theft Protection",
+          "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=200000415",
+          "leafCategory": true
+        }
+      ],
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Lights & Lighting",
+      "categoryId": 39,
+      "categoryName": "Lights & Lighting",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=39",
+      "childCategories": [
+        {
+          "categoryEnName": "Connectors",
+          "categoryId": 200003079,
+          "categoryName": "Connectors",
+          "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=200003079",
+          "leafCategory": true
+        }
+      ],
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Tools",
+      "categoryId": 1420,
+      "categoryName": "Tools",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=1420",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Sports & Entertainment",
+      "categoryId": 18,
+      "categoryName": "Sports & Entertainment",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=18",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Cellphones & Telecommunications",
+      "categoryId": 509,
+      "categoryName": "Cellphones & Telecommunications",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=509",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Jewelry & Accessories",
+      "categoryId": 1509,
+      "categoryName": "Jewelry & Accessories",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=1509",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Computer & Office",
+      "categoryId": 7,
+      "categoryName": "Computer & Office",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=7",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Home & Garden",
+      "categoryId": 15,
+      "categoryName": "Home & Garden",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=15",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Luggage & Bags",
+      "categoryId": 1524,
+      "categoryName": "Luggage & Bags",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=1524",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Shoes",
+      "categoryId": 322,
+      "categoryName": "Shoes",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=322",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Security & Protection",
+      "categoryId": 30,
+      "categoryName": "Security & Protection",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=30",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Women's Clothing",
+      "categoryId": 100003109,
+      "categoryName": "Women's Clothing",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=100003109",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Hair Extensions & Wigs",
+      "categoryId": 200002489,
+      "categoryName": "Hair Extensions & Wigs",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=200002489",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Education & Office Supplies",
+      "categoryId": 21,
+      "categoryName": "Education & Office Supplies",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=21",
+      "leafCategory": false
+    },
+    {
+      "categoryEnName": "Mother & Kids",
+      "categoryId": 1501,
+      "categoryName": "Mother & Kids",
+      "categoryUrl": "//www.aliexpress.com/w/wholesale-hc-12.html?CatId=1501",
+      "leafCategory": false
+    }
+  ],
+  "refineFeatureSwitch": [
+    {
+      "selected": false,
+      "switchTag": { "displayTagType": "text", "tagText": "Free Shipping" },
+      "switchType": "free_shipping_switch"
+    },
+    {
+      "selected": false,
+      "switchTag": {
+        "displayTagType": "image_text",
+        "tagImgHeight": 12,
+        "tagImgUrl": "//ae01.alicdn.com/kf/HTB1W4orR7voK1RjSZFw763iCFXal.png",
+        "tagImgWidth": 64,
+        "tagText": "& Up"
+      },
+      "switchType": "user_favorite_switch"
+    }
+  ],
+  "refineOrder": ["refineCategory", "refineBrand", "refineAttribute"],
+  "refinePrice": {},
+  "refineShipFromCountries": [
+    { "countryCode": "TR", "countryName": "Turkey", "selected": false },
+    { "countryCode": "CN", "countryName": "China", "selected": false }
+  ],
+  "resultCount": 201,
+  "resultSizePerPage": 60,
+  "resultType": "zero_result",
+  "success": true,
+  "topCategoryId": "400103",
+  "translateResult": {
+    "recognizedLanguage": "en",
+    "keywords": "hc 12",
+    "success": "true",
+    "translateText": "hc 12"
+  },
+  "translateStatData": {
+    "aeButtonType": "success",
+    "aeClickBehavior": "",
+    "aeIsmember": "",
+    "aeObjectType": "tr_b=hc 12||tr_f=hc 12||return_code=success",
+    "aeObjectValue": "5",
+    "aePageArea": "lang_r=||lang_f=en",
+    "aePageType": "ggtra_c",
+    "aeProjectId": "15203",
+    "aeUserId": ""
+  }
+}
