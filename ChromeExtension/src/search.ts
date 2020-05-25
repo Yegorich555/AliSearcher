@@ -2,14 +2,35 @@ import axios from "axios";
 import log from "./log";
 // import Product from "./product";
 
+// provide variables between isolated scoped
+function getGlobals(...params: string[]): Promise<any> {
+  const el = document.createElement("script");
+  el.textContent = `
+  var event = document.createEvent("CustomEvent"); 
+  event.initCustomEvent("AliCustomEvent", true, true, {"passback": {${params.join(",")} }});
+  window.dispatchEvent(event); `;
+  (document.head || document.documentElement).appendChild(el);
+  el.parentNode.removeChild(el);
+  // now listen for the message
+  return new Promise(resolve => {
+    const callback = e => {
+      const check = e.detail.passback;
+      window.removeEventListener("AliCustomEvent", callback);
+      resolve(check);
+    };
+    window.addEventListener("AliCustomEvent", callback);
+  });
+}
+
 class SearchClass {
   go = async (): Promise<any> => {
-    const { items, resultCount: totalItems } = window.runParams || {};
+    const globals = await getGlobals("runConfigs", "runParams");
+    const { items, resultCount: totalItems } = globals.runParams || {};
     if (!totalItems || !items || !items.length) {
       throw new Error("No items. Please use default Aliexpress search at first time");
     }
 
-    const href = window.runConfigs?.searchAjaxUrl || window.location.href;
+    const href = globals.runConfigs?.searchAjaxUrl || window.location.href;
     const curUrl = new URL(href.replace(/^\/\//, "https://"), window.location.origin);
     if (!curUrl.searchParams.has("SearchText") && !curUrl.searchParams.has("page")) {
       throw new Error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
