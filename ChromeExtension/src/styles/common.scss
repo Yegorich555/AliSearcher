@@ -23,8 +23,10 @@ $borderRadius: 0;
     color: inherit;
     font: inherit;
     border-radius: $borderRadius;
-    padding: 0;
+    padding: 4px;
     margin: 0;
+    background: none;
+    border: none;
   }
 
   button,

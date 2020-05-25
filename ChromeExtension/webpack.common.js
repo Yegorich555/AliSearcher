@@ -34,10 +34,14 @@ module.exports = function(env, argv) {
       children: false // disable console.info for node_modules/*
     },
     // entryPoint for webpack; it can be object with key-value pairs for multibuild (https://webpack.js.org/concepts/entry-points/)
-    entry: {
-      content: path.resolve(srcPath, "content.jsx"),
-      background: path.resolve(srcPath, "background.js")
-    },
+    entry: isDevServer
+      ? {
+          content: path.resolve(srcPath, "content.tsx")
+        }
+      : {
+          content: path.resolve(srcPath, "content.tsx"),
+          background: path.resolve(srcPath, "background.js")
+        },
     output: {
       path: destPath,
       filename: "[name].js",
@@ -194,7 +198,8 @@ module.exports = function(env, argv) {
         "process.env": {
           NODE_ENV: JSON.stringify(mode),
           BASE_URL: '"/"'
-        }
+        },
+        DEV_SERVER: isDevServer
       }),
       new CaseSensitivePathsPlugin(), // it fixes bugs between OS in caseSensitivePaths (since Windows isn't CaseSensitive but Linux is)
       new FriendlyErrorsWebpackPlugin(), // it provides user-friendly errors from webpack (since the last has ugly useless bug-report)
