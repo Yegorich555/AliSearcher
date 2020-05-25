@@ -2,7 +2,7 @@ import axios from "axios";
 import log from "./log";
 // import Product from "./product";
 
-// provide variables between isolated scoped
+// provide variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
   const el = document.createElement("script");
   el.textContent = `
@@ -11,7 +11,7 @@ function getGlobals(...params: string[]): Promise<any> {
   window.dispatchEvent(event); `;
   (document.head || document.documentElement).appendChild(el);
   el.parentNode.removeChild(el);
-  // now listen for the message
+
   return new Promise(resolve => {
     const callback = e => {
       const check = e.detail.passback;
@@ -38,7 +38,7 @@ class SearchClass {
 
     const pageNum = Number.parseInt(curUrl.searchParams.get("page"), 10) || 1;
     const pageSize = items.length;
-    const pages = Math.round((totalItems + pageSize) / pageSize);
+    const pages = Math.ceil(totalItems / pageSize);
 
     const products = [...items];
     for (let i = 1; i <= pages; ++i) {
