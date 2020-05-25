@@ -26,6 +26,7 @@ module.exports = {
   },
   plugins: ["json", "prettier"],
   rules: {
+    "lines-between-class-members": "off",
     "prettier/prettier": ["error"],
     "react/destructuring-assignment": 0,
     // "react/jsx-max-props-per-line": [1, { maximum: 1 }], //it doesn't work with prettier, you can remove prettier from rules: 'prettier/prettier'...
@@ -65,7 +66,7 @@ module.exports = {
   settings: {
     "import/resolver": {
       alias: {
-        map: Object.keys(pathAlias).map((key) => [key, pathAlias[key]]),
+        map: Object.keys(pathAlias).map(key => [key, pathAlias[key]]),
         extensions: [".ts", ".js", ".jsx", ".tsx", ".json"]
       }
     }

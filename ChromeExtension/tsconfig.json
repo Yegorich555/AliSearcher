@@ -8,6 +8,7 @@
       //this is should be sync with aliases in webpack
       "@/*": ["src/*"]
     },
+    "target": "ESNext",
     "jsx": "react",
     "allowJs": true,
     "outDir": "",

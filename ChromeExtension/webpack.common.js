@@ -27,6 +27,7 @@ module.exports = function(env, argv) {
 
   enableSourceMap = argv.sourceMap != null; // it adds source map for css and js
   module.exports.enableSourceMap = enableSourceMap;
+  module.exports.isDevServer = isDevServer;
 
   process.env.NODE_ENV = mode; // it resolves issues in postcss.config.js (since Define plugin is loaded only after reading config-files)
   const result = {
@@ -159,10 +160,7 @@ module.exports = function(env, argv) {
                     ? (loaderContext, _localIdentName, localName, options) => {
                         // it simplifies classNames fo debug purpose
                         const request = path
-                          .relative(
-                            options.context || "",
-                            loaderContext.resourcePath
-                          )
+                          .relative(options.context || "", loaderContext.resourcePath)
                           .replace(`src${path.sep}`, "")
                           .replace(".module.css", "")
                           .replace(".module.scss", "")
