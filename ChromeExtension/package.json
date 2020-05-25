@@ -21,7 +21,7 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
-    "@types/chrome": "0.0.112",
+    "@types/chrome": "0.0.114",
     "@types/react": "^16.9.35",
     "autoprefixer": "^9.8.0",
     "babel-eslint": "^10.1.0",
@@ -75,6 +75,7 @@
     "webpack-mock-server": "^1.0.5"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
