@@ -3,7 +3,7 @@ import ReactDom from "react-dom";
 import React, { Component } from "react";
 import "./styles/common.scss";
 import styles from "./content.m.scss";
-import messages from "./messages";
+import messages from "./entities/messages";
 import search from "./search";
 
 const elEntry = document.createElement("div");

@@ -1,5 +1,5 @@
 import axios from "axios";
-import log from "./log";
+import log from "./entities/log";
 // import Product from "./product";
 
 // provide variables between isolated scopes

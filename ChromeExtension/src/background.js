@@ -1,17 +1,13 @@
-import messages from "./messages";
+import messages from "./entities/messages";
 
 function handleExtensionClick(tab) {
   chrome.tabs.insertCSS(tab.id, { file: "content.css" });
   chrome.tabs.executeScript(tab.id, { file: "chunk-vendors.js" });
-  chrome.tabs.executeScript(
-    tab.id,
-    { file: "content.js" },
-    function tabCallback() {
-      chrome.tabs.sendMessage(tab.id, {
-        type: messages.TOGGLE_PANEL
-      });
-    }
-  );
+  chrome.tabs.executeScript(tab.id, { file: "content.js" }, function tabCallback() {
+    chrome.tabs.sendMessage(tab.id, {
+      type: messages.TOGGLE_PANEL
+    });
+  });
 }
 
 // function t(t) {
