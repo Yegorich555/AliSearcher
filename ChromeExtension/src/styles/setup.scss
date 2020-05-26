@@ -22,7 +22,7 @@ $iconCheckColor: var(--iconCheckColor, #48a484);
 
 $_basicActiveColor: var(--genericColor, #26608e);
 
-$btnFont: "OpenSans";
+$btnFont: "Arial";
 $btnBorder: 1px solid var(--btnBorderColor, $_basicActiveColor);
 
 $primaryBtnTextColor: var(--primaryBtnTextColor, white);
@@ -60,6 +60,9 @@ $modalOverlayBackColor: var(--modalOverlayBackColor, black);
 $modalBtnCloseColor: var(--modalBtnCloseColor, #8f8e8e);
 $modalBtnCloseHoverColor: var(--modalBtnCloseHoverColor, black);
 
+$tableHeaderBackColor: var(--tableHeaderBackColor, $_basicActiveColor);
+$tableHeaderTextColor: var(--tableHeaderTextColor, $basicTextColor);
+
 @mixin iconBefore($name) {
   &:before {
     font-family: "#{$icomoon-font-family}" !important;
@@ -80,7 +83,7 @@ $modalBtnCloseHoverColor: var(--modalBtnCloseHoverColor, black);
   }
 }
 
-@mixin boxShadow($padding: 36px) {
+@mixin boxShadow($padding: 16px) {
   background: $basicBackColor2;
   padding: $padding;
   border: solid 1px $basicBorderColor;

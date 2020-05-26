@@ -134,7 +134,7 @@ class BaseForm extends Component {
   render() {
     return (
       <form
-        className={this.props.className}
+        className={styles.form}
         onSubmit={this.onSubmit}
         ref={el => {
           this.elForm = el;

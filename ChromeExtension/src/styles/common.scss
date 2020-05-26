@@ -1,10 +1,11 @@
 @import "fontface.scss";
 
 #aliSearcher {
-  font: 14px "OpenSans", Arial, sans-serif;
+  font: 14px Arial, sans-serif;
   color: $basicTextColor;
   background: $basicBackColor;
 }
+
 ::placeholder {
   text-overflow: ellipsis;
 }

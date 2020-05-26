@@ -27,6 +27,7 @@ module.exports = {
   },
   plugins: ["json", "prettier"],
   rules: {
+    "react/jsx-one-expression-per-line": "off",
     "jsx-a11y/control-has-associated-label": "off",
     "lines-between-class-members": "off",
     "prettier/prettier": ["error"],

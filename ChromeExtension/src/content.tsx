@@ -6,6 +6,9 @@ import styles from "./content.scss";
 import messages from "./entities/messages";
 import search from "./search";
 import BaseForm from "./elements/baseForm";
+// eslint-disable-next-line no-unused-vars
+import SearchResult from "./entities/searchResult";
+import TableSearchResults from "./components/tableSearchResults";
 
 const elEntry = document.createElement("div");
 function toggle() {
@@ -17,7 +20,8 @@ let container: AppContainer; // create new class only for intellisense
 class AppContainer extends Component<any, any> {
   state = {
     isMax: !!DEV_SERVER,
-    error: null
+    error: null,
+    searchResults: [] as SearchResult[]
   };
 
   constructor(props) {
@@ -31,6 +35,7 @@ class AppContainer extends Component<any, any> {
         .go()
         .then(items => console.warn("items", items))
         .catch(err => console.error(err));
+    // todo update searchResults here
   }
 
   componentDidCatch() {
@@ -55,9 +60,15 @@ class AppContainer extends Component<any, any> {
 
   renderBody = () => {
     return (
-      //
       <div className={styles.container}>
-        <BaseForm onValidSubmit={this.handleSearchClick} textSubmit="SEARCH" />
+        <BaseForm //
+          className={styles.form}
+          onValidSubmit={this.handleSearchClick}
+          textSubmit="SEARCH"
+        >
+          <TableSearchResults items={this.state.searchResults} />
+          <h2>Search in results</h2>
+        </BaseForm>
       </div>
     );
   };
