@@ -24,6 +24,14 @@ class AppContainer extends Component<any, any> {
     container = this;
   }
 
+  componentDidMount() {
+    DEV_SERVER &&
+      search
+        .go()
+        .then(items => console.warn("items", items))
+        .catch(err => console.error(err));
+  }
+
   componentDidCatch() {
     this.setState({ error: true });
   }
@@ -42,14 +50,6 @@ class AppContainer extends Component<any, any> {
       .go()
       .then(items => console.warn("items", items))
       .catch(err => console.error(err));
-  };
-
-  componentDidMount = () => {
-    DEV_SERVER &&
-      search
-        .go()
-        .then(items => console.warn("items", items))
-        .catch(err => console.error(err));
   };
 
   renderContent = () => {

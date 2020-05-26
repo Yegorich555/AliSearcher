@@ -4,18 +4,17 @@ import log from "./entities/log";
 
 // provide variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
-  const el = document.createElement("script");
-  el.textContent = `
-  var event = document.createEvent("CustomEvent"); 
-  event.initCustomEvent("AliCustomEvent", true, true, {"passback": {${params.join(",")} }});
-  window.dispatchEvent(event); `;
-  (document.head || document.documentElement).appendChild(el);
-  el.parentNode.removeChild(el);
-
   return new Promise(resolve => {
+    const el = document.createElement("script");
+    el.textContent = `
+        const event = document.createEvent("CustomEvent"); 
+        event.initCustomEvent("AliCustomEvent", true, true, {"passback": {${params.join(",")} }});
+        setTimeout(()=>window.dispatchEvent(event), 1) `;
+    (document.head || document.documentElement).appendChild(el);
     const callback = e => {
       const check = e.detail.passback;
       window.removeEventListener("AliCustomEvent", callback);
+      el.parentNode.removeChild(el);
       resolve(check);
     };
     window.addEventListener("AliCustomEvent", callback);
