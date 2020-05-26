@@ -1,6 +1,7 @@
 import axios from "axios";
 import log from "./entities/log";
-// import Product from "./product";
+import Product from "./entities/product";
+import { fixUrl } from "./helpers";
 
 // provide variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
@@ -30,7 +31,7 @@ class SearchClass {
     }
 
     const href = globals.runConfigs?.searchAjaxUrl || window.location.href;
-    const curUrl = new URL(href.replace(/^\/\//, "https://"), window.location.origin);
+    const curUrl = new URL(fixUrl(href), window.location.origin);
     // searchAjaxUrl isn't updated by user interaction only if the page reloads - in this case we need get url only to API part and params get from href
     curUrl.search = window.location.search;
     if (!curUrl.searchParams.has("SearchText") && !curUrl.searchParams.has("page")) {
@@ -41,23 +42,24 @@ class SearchClass {
     const pageSize = items.length;
     const pages = Math.ceil(totalItems / pageSize);
 
-    const products = [...items];
+    const products = (items as object[]).map(v => new Product(v));
     for (let i = 1; i <= pages; ++i) {
       if (i === pageNum) {
         // eslint-disable-next-line no-continue
         continue;
       }
       curUrl.searchParams.set("page", i.toString());
-      console.warn(curUrl);
+      log.warn(curUrl); // todo log.info
       // eslint-disable-next-line no-await-in-loop
       const res = await axios.get(curUrl.href);
-      const { items: gotItems } = typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
+      const { items: gotItems }: { items: object[] } =
+        typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
       if (!gotItems) {
         log.error("No items\n", res);
         throw new Error("No items");
         // todo pause here
       } else {
-        products.push(...gotItems);
+        gotItems.forEach(v => products.push(new Product(v)));
       }
     }
 
