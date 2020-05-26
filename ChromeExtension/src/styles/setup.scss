@@ -1,0 +1,16 @@
+@import "~fonts/icomoon/variables.scss";
+
+$basicTextColor: var(--basicTextColor, #3b3e45);
+$basicBackColor: var(--basicBackColor, #e6e6e6);
+$focusFrameColor: var(--focusFrameColor, #f18a1c);
+$borderRadius: 0;
+
+@mixin iconBefore($name) {
+  &:before {
+    font-family: "#{$icomoon-font-family}" !important;
+    content: $name;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

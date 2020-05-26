@@ -1,7 +1,4 @@
-$basicTextColor: var(--basicTextColor, #3b3e45);
-$basicBackColor: var(--basicBackColor, #e6e6e6);
-$focusFrameColor: var(--focusFrameColor, #f18a1c);
-$borderRadius: 0;
+@import "fontface.scss";
 
 #aliSearcher {
   font: 14px "OpenSans", Arial, sans-serif;

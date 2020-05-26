@@ -1,0 +1,68 @@
+@font-face {
+  font-family: 'icomoon';
+  src:
+    url('fonts/icomoon.ttf?e4p1pk') format('truetype'),
+    url('fonts/icomoon.woff?e4p1pk') format('woff'),
+    url('fonts/icomoon.svg?e4p1pk#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-dropdown:before {
+  content: "\e90c";
+}
+.icon-add:before {
+  content: "\e90b";
+  color: #8f8e8e;
+}
+.icon-edit:before {
+  content: "\e909";
+  color: #8f8e8e;
+}
+.icon-delete:before {
+  content: "\e90a";
+  color: #8f8e8e;
+}
+.icon-fullscreen:before {
+  content: "\e907";
+}
+.icon-refresh:before {
+  content: "\e912";
+}
+.icon-save:before {
+  content: "\e90f";
+}
+.icon-eye-off:before {
+  content: "\e910";
+}
+.icon-eye:before {
+  content: "\e911";
+}
+.icon-close:before {
+  content: "\e908";
+}
+.icon-notification:before {
+  content: "\ea08";
+}
+.icon-check:before {
+  content: "\e903";
+}
+.icon-star-full:before {
+  content: "\e900";
+}

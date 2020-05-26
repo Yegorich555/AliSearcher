@@ -12,9 +12,11 @@
   }
 
   .btnMax {
+    @include iconBefore($icon-fullscreen);
   }
 
   .btnClose {
+    @include iconBefore($icon-close);
   }
 }
 
