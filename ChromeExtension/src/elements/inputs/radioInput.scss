@@ -1,0 +1,39 @@
+$borderSize: 2px;
+$radioSize: 20px;
+
+.radioGroup {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  &[disabled] {
+    background: $inputDisabledBackColor;
+  }
+
+  > div {
+    padding: 3px 8px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    > div {
+      position: relative;
+      margin: 4px;
+      margin-left: 4px;
+      height: $radioSize;
+      width: $radioSize;
+      border: $borderSize solid $primaryBtnBackColor;
+      border-radius: 50%;
+    }
+    &[aria-checked="true"] > div::before {
+      position: absolute;
+      transform: translateX(-50%);
+      left: 50%;
+      top: $borderSize;
+      display: block;
+      content: " ";
+      height: $radioSize - $borderSize * 4;
+      width: $radioSize - $borderSize * 4;
+      background: $primaryBtnBackColor;
+      border-radius: 50%;
+    }
+  }
+}

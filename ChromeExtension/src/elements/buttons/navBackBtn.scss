@@ -1,0 +1,14 @@
+.btn {
+  text-decoration: underline;
+  position: relative;
+  padding-left: 34px;
+  @include iconBefore($icon-arrow-back);
+  &:before {
+    text-decoration: none;
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+  }
+}

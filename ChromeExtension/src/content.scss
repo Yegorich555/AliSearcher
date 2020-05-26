@@ -1,11 +1,15 @@
-.content {
+.container {
   position: relative;
+  width: 100vw;
+  height: 100vh;
 }
 
 .btnPanel {
   display: flex;
   background: white;
   box-shadow: rgba(100, 115, 130, 0.15) 0 1px 4px 0;
+  max-width: fit-content;
+  margin-left: auto;
   > button {
     color: gray;
     font-size: 20px;

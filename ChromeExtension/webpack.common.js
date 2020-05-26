@@ -155,7 +155,14 @@ module.exports = function(env, argv) {
               loader: "css-loader", // it interprets @import and url() like import/require() and it resolves them (you can use [import *.css] into *.js).
               options: {
                 modules: {
-                  auto: /\.m\.\w+$/, // enable css-modules option for files *.module*.
+                  auto: (function() {
+                    class MyReg extends RegExp {
+                      test(str) {
+                        return !str.includes("styles");
+                      }
+                    }
+                    return new MyReg();
+                  })(), // enable css-modules option for files *.module*.
                   getLocalIdent: isDevMode
                     ? (loaderContext, _localIdentName, localName, options) => {
                         // it simplifies classNames fo debug purpose
@@ -197,7 +204,8 @@ module.exports = function(env, argv) {
           NODE_ENV: JSON.stringify(mode),
           BASE_URL: '"/"'
         },
-        DEV_SERVER: isDevServer
+        DEV_SERVER: isDevServer,
+        DEBUG: isDevServer
       }),
       new CaseSensitivePathsPlugin(), // it fixes bugs between OS in caseSensitivePaths (since Windows isn't CaseSensitive but Linux is)
       new FriendlyErrorsWebpackPlugin(), // it provides user-friendly errors from webpack (since the last has ugly useless bug-report)

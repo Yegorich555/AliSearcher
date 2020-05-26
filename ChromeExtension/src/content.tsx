@@ -2,9 +2,10 @@
 import ReactDom from "react-dom";
 import React, { Component } from "react";
 import "./styles/common.scss";
-import styles from "./content.m.scss";
+import styles from "./content.scss";
 import messages from "./entities/messages";
 import search from "./search";
+import BaseForm from "./elements/baseForm";
 
 const elEntry = document.createElement("div");
 function toggle() {
@@ -15,7 +16,7 @@ let container: AppContainer; // create new class only for intellisense
 
 class AppContainer extends Component<any, any> {
   state = {
-    isMax: true,
+    isMax: !!DEV_SERVER,
     error: null
   };
 
@@ -45,18 +46,18 @@ class AppContainer extends Component<any, any> {
     this.setState({ isMax: !isMax });
   };
 
-  handleSearchClick = () => {
+  handleSearchClick = (model: any) => {
     search
       .go()
       .then(items => console.warn("items", items))
       .catch(err => console.error(err));
   };
 
-  renderContent = () => {
+  renderBody = () => {
     return (
       //
-      <div className={styles.content}>
-        <button onClick={this.handleSearchClick}>Search</button>
+      <div className={styles.container}>
+        <BaseForm onValidSubmit={this.handleSearchClick} textSubmit="SEARCH" />
       </div>
     );
   };
@@ -69,7 +70,7 @@ class AppContainer extends Component<any, any> {
           <button className={styles.btnClose} onClick={toggle} title="Close" />
         </div>
         {this.state.error ? <div className={styles.error}>Got error</div> : null}
-        {this.state.isMax ? this.renderContent() : null}
+        {this.state.isMax ? this.renderBody() : null}
       </>
     );
   }
@@ -80,6 +81,7 @@ elEntry.style.position = "fixed";
 elEntry.style.right = "0px";
 elEntry.style.top = "0px";
 elEntry.style.zIndex = "999";
+elEntry.setAttribute("data-theme", "dark");
 document.body.prepend(elEntry);
 
 ReactDom.render(<AppContainer />, elEntry);

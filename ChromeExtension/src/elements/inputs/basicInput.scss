@@ -1,0 +1,44 @@
+$margin: 4px;
+.control {
+  margin-bottom: 20px;
+  display: block;
+  > fieldset {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    border: 1px solid $inputBorderColor;
+    border-radius: $borderRadius;
+  }
+  input,
+  textarea {
+    padding: 9px 12px;
+    border: none;
+    background-color: $basicBackColor2;
+    width: 100%;
+    &:focus {
+      outline-offset: -1px;
+    }
+  }
+  > span {
+    display: block;
+    margin-bottom: $margin;
+    position: relative;
+  }
+}
+
+.description {
+  font-size: 12px;
+  margin-bottom: $margin;
+}
+
+.errorMessage {
+  color: $errorTextColor;
+}
+
+.required::after {
+  content: "*";
+  font-size: larger;
+  font-weight: bolder;
+  position: absolute;
+  padding-left: 0.2em;
+}

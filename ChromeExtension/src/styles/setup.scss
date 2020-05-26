@@ -1,9 +1,64 @@
 @import "~fonts/icomoon/variables.scss";
+@import "./themes/dark.scss";
 
 $basicTextColor: var(--basicTextColor, #3b3e45);
-$basicBackColor: var(--basicBackColor, #e6e6e6);
+$basicTextDisabledColor: var(--basicTextDisabledColor, #717273);
+$basicBackColor: var(--basicBackColor, #e6e6e6); //color for body background
+$basicBackColor2: var(--basicBackColor2, white); //color for boxes: the header, modal-windows, forms
+$basicBorderColor: var(--basicBorderColor, #cfcfcf); //border color for boxes: the header, modal-windows, forms
+$basicShadow: var(--basicBoxShadow, 0px 2px 4px rgba(0, 0, 0, 0.3)); //shadow for boxes: forms etc.
+
+$inputBorderColor: var(--inputBorderColor, #bdcad9);
+$inputDisabledBackColor: var(--inputDisabledBackColor, #ebebe4);
+$inputIconBackColor: var(--inputIconBackColor, whitesmoke);
+
+$borderRadius: 3px;
 $focusFrameColor: var(--focusFrameColor, #f18a1c);
-$borderRadius: 0;
+$starsColor: var(--starsColor, #f18a1c);
+$errorTextColor: var(--errorTextColor, #b70000);
+$successTextColor: var(--successTextColor, #007522);
+$descriptionTextColor: var(--descriptionTextColor, #3b3e45);
+$iconCheckColor: var(--iconCheckColor, #48a484);
+
+$_basicActiveColor: var(--genericColor, #26608e);
+
+$btnFont: "OpenSans";
+$btnBorder: 1px solid var(--btnBorderColor, $_basicActiveColor);
+
+$primaryBtnTextColor: var(--primaryBtnTextColor, white);
+$primaryBtnBackColor: var(--primaryBtnBackColor, $_basicActiveColor);
+$primaryBtnHoverBackColor: var(--primaryBtnHoverBackColor, #00a5d4);
+$primaryBtnHoverTextColor: var(--primaryBtnHoverTextColor, $primaryBtnTextColor);
+$primaryBtnDisabledTextColor: var(--primaryBtnTextColor, $primaryBtnTextColor);
+$primaryBtnDisabledBackColor: var(--primaryBtnDisabledBackColor, #748390);
+
+$secondaryBtnTextColor: var(--secondaryBtnTextColor, $_basicActiveColor);
+$secondaryBtnBackColor: var(--secondaryBtnBackColor, white);
+$secondaryBtnHoverBackColor: var(--secondaryBtnHoverBackColor, #d1f2fc);
+$secondaryBtnHoverTextColor: var(--secondaryBtnHoverTextColor, $secondaryBtnTextColor);
+
+$warnBtnTextColor: var(--warnBtnTextColor, #272626);
+$warnBtnBackColor: var(--warnBtnBackColor, #f4af0d);
+$warnBtnHoverBackColor: var(--warnBtnHoverBackColor, darken(#f4af0d, 10%));
+$warnBtnHoverTextColor: var(--warnBtnHoverTextColor, white);
+$warnBtnFocusFrameColor: var(--warnBtnFocusFrameColor, #3764b6);
+
+$btnIconColor: var(--btnIconColor, #3b3e45);
+$btnIconHoverColor: var(--btnIconHoverColor, #0080a3);
+$btnIconFocusFrameColor: var(--btnIconFocusFrameColor, $focusFrameColor);
+
+$linkColor: var(--linkColor, $_basicActiveColor);
+$linkHoverColor: var(--linkHoverColor, #0080a3);
+
+$spinnerColor1: var(--spinnerColor1, #00a5d4);
+$spinnerColor2: var(--spinnerColor2, #f3f3f3);
+
+$primaryBtnSpinnerColor1: var(--primaryBtnSpinnerColor1, #00627d); // contrast with $primaryBtnDisabledBackColor
+$primaryBtnSpinnerColor2: var(--primaryBtnSpinnerColor2, #f3f3f3);
+
+$modalOverlayBackColor: var(--modalOverlayBackColor, black);
+$modalBtnCloseColor: var(--modalBtnCloseColor, #8f8e8e);
+$modalBtnCloseHoverColor: var(--modalBtnCloseHoverColor, black);
 
 @mixin iconBefore($name) {
   &:before {
@@ -13,4 +68,22 @@ $borderRadius: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+}
+
+@mixin iconAfter($name) {
+  &:after {
+    font-family: "#{$icomoon-font-family}" !important;
+    content: $name;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@mixin boxShadow($padding: 36px) {
+  background: $basicBackColor2;
+  padding: $padding;
+  border: solid 1px $basicBorderColor;
+  box-shadow: $basicShadow;
+  border-radius: $borderRadius;
 }

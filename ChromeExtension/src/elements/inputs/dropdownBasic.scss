@@ -1,0 +1,47 @@
+$btnOpenSize: 34px;
+
+.btnOpen {
+  color: inherit;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  background: $inputIconBackColor;
+  border: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 1px solid $inputBorderColor;
+  outline-offset: -1px;
+  @include iconBefore($icon-dropdown);
+  width: $btnOpenSize;
+}
+
+.control {
+  fieldset {
+    padding-right: $btnOpenSize;
+    cursor: text;
+  }
+  input {
+    width: calc(100% - 1px); //fix focus-border-overflow
+    &[readonly] {
+      user-select: none;
+      cursor: pointer;
+    }
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.menu {
+  position: absolute;
+  left: 0;
+  z-index: 101;
+  background: $basicBackColor2;
+  border: 1px solid $inputBorderColor;
+  border-radius: $borderRadius;
+  overflow: auto;
+
+  //because of fieldset has 1px-border
+  min-width: calc(100% + 2px);
+  margin: 1px -1px;
+}

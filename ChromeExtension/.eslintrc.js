@@ -11,18 +11,19 @@ module.exports = {
   parserOptions: {
     sourceType: "module",
     ecmaFeatures: {
-      jsx: true,
-    },
+      jsx: true
+    }
   },
   extends: ["airbnb", "prettier"],
   env: {
     es6: true,
     node: true,
     browser: true,
-    webextensions: true,
+    webextensions: true
   },
   globals: {
     DEV_SERVER: true,
+    DEBUG: true
   },
   plugins: ["json", "prettier"],
   rules: {
@@ -60,16 +61,16 @@ module.exports = {
         ignoreUrls: true,
         ignoreStrings: true,
         ignoreTemplateLiterals: true,
-        ignoreRegExpLiterals: true,
-      },
-    ],
+        ignoreRegExpLiterals: true
+      }
+    ]
   },
   settings: {
     "import/resolver": {
       alias: {
-        map: Object.keys(pathAlias).map((key) => [key, pathAlias[key]]),
-        extensions: [".ts", ".js", ".jsx", ".tsx", ".json"],
-      },
-    },
-  },
+        map: Object.keys(pathAlias).map(key => [key, pathAlias[key]]),
+        extensions: [".ts", ".js", ".jsx", ".tsx", ".json"]
+      }
+    }
+  }
 };

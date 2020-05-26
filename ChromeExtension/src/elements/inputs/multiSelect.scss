@@ -1,0 +1,49 @@
+$btnOpenSize: 34px;
+
+.control {
+  fieldset {
+    padding-left: 12px;
+    min-inline-size: auto; //fix 'text overflows parent' for Chrome, Safari, Firefox
+    min-width: 20px; //fix 'text overflows parent' for Edge
+  }
+  [contenteditable="true"] {
+    display: inline-block; //fix render-bag with flex for Firefox and Edge
+    cursor: text;
+    min-width: 1em;
+    outline: 0;
+    flex: auto;
+    &:focus {
+      text-overflow: initial;
+    }
+  }
+}
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  > * {
+    cursor: default;
+    display: flex;
+    padding: 9px 8px 9px 0;
+    max-width: 100%;
+    > span {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+
+  .btnRemove {
+    border-radius: 0;
+    position: initial;
+    margin-top: -4px;
+    font-size: x-small;
+    opacity: initial;
+    @include iconBefore($icon-close);
+
+    &:hover {
+      background-color: #ffbdad;
+      opacity: initial;
+    }
+  }
+}
