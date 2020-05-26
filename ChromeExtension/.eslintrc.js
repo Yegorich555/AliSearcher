@@ -26,6 +26,7 @@ module.exports = {
   },
   plugins: ["json", "prettier"],
   rules: {
+    "jsx-a11y/control-has-associated-label": "off",
     "lines-between-class-members": "off",
     "prettier/prettier": ["error"],
     "react/destructuring-assignment": 0,

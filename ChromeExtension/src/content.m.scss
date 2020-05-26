@@ -4,15 +4,23 @@
 
 .btnPanel {
   display: flex;
-  > * {
-    padding: 8px;
-    + * {
-      border-left: 1px solid gray;
+  background: white;
+  box-shadow: rgba(100, 115, 130, 0.15) 0 1px 4px 0;
+  > button {
+    color: gray;
+    font-size: 20px;
+    line-height: 20px;
+    height: 30px;
+    width: 50px;
+    &:hover {
+      color: black;
+      background-color: #adc7ed;
     }
   }
 
   .btnMax {
     @include iconBefore($icon-fullscreen);
+    font-size: 24px;
   }
 
   .btnClose {
