@@ -29,9 +29,10 @@ class SearchClass {
       throw new Error("No items. Please use default Aliexpress search at first time");
     }
 
-    // todo searchAjaxUrl isn't updated by user interaction only if the page reloads - in this case we need get url only to API part and params get from href
     const href = globals.runConfigs?.searchAjaxUrl || window.location.href;
     const curUrl = new URL(href.replace(/^\/\//, "https://"), window.location.origin);
+    // searchAjaxUrl isn't updated by user interaction only if the page reloads - in this case we need get url only to API part and params get from href
+    curUrl.search = window.location.search;
     if (!curUrl.searchParams.has("SearchText") && !curUrl.searchParams.has("page")) {
       throw new Error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
     }
