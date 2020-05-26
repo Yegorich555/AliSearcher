@@ -20,7 +20,7 @@ module.exports = (env, argv) => {
 
   const result = merge(devConfig, {
     devServer: {
-      openPage: "?ltype=affiliate&trafficChannel=af&d=y&CatId=0&SearchText=hc-12&ltype=affiliate&SortType=default",
+      openPage: "?trafficChannel=af&d=y&CatId=0&SearchText=hc-12&ltype=affiliate&SortType=default",
       historyApiFallback: {
         // provide index.html instead of 404:not found error (for SPA app)
         rewrites: [
