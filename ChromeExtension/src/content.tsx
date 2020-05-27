@@ -38,7 +38,7 @@ class AppContainer extends Component<any, any> {
   componentDidMount() {
     DEV_SERVER &&
       search
-        .go()
+        .go({} as SearchModel)
         .then(items => console.warn("items", items))
         .catch(err => console.error(err));
     // todo update searchResults here
@@ -84,7 +84,7 @@ class AppContainer extends Component<any, any> {
             <Dropdown
               name="sort"
               defaultValue={Object.keys(SortTypes)[0]}
-              options={Object.keys(SortTypes).map(key => ({ value: key, text: SortTypes[key] }))}
+              options={Object.keys(SortTypes).map(key => ({ value: key, text: SortTypes[key].text }))}
             />
           </div>
           <div className={styles.inputGroup}>

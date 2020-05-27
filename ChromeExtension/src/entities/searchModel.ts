@@ -1,10 +1,17 @@
 export const SortTypes = {
-  priceMinToMax: "Price: min to max",
-  priceMaxToMin: "Price: max to min",
-  minToMaxPieces: "Pcs: min to max",
-  maxToMinPieces: "Pcs: min to max",
-  numOrdersMaxToMin: "Orders: max to min",
-  numOrdersMinToMax: "Orders: min to max"
+  priceMinToMax: { text: "Price: min to max", param: "price_asc" },
+  priceMaxToMin: { text: "Price: max to min", param: "price_desc" },
+  // minToMaxPieces: {text: "Pcs: min to max"},
+  // maxToMinPieces: {text: "Pcs: min to max"},
+  ordersMaxToMin: { text: "Orders: max to min", param: "total_tranpro_desc" }
+};
+
+export const SearchParams = {
+  text: "SearchText",
+  sort: "SortType",
+  minPrice: "minPrice",
+  maxPrice: "maxPrice",
+  page: "page"
 };
 
 export default class SearchModel {
@@ -16,5 +23,5 @@ export default class SearchModel {
   text?: string;
   textAli?: string;
   exclude?: string;
-  sortType: keyof typeof SortTypes;
+  sort: keyof typeof SortTypes;
 }

@@ -2,8 +2,10 @@ import axios from "axios";
 import log from "./entities/log";
 import Product from "./entities/product";
 import { fixUrl } from "./helpers";
+// eslint-disable-next-line no-unused-vars
+import SearchModel, { SortTypes, SearchParams } from "./entities/searchModel";
 
-// provide variables between isolated scopes
+// provides variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
   return new Promise(resolve => {
     const el = document.createElement("script");
@@ -34,11 +36,17 @@ class SearchClass {
     const curUrl = new URL(fixUrl(href), window.location.origin);
     // searchAjaxUrl isn't updated by user interaction only if the page reloads - in this case we need get url only to API part and params get from href
     curUrl.search = window.location.search;
-    if (!curUrl.searchParams.has("SearchText") && !curUrl.searchParams.has("page")) {
+    if (!curUrl.searchParams.has(SearchParams.text) && !curUrl.searchParams.has("page")) {
       throw new Error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
     }
-
-    // todo useModelHere
+    // todo const searchTexts = model.textAli?.split(/;/g) || [curUrl.searchParams.get(searchParams.text)];
+    // todo smart-cache
+    model.textAli && curUrl.searchParams.set(SearchParams.text, model.textAli);
+    model.minPrice && curUrl.searchParams.set(SearchParams.minPrice, model.minPrice.toString());
+    model.maxPrice && curUrl.searchParams.set(SearchParams.maxPrice, model.maxPrice.toString());
+    model.sort &&
+      SortTypes[model.sort].param &&
+      curUrl.searchParams.set(SearchParams.sort, SortTypes[model.sort].param);
 
     const pageNum = Number.parseInt(curUrl.searchParams.get("page"), 10) || 1;
     const pageSize = items.length;
