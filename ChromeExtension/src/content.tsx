@@ -9,19 +9,25 @@ import BaseForm from "./elements/baseForm";
 // eslint-disable-next-line no-unused-vars
 import SearchResult from "./entities/searchResult";
 import TableSearchResults from "./components/tableSearchResults";
+import TextInput from "./elements/inputs/textInput";
+import NumberInput from "./elements/inputs/numberInput";
+import Dropdown from "./elements/inputs/dropdown";
+// eslint-disable-next-line no-unused-vars
+import SearchModel, { SortTypes } from "./entities/searchModel";
 
 const elEntry = document.createElement("div");
 function toggle() {
   elEntry.hidden = !elEntry.hidden;
 }
 
+// eslint-disable-next-line no-unused-vars
 let container: AppContainer; // create new class only for intellisense
 
 class AppContainer extends Component<any, any> {
   state = {
     isMax: !!DEV_SERVER,
     error: null,
-    searchResults: [] as SearchResult[]
+    searchResults: null as SearchResult[]
   };
 
   constructor(props) {
@@ -51,9 +57,9 @@ class AppContainer extends Component<any, any> {
     this.setState({ isMax: !isMax });
   };
 
-  handleSearchClick = (model: any) => {
+  handleSearchClick = (model: SearchModel) => {
     search
-      .go()
+      .go(model)
       .then(items => console.warn("items", items))
       .catch(err => console.error(err));
   };
@@ -65,9 +71,31 @@ class AppContainer extends Component<any, any> {
           className={styles.form}
           onValidSubmit={this.handleSearchClick}
           textSubmit="SEARCH"
+          // defaultModel={model}
+          footer={this.state.searchResults && <TableSearchResults items={this.state.searchResults} />}
         >
-          <TableSearchResults items={this.state.searchResults} />
-          <h2>Search in results</h2>
+          <div className={styles.inputGroup}>
+            <TextInput name="textAli" placeholder="Search in Aliexpress" />
+          </div>
+          {/* <h2>Search in results</h2> */}
+          <div className={styles.inputGroup}>
+            <NumberInput name="minPrice" placeholder="Min price" />
+            <NumberInput name="maxPrice" placeholder="Max price" />
+            <Dropdown
+              name="sort"
+              defaultValue={Object.keys(SortTypes)[0]}
+              options={Object.keys(SortTypes).map(key => ({ value: key, text: SortTypes[key] }))}
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <NumberInput name="maxLotSize" placeholder="Max lot size" />
+            <NumberInput name="minOrders" placeholder="Min orders" />
+            <NumberInput name="minRating" placeholder="Min rating" />
+          </div>
+          <div className={styles.inputGroup}>
+            <TextInput name="text" placeholder="Search in results" />
+            <TextInput name="exclude" placeholder="Exclude" />
+          </div>
         </BaseForm>
       </div>
     );
@@ -95,7 +123,6 @@ elEntry.style.zIndex = "999";
 elEntry.setAttribute("data-theme", "dark");
 document.body.prepend(elEntry);
 
-ReactDom.render(<AppContainer />, elEntry);
 ReactDom.render(<AppContainer />, elEntry);
 
 chrome.runtime.onMessage &&

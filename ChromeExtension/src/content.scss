@@ -35,3 +35,27 @@
 .error {
   color: red;
 }
+
+.inputGroup {
+  display: flex;
+  > label {
+    > span:first-child {
+      display: none;
+    }
+    margin-bottom: 0;
+    flex: 1 1 30%;
+    + * {
+      margin-left: 10px;
+    }
+    &:nth-child(3) {
+      flex-basis: 40%;
+    }
+  }
+  + .inputGroup {
+    margin-top: 4px;
+  }
+}
+
+.form [type="submit"] {
+  margin-top: 16px;
+}

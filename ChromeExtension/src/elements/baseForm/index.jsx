@@ -134,7 +134,7 @@ class BaseForm extends Component {
   render() {
     return (
       <form
-        className={styles.form}
+        className={[styles.form, this.props.className]}
         onSubmit={this.onSubmit}
         ref={el => {
           this.elForm = el;
@@ -158,6 +158,7 @@ class BaseForm extends Component {
           </PrimaryBtn>
           {this.props.buttons}
         </div>
+        {this.props.footer}
       </form>
     );
   }

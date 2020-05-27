@@ -23,7 +23,7 @@ function getGlobals(...params: string[]): Promise<any> {
 }
 
 class SearchClass {
-  go = async (): Promise<any> => {
+  go = async (model: SearchModel): Promise<any> => {
     const globals = await getGlobals("runConfigs", "runParams");
     const { items, resultCount: totalItems } = globals.runParams || {};
     if (!totalItems || !items || !items.length) {
@@ -37,6 +37,8 @@ class SearchClass {
     if (!curUrl.searchParams.has("SearchText") && !curUrl.searchParams.has("page")) {
       throw new Error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
     }
+
+    // todo useModelHere
 
     const pageNum = Number.parseInt(curUrl.searchParams.get("page"), 10) || 1;
     const pageSize = items.length;

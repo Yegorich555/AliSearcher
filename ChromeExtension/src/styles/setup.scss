@@ -62,6 +62,10 @@ $modalBtnCloseHoverColor: var(--modalBtnCloseHoverColor, black);
 
 $tableHeaderBackColor: var(--tableHeaderBackColor, $_basicActiveColor);
 $tableHeaderTextColor: var(--tableHeaderTextColor, $basicTextColor);
+$tableSelectBackColor: var(--tableSelectBackColor, #aecfea); //color for selected row
+$tableSelectTextColor: var(--tableSelectTextColor, black); //color for selected row
+$tableHoverBackColor: var(--tableHoverBackColor, #599dd4); //hover-color for dropdown menu-item
+$tableHoverTextColor: var(--tableHoverTextColor, white); //hover-color for dropdown menu-item
 
 @mixin iconBefore($name) {
   &:before {
