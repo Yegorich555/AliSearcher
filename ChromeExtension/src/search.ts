@@ -7,13 +7,13 @@ import SearchProgress from "./entities/searchProgress";
 
 // provides variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
-  // todo fix double injection
   return new Promise(resolve => {
     const el = document.createElement("script");
-    el.textContent = `
-        const event = document.createEvent("CustomEvent"); 
+    el.textContent = `(function(){
+        let event = document.createEvent("CustomEvent"); 
         event.initCustomEvent("AliCustomEvent", true, true, {"passback": {${params.join(",")} }});
-        setTimeout(()=>window.dispatchEvent(event), 1) `;
+        setTimeout(()=>window.dispatchEvent(event), 1) 
+        })()`;
     (document.head || document.documentElement).appendChild(el);
     const callback = e => {
       const check = e.detail.passback;
@@ -126,7 +126,7 @@ class SearchClass {
                 text: searchText,
                 totalItems,
                 progress: { loadedPages: i, totalPages: pages },
-                speed: Math.round((t1 - t0) / i)
+                speed: Math.round((t1 - t0) / cnt)
               })
             ]
           });
