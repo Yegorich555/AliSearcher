@@ -1,12 +1,9 @@
-import search from "../src/search";
+import search from "../src/entities/search";
 import fs from "fs";
 import path from "path";
 
 describe("search", () => {
-  const htmlGood = fs.readFileSync(
-    path.join(__dirname, "../mock/hc-12_page1.html"),
-    "utf8"
-  );
+  const htmlGood = fs.readFileSync(path.join(__dirname, "../mock/hc-12_page1.html"), "utf8");
 
   test("extracting runParams object from html", () => {
     const obj = search.extractJsObject(htmlGood, "runParams");

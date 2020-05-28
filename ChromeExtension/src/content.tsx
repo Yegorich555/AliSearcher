@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import "./styles/common.scss";
 import styles from "./content.scss";
 import messages from "./entities/messages";
-import search, { SearchCallbackObj } from "./search";
+import search, { SearchCallbackObj } from "./entities/search";
 import BaseForm from "./elements/baseForm";
 import SearchProgress from "./entities/searchProgress";
 import TableSearchResults from "./components/tableSearchResults";
