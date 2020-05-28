@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const pathAlias = require("./webpack.alias");
 
 /* 
@@ -27,6 +28,7 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "json", "prettier"],
   rules: {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/prefer-namespace-keyword": "off",
     "@typescript-eslint/no-explicit-any": "off", // ["error", { ignoreRestArgs: true, }],
@@ -70,6 +72,14 @@ module.exports = {
       }
     ]
   },
+  overrides: [
+    {
+      files: ["*.ts", ".tsx"],
+      rules: {
+        "@typescript-eslint/explicit-function-return-type": "error"
+      }
+    }
+  ],
   settings: {
     "import/resolver": {
       alias: {

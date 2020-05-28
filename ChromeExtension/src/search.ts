@@ -15,7 +15,7 @@ function getGlobals(...params: string[]): Promise<any> {
         setTimeout(()=>window.dispatchEvent(event), 1) 
         })()`;
     (document.head || document.documentElement).appendChild(el);
-    const callback = e => {
+    const callback = (e: any): void => {
       const check = e.detail.passback;
       window.removeEventListener("AliCustomEvent", callback);
       el.parentNode.removeChild(el);
@@ -57,14 +57,14 @@ class SearchClass {
       paramKey: keyof typeof SearchParams,
       modelKey: keyof SearchModel,
       parseString?: (v: string) => T
-    ) {
+    ): T {
       if (model[modelKey]) {
         curUrl.searchParams.set(SearchParams[paramKey], model[modelKey].toString());
-        return model[modelKey];
+        return (model as any)[modelKey] as T;
       }
       const param = curUrl.searchParams.get(SearchParams[paramKey]);
       (updatedModel as any)[modelKey] = (parseString && parseString(param)) || param;
-      return param;
+      return (param as unknown) as T;
     }
     const searchText = modelToParams("text", "textAli") as string;
     modelToParams("minPrice", "minPrice", Number.parseFloat);

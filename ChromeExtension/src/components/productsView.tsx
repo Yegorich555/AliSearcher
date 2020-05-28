@@ -13,7 +13,7 @@ export default class ProductsView extends Component<ProductsViewProps> {
     return this.props.items || [];
   }
 
-  render() {
+  render(): JSX.Element {
     const currency = "$";
     return (
       <ul className={styles.productsContainer}>

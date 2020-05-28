@@ -32,6 +32,8 @@ class AppContainer extends Component<any, any> {
     defaultModel: null as SearchModel
   };
 
+  formRef: BaseForm;
+
   constructor(props) {
     super(props);
     container = this;
@@ -79,6 +81,9 @@ class AppContainer extends Component<any, any> {
     return (
       <div className={styles.container}>
         <BaseForm //
+          ref={el => {
+            this.formRef = el;
+          }}
           className={styles.form}
           onValidSubmit={this.handleSearchClick}
           textSubmit="SEARCH"
