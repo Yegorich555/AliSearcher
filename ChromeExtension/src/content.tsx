@@ -14,6 +14,9 @@ import NumberInput from "./elements/inputs/numberInput";
 import Dropdown from "./elements/inputs/dropdown";
 // eslint-disable-next-line no-unused-vars
 import SearchModel, { SortTypes } from "./entities/searchModel";
+// eslint-disable-next-line no-unused-vars
+import Product from "./entities/product";
+import ProductsView from "./components/productsView";
 
 const elEntry = document.createElement("div");
 function toggle() {
@@ -27,7 +30,8 @@ class AppContainer extends Component<any, any> {
   state = {
     isMax: !!DEV_SERVER,
     error: null,
-    searchResults: null as SearchResult[]
+    searchResults: null as SearchResult[],
+    items: [] as Product[]
   };
 
   constructor(props) {
@@ -39,7 +43,7 @@ class AppContainer extends Component<any, any> {
     DEV_SERVER &&
       search
         .go({} as SearchModel)
-        .then(items => console.warn("items", items))
+        .then(items => this.setState({ items }))
         .catch(err => console.error(err));
     // todo update searchResults here
   }
@@ -97,6 +101,7 @@ class AppContainer extends Component<any, any> {
             <TextInput name="exclude" placeholder="Exclude" />
           </div>
         </BaseForm>
+        <ProductsView items={this.state.items} />
       </div>
     );
   };

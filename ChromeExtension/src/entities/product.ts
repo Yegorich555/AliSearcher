@@ -1,6 +1,10 @@
 import { fixUrl } from "@/helpers";
 
+let id = 0;
+const getUniqueId = () => ++id;
+
 export default class Product {
+  id: number;
   description: string;
   link: string;
   linkImage: string;
@@ -36,6 +40,8 @@ export default class Product {
   // freeShipping: boolean;
 
   constructor(parsedItem: any) {
+    this.id = parsedItem.productId || getUniqueId();
+
     this.description = parsedItem.title;
     this.link = fixUrl(parsedItem.productDetailUrl);
     this.linkImage = fixUrl(parsedItem.imageUrl);
