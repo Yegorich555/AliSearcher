@@ -1,9 +1,9 @@
 import axios from "axios";
-import log from "./entities/log";
-import Product from "./entities/product";
-import { fixUrl } from "./helpers";
-import SearchModel, { SortTypes, SearchParams } from "./entities/searchModel";
-import SearchProgress from "./entities/searchProgress";
+import log from "./log";
+import Product from "./product";
+import { fixUrl } from "../helpers";
+import SearchModel, { SortTypes, SearchParams } from "./searchModel";
+import SearchProgress from "./searchProgress";
 
 // provides variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
