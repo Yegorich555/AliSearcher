@@ -1,10 +1,9 @@
 import React from "react";
-// eslint-disable-next-line no-unused-vars
-import { Progress } from "@/entities/searchProgress";
+import Pagination from "@/entities/pagination";
 import styles from "./progressBar.scss";
 
-export default function progressBar(progress: Progress): JSX.Element {
-  const percent = (progress.loadedPages * 100) / progress.totalPages;
+export default function progressBar(v: Pagination): JSX.Element {
+  const percent = (v.loadedPages * 100) / v.totalPages;
   return (
     <div
       className={styles.progressBar}
@@ -13,9 +12,9 @@ export default function progressBar(progress: Progress): JSX.Element {
           1}%)`
       }}
     >
-      {!progress || !progress.totalPages
+      {!v || !v.totalPages
         ? "---" //
-        : `${progress.loadedPages} / ${progress.totalPages}`}
+        : `${v.loadedPages} / ${v.totalPages}`}
     </div>
   );
 }

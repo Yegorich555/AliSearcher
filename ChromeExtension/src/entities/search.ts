@@ -4,6 +4,7 @@ import Product from "./product";
 import { fixUrl } from "../helpers";
 import SearchModel, { SortTypes, SearchParams } from "./searchModel";
 import SearchProgress from "./searchProgress";
+import Pagination from "./pagination";
 
 // provides variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
@@ -33,20 +34,18 @@ export interface SearchCallbackObj {
 
 class SearchClass {
   go = async (model: SearchModel, callback?: (obj: SearchCallbackObj) => void): Promise<any> => {
-    const callbackObj: SearchCallbackObj = {};
-
+    /** gathering pageInfo */
     const globals = await getGlobals("runConfigs", "runParams");
-    const { items, resultCount: totalItems } = globals.runParams || {};
-    if (!totalItems || !items || !items.length) {
-      log.error("No items. Please use default Aliexpress search at first time");
-      return;
-    }
-
-    const href = globals.runConfigs?.searchAjaxUrl || window.location.href;
-    const curUrl = new URL(fixUrl(href), window.location.origin);
+    const pageInfo = {
+      pageSize: globals.runParams?.resultSizePerPage,
+      items: globals.runParams?.items || [],
+      totalItems: globals.runParams?.resultCount,
+      url: new URL(fixUrl(globals.runConfigs?.searchAjaxUrl || window.location.href), window.location.origin)
+    };
     // searchAjaxUrl isn't updated by user interaction only if the page reloads - in this case we need get url only to API part and params get from href
-    curUrl.search = window.location.search;
-    if (!curUrl.searchParams.has(SearchParams.text) && !curUrl.searchParams.has("page")) {
+    pageInfo.url.search = window.location.search;
+
+    if (!pageInfo.url.searchParams.has(SearchParams.text)) {
       log.error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
       return;
     }
@@ -55,17 +54,19 @@ class SearchClass {
     // todo force clear params when model.prop is empty
     // todo const searchTexts = model.textAli?.split(/;/g) || [curUrl.searchParams.get(searchParams.text)];
     // todo smart-cache
+    const nextUrl = pageInfo.url; // todo it doesn't create new url
     const updatedModel: Partial<SearchModel> = {};
+
     function modelToParams<T>(
       paramKey: keyof typeof SearchParams,
       modelKey: keyof SearchModel,
       parseString?: (v: string) => T
     ): T {
       if (model[modelKey]) {
-        curUrl.searchParams.set(SearchParams[paramKey], model[modelKey].toString());
+        nextUrl.searchParams.set(SearchParams[paramKey], model[modelKey].toString());
         return (model as any)[modelKey] as T;
       }
-      const param = curUrl.searchParams.get(SearchParams[paramKey]);
+      const param = nextUrl.searchParams.get(SearchParams[paramKey]);
       (updatedModel as any)[modelKey] = (parseString && parseString(param)) || param;
       return (param as unknown) as T;
     }
@@ -75,67 +76,56 @@ class SearchClass {
     // todo sort via modelToParams; add BestMatch is "default"
     model.sort &&
       SortTypes[model.sort].param &&
-      curUrl.searchParams.set(SearchParams.sort, SortTypes[model.sort].param);
+      nextUrl.searchParams.set(SearchParams.sort, SortTypes[model.sort].param);
 
     /** pages-calculation */
-    const pageNum = Number.parseInt(curUrl.searchParams.get("page"), 10) || 1;
-    const pageSize = items.length;
-    const pages = Math.ceil(totalItems / pageSize);
+    const products = [] as Product[];
 
-    const products = (items as any[]).map(v => new Product(v));
+    const pagination = new Pagination({
+      pageSize: pageInfo.pageSize,
+      totalPages: 225
+    });
 
     if (Object.keys(updatedModel).length) {
-      callbackObj.updatedModel = { ...model, ...updatedModel };
+      callback && callback({ updatedModel: { ...model, ...updatedModel } });
     }
-    callbackObj.items = products;
-    callbackObj.progress = [
-      new SearchProgress({
-        text: searchText,
-        totalItems,
-        progress: { loadedPages: 1, totalPages: pages }
-      })
-    ];
-    callback && callback(callbackObj);
 
     const t0 = performance.now();
-    let cnt = 0;
-    for (let i = 1; i <= pages; ++i) {
-      if (i === pageNum) {
-        // eslint-disable-next-line no-continue
-        continue;
-      }
-      ++cnt;
-      curUrl.searchParams.set("page", i.toString());
-      log.info(curUrl);
+    for (let i = 1; i <= pagination.totalPages; ++i) {
+      nextUrl.searchParams.set("page", i.toString());
+      log.info(nextUrl);
       // eslint-disable-next-line no-await-in-loop
-      const res = await axios.get(curUrl.href);
-      const {
-        items: gotItems
-      }: {
-        items: any[];
-      } = typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
-      if (!gotItems) {
+      const res = await axios.get(nextUrl.href);
+      const { items, resultCount, resultSizePerPage } =
+        typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
+
+      pagination.totalItems = resultCount;
+      pagination.pageSize = resultSizePerPage;
+      pagination.loadedPages = i;
+      pagination.totalPages = Math.ceil(pageInfo.totalItems / pagination.pageSize);
+
+      if (!items) {
         log.error("No items\n", res);
-        throw new Error("No items");
+        return;
         // todo pause here
-      } else {
-        gotItems.forEach(v => products.push(new Product(v)));
-        const t1 = performance.now();
-        callback &&
-          callback({
-            items: products,
-            progress: [
-              new SearchProgress({
-                text: searchText,
-                totalItems,
-                progress: { loadedPages: i, totalPages: pages },
-                speed: Math.round((t1 - t0) / cnt)
-              })
-            ]
-          });
       }
+
+      (items as any[]).forEach(v => products.push(new Product(v)));
+      const t1 = performance.now();
+      callback &&
+        callback({
+          items: products,
+          progress: [
+            new SearchProgress({
+              text: searchText,
+              pagination,
+              speed: Math.round((t1 - t0) / i)
+            })
+          ]
+        });
     }
 
+    // eslint-disable-next-line consistent-return
     return products;
   };
 
