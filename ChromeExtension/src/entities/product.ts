@@ -27,7 +27,7 @@ export default class Product {
   get unitPrice(): number {
     const min = this.priceTotalMin;
     if (!this.lotSizeNum) return min;
-    return (min + 0.05) / this.lotSizeNum; // round to last point
+    return Math.round((min * 100) / this.lotSizeNum) / 100;
   }
 
   rating: number;
@@ -55,7 +55,7 @@ export default class Product {
 
     this.unit = parsedItem.saleUnit;
     this.lotSizeNum = parsedItem.leastPackagingNum;
-    this.lotSizeText = parsedItem.saleComplexUnit;
+    this.lotSizeText = (parsedItem.saleComplexUnit || "").replace("pieces", "pcs");
 
     this.rating = Number.parseFloat(parsedItem.starRating) || null;
     this.storeOrderCount = (parsedItem.tradeDesc && Number.parseInt(/(\d*)/.exec(parsedItem.tradeDesc)[1], 10)) || null;
