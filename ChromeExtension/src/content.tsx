@@ -78,6 +78,11 @@ class AppContainer extends Component<any, any> {
       .catch(err => console.error(err));
   };
 
+  handleResetClick = () => {
+    this.formRef.reset();
+    this.setState({ searchProgress: null });
+  };
+
   renderBody = () => {
     return (
       <div className={styles.container}>
@@ -90,7 +95,7 @@ class AppContainer extends Component<any, any> {
           textSubmit="SEARCH"
           defaultModel={this.state.defaultModel}
           footer={this.state.searchProgress && <TableSearchResults items={this.state.searchProgress} />}
-          buttons={<SecondaryBtn onClick={() => this.formRef.reset()}>RESET</SecondaryBtn>}
+          buttons={<SecondaryBtn onClick={this.handleResetClick}>RESET</SecondaryBtn>}
           btnGroupClass={styles.formBtnGroup}
         >
           <div className={styles.inputGroup}>

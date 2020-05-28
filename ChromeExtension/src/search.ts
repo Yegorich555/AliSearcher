@@ -50,6 +50,7 @@ class SearchClass {
     }
 
     /** integration model with URL-params */
+    // todo force clear params when model.prop is empty
     // todo const searchTexts = model.textAli?.split(/;/g) || [curUrl.searchParams.get(searchParams.text)];
     // todo smart-cache
     const updatedModel: Partial<SearchModel> = {};
