@@ -27,7 +27,7 @@ export default class ProductsView extends Component<ProductsViewProps> {
               <span>
                 {`${item.priceTotalMin} ${!item.priceTotalMax ? "" : ` - ${item.priceTotalMax}`} ${currency}`}
               </span>
-              <span>{item.lotSizeText || item.unit}</span>
+              <span>{`${item.lotSizeNum ? `${item.lotSizeNum} ${item.lotSizeText} / ` : ""}${item.unit}`}</span>
             </div>
             {/* todo price + shipping here <div></div> */}
             <div className={styles.ratingBar}>

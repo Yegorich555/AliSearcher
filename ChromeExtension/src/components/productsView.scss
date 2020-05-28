@@ -25,13 +25,18 @@
   }
   .productLink {
     display: flex;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
     img {
       border-top-left-radius: $borderRadius;
       border-top-right-radius: $borderRadius;
+      height: 100%;
       width: 100%;
-      height: auto;
+      object-fit: contain;
     }
     &:hover {
+      box-shadow: 0 0 6px 2px var(--focusFrameColor, #f18a1c);
     }
   }
   .priceBar {
@@ -50,7 +55,7 @@
     }
   }
   .ratingBar {
-    font-size: smaller;
+    font-size: 10px;
     text-align: center;
     /* stylelint-disable-next-line no-descending-specificity */
     > * + * {
