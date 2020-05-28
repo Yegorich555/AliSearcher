@@ -1,17 +1,18 @@
 import React from "react";
 // eslint-disable-next-line no-unused-vars
-import SearchResult, { Progress } from "@/entities/searchResult";
+import SearchProgress, { Progress } from "@/entities/searchProgress";
 import progressBar from "@/elements/progressBar";
 import styles from "./tableSearchResults.scss";
 
-function sumProgress(items: SearchResult[]): Progress {
+function sumProgress(items: SearchProgress[]): Progress {
   return {
     loadedPages: items.reduce((acc, v) => acc + v.progress.loadedPages, 0),
     totalPages: items.reduce((acc, v) => acc + v.progress.totalPages, 0)
   };
 }
 
-export default function TableSearchResults({ items }: { items: SearchResult[] }) {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export default function TableSearchResults({ items }: { items: SearchProgress[] }) {
   return (
     <table className={styles.table}>
       <thead>

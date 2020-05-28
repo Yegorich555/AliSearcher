@@ -2,7 +2,8 @@ export type Progress = {
   loadedPages: number;
   totalPages: number;
 };
-export default class SearchResult {
+
+export default class SearchProgress {
   /** search string */
   text: string;
   totalItems: number;
@@ -13,5 +14,9 @@ export default class SearchResult {
     if (!this.speed) {
       return "";
     }
+  }
+
+  public constructor(init?: Partial<SearchProgress>) {
+    Object.assign(this, init);
   }
 }

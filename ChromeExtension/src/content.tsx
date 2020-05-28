@@ -4,9 +4,9 @@ import React, { Component } from "react";
 import "./styles/common.scss";
 import styles from "./content.scss";
 import messages from "./entities/messages";
-import search from "./search";
+import search, { SearchCallbackObj } from "./search";
 import BaseForm from "./elements/baseForm";
-import SearchResult from "./entities/searchResult";
+import SearchProgress from "./entities/searchProgress";
 import TableSearchResults from "./components/tableSearchResults";
 import TextInput from "./elements/inputs/textInput";
 import NumberInput from "./elements/inputs/numberInput";
@@ -27,8 +27,9 @@ class AppContainer extends Component<any, any> {
   state = {
     isMax: !!DEV_SERVER,
     error: null,
-    searchResults: null as SearchResult[],
-    items: [] as Product[]
+    searchProgress: null as SearchProgress[],
+    items: [] as Product[],
+    defaultModel: null as SearchModel
   };
 
   constructor(props) {
@@ -53,10 +54,24 @@ class AppContainer extends Component<any, any> {
     this.setState({ isMax: !isMax });
   };
 
+  searchCallback = (obj: SearchCallbackObj) => {
+    let nextState = this.state; // required for intellisense
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    nextState = {};
+    if (obj.updatedModel) {
+      // todo defaultModel doesn't work: only by componentInit
+      nextState.defaultModel = obj.updatedModel;
+    }
+    nextState.searchProgress = obj.progress;
+    nextState.items = obj.items;
+    this.setState(nextState);
+  };
+
   handleSearchClick = (model: SearchModel) => {
     search
-      .go(model)
-      .then(items => console.warn("items", items))
+      .go(model, this.searchCallback)
+      .then(items => this.setState({ items }))
       .catch(err => console.error(err));
   };
 
@@ -67,13 +82,12 @@ class AppContainer extends Component<any, any> {
           className={styles.form}
           onValidSubmit={this.handleSearchClick}
           textSubmit="SEARCH"
-          // defaultModel={model}
-          footer={this.state.searchResults && <TableSearchResults items={this.state.searchResults} />}
+          defaultModel={this.state.defaultModel}
+          footer={this.state.searchProgress && <TableSearchResults items={this.state.searchProgress} />}
         >
           <div className={styles.inputGroup}>
             <TextInput name="textAli" placeholder="Search in Aliexpress" />
           </div>
-          {/* <h2>Search in results</h2> */}
           <div className={styles.inputGroup}>
             <NumberInput name="minPrice" placeholder="Min price" />
             <NumberInput name="maxPrice" placeholder="Max price" />
@@ -83,6 +97,7 @@ class AppContainer extends Component<any, any> {
               options={Object.keys(SortTypes).map(key => ({ value: key, text: SortTypes[key].text }))}
             />
           </div>
+          <h3>Search in results</h3>
           <div className={styles.inputGroup}>
             <NumberInput name="maxLotSize" placeholder="Max lot size" />
             <NumberInput name="minOrders" placeholder="Min orders" />
@@ -90,7 +105,7 @@ class AppContainer extends Component<any, any> {
           </div>
           <div className={styles.inputGroup}>
             <TextInput name="text" placeholder="Search in results" />
-            <TextInput name="exclude" placeholder="Exclude" />
+            <TextInput name="exclude" placeholder="Exclude from results" />
           </div>
         </BaseForm>
         <ProductsView items={this.state.items} />

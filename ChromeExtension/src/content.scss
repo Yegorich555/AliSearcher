@@ -57,6 +57,12 @@
   }
 }
 
-.form [type="submit"] {
-  margin-top: 16px;
+.form {
+  h3 {
+    padding: 0;
+    margin: 6px 0;
+  }
+  [type="submit"] {
+    margin-top: 16px;
+  }
 }

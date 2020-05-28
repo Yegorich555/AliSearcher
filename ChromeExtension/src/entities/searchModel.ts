@@ -23,5 +23,5 @@ export default class SearchModel {
   text?: string;
   textAli?: string;
   exclude?: string;
-  sort: keyof typeof SortTypes;
+  sort?: keyof typeof SortTypes;
 }

@@ -2,8 +2,8 @@ import axios from "axios";
 import log from "./entities/log";
 import Product from "./entities/product";
 import { fixUrl } from "./helpers";
-// eslint-disable-next-line no-unused-vars
 import SearchModel, { SortTypes, SearchParams } from "./entities/searchModel";
+import SearchProgress from "./entities/searchProgress";
 
 // provides variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
@@ -24,8 +24,16 @@ function getGlobals(...params: string[]): Promise<any> {
   });
 }
 
+export interface SearchCallbackObj {
+  updatedModel?: Partial<SearchModel>;
+  progress?: SearchProgress[];
+  items?: Product[];
+}
+
 class SearchClass {
-  go = async (model: SearchModel): Promise<any> => {
+  go = async (model: SearchModel, callback?: (obj: SearchCallbackObj) => void): Promise<any> => {
+    const callbackObj: SearchCallbackObj = {};
+
     const globals = await getGlobals("runConfigs", "runParams");
     const { items, resultCount: totalItems } = globals.runParams || {};
     if (!totalItems || !items || !items.length) {
@@ -39,20 +47,52 @@ class SearchClass {
     if (!curUrl.searchParams.has(SearchParams.text) && !curUrl.searchParams.has("page")) {
       throw new Error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
     }
+
+    /** integration model with URL-params */
     // todo const searchTexts = model.textAli?.split(/;/g) || [curUrl.searchParams.get(searchParams.text)];
     // todo smart-cache
-    model.textAli && curUrl.searchParams.set(SearchParams.text, model.textAli);
-    model.minPrice && curUrl.searchParams.set(SearchParams.minPrice, model.minPrice.toString());
-    model.maxPrice && curUrl.searchParams.set(SearchParams.maxPrice, model.maxPrice.toString());
+    const updatedModel: Partial<SearchModel> = {};
+    function modelToParams<T>(
+      paramKey: keyof typeof SearchParams,
+      modelKey: keyof SearchModel,
+      parseString?: (v: string) => T
+    ) {
+      if (model[modelKey]) {
+        curUrl.searchParams.set(SearchParams[paramKey], model[modelKey].toString());
+        return model[modelKey];
+      }
+      const param = curUrl.searchParams.get(SearchParams[paramKey]);
+      (updatedModel as any)[modelKey] = (parseString && parseString(param)) || param;
+      return param;
+    }
+    const searchText = modelToParams("text", "textAli") as string;
+    modelToParams("minPrice", "minPrice", Number.parseFloat);
+    modelToParams("maxPrice", "maxPrice", Number.parseFloat);
+    // todo sort via modelToParams; add BestMatch is "default"
     model.sort &&
       SortTypes[model.sort].param &&
       curUrl.searchParams.set(SearchParams.sort, SortTypes[model.sort].param);
 
+    /** pages-calculation */
     const pageNum = Number.parseInt(curUrl.searchParams.get("page"), 10) || 1;
     const pageSize = items.length;
     const pages = Math.ceil(totalItems / pageSize);
 
-    const products = (items as object[]).map(v => new Product(v));
+    const products = (items as any[]).map(v => new Product(v));
+
+    if (Object.keys(updatedModel).length) {
+      callbackObj.updatedModel = { ...model, ...updatedModel };
+    }
+    callbackObj.items = products;
+    callbackObj.progress = [
+      new SearchProgress({
+        text: searchText,
+        totalItems,
+        progress: { loadedPages: 1, totalPages: pages }
+      })
+    ];
+    callback && callback(callbackObj);
+
     for (let i = 1; i <= pages; ++i) {
       if (i === pageNum) {
         // eslint-disable-next-line no-continue
@@ -62,14 +102,28 @@ class SearchClass {
       log.warn(curUrl); // todo log.info
       // eslint-disable-next-line no-await-in-loop
       const res = await axios.get(curUrl.href);
-      const { items: gotItems }: { items: object[] } =
-        typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
+      const {
+        items: gotItems
+      }: {
+        items: any[];
+      } = typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
       if (!gotItems) {
         log.error("No items\n", res);
         throw new Error("No items");
         // todo pause here
       } else {
         gotItems.forEach(v => products.push(new Product(v)));
+        callback &&
+          callback({
+            items: products,
+            progress: [
+              new SearchProgress({
+                text: searchText,
+                totalItems,
+                progress: { loadedPages: i, totalPages: pages }
+              })
+            ]
+          });
       }
     }
 
