@@ -5,7 +5,34 @@
   overflow: auto;
 }
 
+.stickyPanel {
+  display: flex;
+  position: relative;
+  height: 30px;
+  .error {
+    color: $errorTextColor;
+    padding: 2px 120px;
+    z-index: 1;
+    background: $basicBackColor;
+    border: none;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    @include iconAfter($icon-close);
+    &::after {
+      margin-left: 10px;
+    }
+    &:hover {
+      opacity: 0.98;
+    }
+  }
+}
+
 .btnPanel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
   display: flex;
   background: white;
   box-shadow: rgba(100, 115, 130, 0.15) 0 1px 4px 0;
@@ -15,7 +42,6 @@
     color: gray;
     font-size: 20px;
     line-height: 20px;
-    height: 30px;
     width: 50px;
     &:hover {
       color: black;
@@ -31,10 +57,6 @@
   .btnClose {
     @include iconBefore($icon-close);
   }
-}
-
-.error {
-  color: red;
 }
 
 .inputGroup {

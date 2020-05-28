@@ -38,7 +38,8 @@ class SearchClass {
     const globals = await getGlobals("runConfigs", "runParams");
     const { items, resultCount: totalItems } = globals.runParams || {};
     if (!totalItems || !items || !items.length) {
-      throw new Error("No items. Please use default Aliexpress search at first time");
+      log.error("No items. Please use default Aliexpress search at first time");
+      return;
     }
 
     const href = globals.runConfigs?.searchAjaxUrl || window.location.href;
@@ -46,7 +47,8 @@ class SearchClass {
     // searchAjaxUrl isn't updated by user interaction only if the page reloads - in this case we need get url only to API part and params get from href
     curUrl.search = window.location.search;
     if (!curUrl.searchParams.has(SearchParams.text) && !curUrl.searchParams.has("page")) {
-      throw new Error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
+      log.error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
+      return;
     }
 
     /** integration model with URL-params */
@@ -104,7 +106,7 @@ class SearchClass {
       }
       ++cnt;
       curUrl.searchParams.set("page", i.toString());
-      log.warn(curUrl); // todo log.info
+      log.info(curUrl);
       // eslint-disable-next-line no-await-in-loop
       const res = await axios.get(curUrl.href);
       const {

@@ -15,6 +15,9 @@ import SearchModel, { SortTypes } from "./entities/searchModel";
 import Product from "./entities/product";
 import ProductsView from "./components/productsView";
 import SecondaryBtn from "./elements/buttons/secondaryBtn";
+import log from "./entities/log";
+import BasicIconBtn from "./elements/buttons/iconButtons/basicIconBtn";
+import BasicBtn from "./elements/buttons/basicBtn";
 
 const elEntry = document.createElement("div");
 function toggle() {
@@ -38,18 +41,23 @@ class AppContainer extends Component<any, any> {
   constructor(props) {
     super(props);
     container = this;
+    log.subscribe(this.handleError);
   }
 
   componentDidMount() {
     DEV_SERVER && this.handleSearchClick({} as SearchModel);
   }
 
-  componentDidCatch() {
-    this.setState({ error: true });
+  componentDidCatch(error: Error) {
+    log.error(error);
   }
 
   resetError = () => {
     this.setState({ error: null });
+  };
+
+  handleError = (message: string): void => {
+    this.setState({ error: message });
   };
 
   handleMaxClick = () => {
@@ -59,7 +67,6 @@ class AppContainer extends Component<any, any> {
 
   searchCallback = (obj: SearchCallbackObj) => {
     let nextState = this.state; // required for intellisense
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     nextState = {};
     if (obj.updatedModel) {
@@ -75,7 +82,7 @@ class AppContainer extends Component<any, any> {
     search
       .go(model, this.searchCallback)
       .then(items => this.setState({ items }))
-      .catch(err => console.error(err));
+      .catch(err => log.error(err.message, err));
   };
 
   handleResetClick = () => {
@@ -126,14 +133,25 @@ class AppContainer extends Component<any, any> {
     );
   };
 
+  renderError = () => {
+    return (
+      <BasicBtn className={styles.error} onClick={() => this.setState({ error: null })}>
+        {this.state.error}
+      </BasicBtn>
+    );
+  };
+
   render() {
     return (
       <>
-        <div className={styles.btnPanel}>
-          <button className={styles.btnMax} onClick={this.handleMaxClick} title="Show/Hide" />
-          <button className={styles.btnClose} onClick={toggle} title="Close" />
+        <div className={styles.stickyPanel}>
+          {this.state.error ? this.renderError() : null}
+          <div className={styles.btnPanel}>
+            <button className={styles.btnMax} onClick={this.handleMaxClick} title="Show/Hide" />
+            <button className={styles.btnClose} onClick={toggle} title="Close" />
+          </div>
         </div>
-        {this.state.error ? <div className={styles.error}>Got error</div> : null}
+
         {this.state.isMax ? this.renderBody() : null}
       </>
     );
