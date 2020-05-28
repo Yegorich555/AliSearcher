@@ -6,15 +6,12 @@ import styles from "./content.scss";
 import messages from "./entities/messages";
 import search from "./search";
 import BaseForm from "./elements/baseForm";
-// eslint-disable-next-line no-unused-vars
 import SearchResult from "./entities/searchResult";
 import TableSearchResults from "./components/tableSearchResults";
 import TextInput from "./elements/inputs/textInput";
 import NumberInput from "./elements/inputs/numberInput";
 import Dropdown from "./elements/inputs/dropdown";
-// eslint-disable-next-line no-unused-vars
 import SearchModel, { SortTypes } from "./entities/searchModel";
-// eslint-disable-next-line no-unused-vars
 import Product from "./entities/product";
 import ProductsView from "./components/productsView";
 
@@ -23,7 +20,7 @@ function toggle() {
   elEntry.hidden = !elEntry.hidden;
 }
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let container: AppContainer; // create new class only for intellisense
 
 class AppContainer extends Component<any, any> {
@@ -40,12 +37,7 @@ class AppContainer extends Component<any, any> {
   }
 
   componentDidMount() {
-    DEV_SERVER &&
-      search
-        .go({} as SearchModel)
-        .then(items => this.setState({ items }))
-        .catch(err => console.error(err));
-    // todo update searchResults here
+    DEV_SERVER && this.handleSearchClick({} as SearchModel);
   }
 
   componentDidCatch() {

@@ -14,7 +14,7 @@ module.exports = {
       jsx: true
     }
   },
-  extends: ["airbnb", "prettier"],
+  extends: ["airbnb", "prettier", "plugin:@typescript-eslint/recommended"],
   env: {
     es6: true,
     node: true,
@@ -25,8 +25,11 @@ module.exports = {
     DEV_SERVER: true,
     DEBUG: true
   },
-  plugins: ["json", "prettier"],
+  plugins: ["@typescript-eslint", "json", "prettier"],
   rules: {
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/prefer-namespace-keyword": "off",
+    "@typescript-eslint/no-explicit-any": "off", // ["error", { ignoreRestArgs: true, }],
     "react/jsx-one-expression-per-line": "off",
     "jsx-a11y/control-has-associated-label": "off",
     "lines-between-class-members": "off",
@@ -50,6 +53,7 @@ module.exports = {
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-alert": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-plusplus": 0,
+    "no-unused-vars": 0,
     "class-methods-use-this": 0,
     "max-len": [
       "warn",
