@@ -1,62 +1,43 @@
 .table {
   width: 100%;
   max-width: 100%;
-  margin: 16px auto;
+  margin: 16px auto 0;
   font-size: 12px;
-  background-color: #9cabab;
+  background-color: $basicBackColor2;
   text-align: center;
   border-spacing: 0;
   border-collapse: collapse;
+  border: $btnBorder;
+  border-color: $tableHeaderBackColor;
 }
 
-.table > thead > tr > th {
+.table > thead > tr > th,
+.table > tfoot > tr > td {
   padding: 8px;
   text-align: inherit;
   vertical-align: middle;
   color: $tableHeaderTextColor;
   background-color: $tableHeaderBackColor;
+  &:first-child {
+    text-align: left;
+  }
+}
+
+.table > tfoot > tr > td {
+  box-shadow: inset 0 0 0 9999px rgba($color: #000000, $alpha: 0.3);
 }
 
 .table > tbody > tr > td {
   padding: 8px;
   vertical-align: middle;
   border-top: 1px solid #a6b1b1 !important;
+  &:first-child {
+    text-align: left;
+  }
 }
 
-.progressColumn {
+.table .progressColumn {
   min-width: 90px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
-
-.progressBar {
-  color: #4e4e4e;
-  width: 100%;
-  font-size: 10px;
-  background-color: #7ed08f;
-}
-// .progress {
-//   position: relative;
-//   padding: 0;
-//   margin-bottom: 0;
-//   border-radius: 0;
-// }
-
-// .progress-bar {
-//   box-shadow: none;
-// }
-
-// .progress-bar-info {
-//   background-color: #7ed08f;
-// }
-
-// .progress-column {
-//   vertical-align: middle !important;
-//   padding: 0 !important;
-// }
-
-// .progress span {
-//   color: #4e4e4e;
-//   position: absolute;
-//   display: block;
-//   width: 100%;
-//   font-size: 10px;
-// }

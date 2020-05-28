@@ -3,10 +3,16 @@ import React from "react";
 import { Progress } from "@/entities/searchProgress";
 import styles from "./progressBar.scss";
 
-export default function progressBar(progress: Progress) {
+export default function progressBar(progress: Progress): JSX.Element {
+  const percent = (progress.loadedPages * 100) / progress.totalPages;
   return (
-    // todo fill behavior
-    <div className={styles.progressBar}>
+    <div
+      className={styles.progressBar}
+      style={{
+        background: `linear-gradient(to right, var(--primaryBtnBackColor, gray) ${percent}%, transparent ${percent +
+          1}%)`
+      }}
+    >
       {!progress || !progress.totalPages
         ? "---" //
         : `${progress.loadedPages} / ${progress.totalPages}`}

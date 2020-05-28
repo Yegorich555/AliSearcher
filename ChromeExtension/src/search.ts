@@ -7,6 +7,7 @@ import SearchProgress from "./entities/searchProgress";
 
 // provides variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
+  // todo fix double injection
   return new Promise(resolve => {
     const el = document.createElement("script");
     el.textContent = `
@@ -93,11 +94,14 @@ class SearchClass {
     ];
     callback && callback(callbackObj);
 
+    const t0 = performance.now();
+    let cnt = 0;
     for (let i = 1; i <= pages; ++i) {
       if (i === pageNum) {
         // eslint-disable-next-line no-continue
         continue;
       }
+      ++cnt;
       curUrl.searchParams.set("page", i.toString());
       log.warn(curUrl); // todo log.info
       // eslint-disable-next-line no-await-in-loop
@@ -113,6 +117,7 @@ class SearchClass {
         // todo pause here
       } else {
         gotItems.forEach(v => products.push(new Product(v)));
+        const t1 = performance.now();
         callback &&
           callback({
             items: products,
@@ -120,7 +125,8 @@ class SearchClass {
               new SearchProgress({
                 text: searchText,
                 totalItems,
-                progress: { loadedPages: i, totalPages: pages }
+                progress: { loadedPages: i, totalPages: pages },
+                speed: Math.round((t1 - t0) / i)
               })
             ]
           });

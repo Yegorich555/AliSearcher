@@ -27,24 +27,26 @@ export default function TableSearchResults({ items }: { items: SearchProgress[] 
       <tbody>
         {items.map(v => {
           return (
-            <tr>
+            <tr key={v.text}>
               <td>{v.text}</td>
               <td>{v.totalItems}</td>
-              <td>{progressBar(v.progress)}</td>
+              <td className={styles.progressColumn}>{progressBar(v.progress)}</td>
               <td>{v.speed}ms</td>
-              <td>{v.lostTime}ms</td>
+              <td>{v.lostTime}</td>
             </tr>
           );
         })}
       </tbody>
       <tfoot>
-        {!items.length ? null : (
+        {items.length > 1 ? (
           <tr>
             <td>Summary</td>
             <td>{items.reduce((acc, v) => acc + v.totalItems, 0)}</td>
-            <td>{progressBar(sumProgress(items))}</td>
+            <td className={styles.progressColumn}>{progressBar(sumProgress(items))}</td>
+            <td />
+            <td />
           </tr>
-        )}
+        ) : null}
       </tfoot>
     </table>
   );
