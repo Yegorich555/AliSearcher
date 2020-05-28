@@ -16,7 +16,6 @@ import Product from "./entities/product";
 import ProductsView from "./components/productsView";
 import SecondaryBtn from "./elements/buttons/secondaryBtn";
 import log from "./entities/log";
-import BasicIconBtn from "./elements/buttons/iconButtons/basicIconBtn";
 import BasicBtn from "./elements/buttons/basicBtn";
 
 const elEntry = document.createElement("div");
@@ -81,8 +80,8 @@ class AppContainer extends Component<any, any> {
   handleSearchClick = (model: SearchModel) => {
     search
       .go(model, this.searchCallback)
-      .then(items => this.setState({ items }))
-      .catch(err => log.error(err.message, err));
+      .then(items => this.setState({ items }, () => console.warn(items)))
+      .catch(err => log.error(err.message));
   };
 
   handleResetClick = () => {

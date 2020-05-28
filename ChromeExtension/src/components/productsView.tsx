@@ -12,7 +12,6 @@ export default class ProductsView extends Component<ProductsViewProps> {
   get filteredItems(): Product[] {
     return this.props.items || [];
   }
-
   render(): JSX.Element {
     const currency = "$";
     return (

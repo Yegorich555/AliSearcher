@@ -46,8 +46,7 @@ class SearchClass {
     pageInfo.url.search = window.location.search;
 
     if (!pageInfo.url.searchParams.has(SearchParams.text)) {
-      log.error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
-      return;
+      throw new Error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
     }
 
     /** integration model with URL-params */
@@ -83,7 +82,7 @@ class SearchClass {
 
     const pagination = new Pagination({
       pageSize: pageInfo.pageSize,
-      totalPages: 225
+      totalPages: 1
     });
 
     if (Object.keys(updatedModel).length) {
@@ -102,12 +101,16 @@ class SearchClass {
       pagination.totalItems = resultCount;
       pagination.pageSize = resultSizePerPage;
       pagination.loadedPages = i;
-      pagination.totalPages = Math.ceil(pageInfo.totalItems / pagination.pageSize);
-
+      pagination.totalPages = Math.ceil(pagination.totalItems / pagination.pageSize);
       if (!items) {
         log.error("No items\n", res);
-        return;
+        throw new Error("No items");
         // todo pause here
+      }
+      if (pagination.totalPages > 200) {
+        throw new Error(
+          `Too much pages: ${pagination.totalPages} for '${searchText}'. Expected < 201. Improve your search`
+        );
       }
 
       (items as any[]).forEach(v => products.push(new Product(v)));

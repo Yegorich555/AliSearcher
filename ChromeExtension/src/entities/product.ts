@@ -40,7 +40,6 @@ export default class Product {
   // freeShipping: boolean;
 
   constructor(parsedItem: any) {
-    console.warn(parsedItem.productId);
     this.id = parsedItem.productId || getUniqueId();
 
     this.description = parsedItem.title;
