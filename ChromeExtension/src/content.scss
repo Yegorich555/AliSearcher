@@ -62,7 +62,18 @@
     padding: 0;
     margin: 6px 0;
   }
-  [type="submit"] {
+  .formBtnGroup {
     margin-top: 16px;
+    font-weight: bold;
+    > * {
+      letter-spacing: 1px;
+    }
+    > *:first-child {
+      flex: 1 1 70%;
+    }
+    > *:last-child {
+      margin-left: 10px;
+      flex: 1 1 20%;
+    }
   }
 }

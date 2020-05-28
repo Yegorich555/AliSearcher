@@ -33,7 +33,7 @@ export default class BasicInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.defaultValue !== undefined ? this.defaultValue : this.constructor.initValue,
+      value: this.defaultValue !== undefined ? this.defaultValue : this.props.initValue || this.constructor.initValue,
       isValid: true
     };
     this.provideValueCallback = this.provideValueCallback.bind(this); // Such bind is important for inheritance and using super...():
@@ -41,7 +41,10 @@ export default class BasicInput extends Component {
     this.props.provideValue && this.props.provideValue(this.provideValueCallback);
     this.props.resetValue &&
       this.props.resetValue(() => {
-        this.setState({ value: this.constructor.initValue });
+        this.setState({
+          value: this.props.initValue !== undefined ? this.props.initValue : this.initValue,
+          errorMessage: null
+        });
       });
     this.props.validate && this.props.validate(() => this.validate(this.state.value));
     this.renderInput = this.renderInput.bind(this); // Such bind is important for inheritance and using super...(): https://stackoverflow.com/questions/46869503/es6-arrow-functions-trigger-super-outside-of-function-or-class-error

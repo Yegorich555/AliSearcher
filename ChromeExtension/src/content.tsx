@@ -14,6 +14,7 @@ import Dropdown from "./elements/inputs/dropdown";
 import SearchModel, { SortTypes } from "./entities/searchModel";
 import Product from "./entities/product";
 import ProductsView from "./components/productsView";
+import SecondaryBtn from "./elements/buttons/secondaryBtn";
 
 const elEntry = document.createElement("div");
 function toggle() {
@@ -89,6 +90,8 @@ class AppContainer extends Component<any, any> {
           textSubmit="SEARCH"
           defaultModel={this.state.defaultModel}
           footer={this.state.searchProgress && <TableSearchResults items={this.state.searchProgress} />}
+          buttons={<SecondaryBtn onClick={() => this.formRef.reset()}>RESET</SecondaryBtn>}
+          btnGroupClass={styles.formBtnGroup}
         >
           <div className={styles.inputGroup}>
             <TextInput name="textAli" placeholder="Search in Aliexpress" />
@@ -98,7 +101,7 @@ class AppContainer extends Component<any, any> {
             <NumberInput name="maxPrice" placeholder="Max price" />
             <Dropdown
               name="sort"
-              defaultValue={Object.keys(SortTypes)[0]}
+              initValue={Object.keys(SortTypes)[0]}
               options={Object.keys(SortTypes).map(key => ({ value: key, text: SortTypes[key].text }))}
             />
           </div>

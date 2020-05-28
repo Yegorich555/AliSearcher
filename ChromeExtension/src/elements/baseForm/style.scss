@@ -1,9 +1,6 @@
 .form {
   max-width: 540px;
   margin: auto;
-  button[type="submit"] {
-    width: 100%;
-  }
   @include boxShadow();
 }
 
