@@ -16,7 +16,7 @@
   }
   > li {
     list-style-type: none;
-    margin: 5px;
+    margin: 10px 5px;
     padding: 0;
     width: 200px;
     > * + * {
@@ -26,6 +26,7 @@
   .productLink {
     display: flex;
     height: 200px;
+    width: 100%;
     overflow: hidden;
     position: relative;
     img {
