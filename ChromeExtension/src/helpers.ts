@@ -22,3 +22,19 @@ function update<T>(getterKey, newItem): T {
 }
 
 export const arrayFunctions = { remove, addIfNotExists, update };
+
+type Range = { min?: number; max?: number };
+/** exclude 1 range from another range */
+export function excludeRange(min: number | undefined, max: number | undefined, exMin: number, exMax: number): Range[] {
+  const ranges: Range[] = [];
+
+  if ((min || 0) < exMin) {
+    ranges.push({ min, max: Math.min(exMin, max || exMin) });
+  }
+
+  if (max > exMax || max == null) {
+    ranges.push({ min: Math.max(exMax, min || 0), max });
+  }
+
+  return ranges;
+}
