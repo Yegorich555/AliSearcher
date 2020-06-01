@@ -36,6 +36,7 @@ module.exports = {
     "react/jsx-one-expression-per-line": "off",
     "jsx-a11y/control-has-associated-label": "off",
     "lines-between-class-members": "off",
+    "no-return-assign": ["error", "except-parens"],
     "prettier/prettier": ["error"],
     "react/destructuring-assignment": 0,
     // "react/jsx-max-props-per-line": [1, { maximum: 1 }], //it doesn't work with prettier, you can remove prettier from rules: 'prettier/prettier'...
