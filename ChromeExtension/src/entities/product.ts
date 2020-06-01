@@ -1,7 +1,7 @@
 import { fixUrl } from "@/helpers";
 
 let id = 0;
-const getUniqueId = () => ++id;
+const getUniqueId = (): number => ++id;
 
 export default class Product {
   id: number;
@@ -38,8 +38,18 @@ export default class Product {
   // storeFeedbackCount: number;
   // storeFeedbackLink: string;
   // freeShipping: boolean;
+  searchText: string;
+  date: Date;
 
-  constructor(parsedItem: any) {
+  toString(): string {
+    return `${this.priceMin}. ${this.description}`;
+  }
+
+  constructor(parsedItem?: any, searchText?: string) {
+    this.date = new Date();
+    if (!parsedItem) {
+      return;
+    }
     this.id = parsedItem.productId || getUniqueId();
 
     this.description = parsedItem.title;
@@ -61,5 +71,7 @@ export default class Product {
     this.storeOrderCount = (parsedItem.tradeDesc && Number.parseInt(/(\d*)/.exec(parsedItem.tradeDesc)[1], 10)) || null;
     this.storeName = parsedItem.store?.storeName;
     this.storeLink = fixUrl(parsedItem.store?.storeUrl);
+
+    this.searchText = searchText;
   }
 }

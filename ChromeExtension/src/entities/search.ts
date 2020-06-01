@@ -5,6 +5,7 @@ import { fixUrl } from "../helpers";
 import SearchModel, { SortTypes, SearchParams } from "./searchModel";
 import SearchProgress from "./searchProgress";
 import Pagination from "./pagination";
+import aliStorage from "./aliStorage";
 
 // provides variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
@@ -113,18 +114,24 @@ class SearchClass {
         );
       }
 
-      (items as any[]).forEach(v => products.push(new Product(v)));
+      const nProducts = (items as any[]).map(v => new Product(v, searchText));
+      aliStorage.appendProducts(nProducts);
+      products.push(...nProducts);
       const t1 = performance.now();
+
       callback &&
-        callback({
-          items: products,
-          progress: [
-            new SearchProgress({
-              text: searchText,
-              pagination,
-              speed: Math.round((t1 - t0) / i)
-            })
-          ]
+        // todo use callback every 500ms instead of each call
+        setTimeout(() => {
+          callback({
+            items: products,
+            progress: [
+              new SearchProgress({
+                text: searchText,
+                pagination,
+                speed: Math.round((t1 - t0) / i)
+              })
+            ]
+          });
         });
     }
 
