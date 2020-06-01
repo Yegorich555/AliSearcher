@@ -61,7 +61,7 @@ export class AliStore {
     });
   }
 
-  async getProducts(searchText: string, priceMin: number, priceMax: number): Promise<Product[]> {
+  getProducts(searchText: string, priceMin: number, priceMax: number): Promise<Product[]> {
     return new Promise((resolve, reject) => {
       const items: Product[] = [];
       const t = this.getProductStore("readonly")
@@ -88,7 +88,7 @@ export class AliStore {
     });
   }
 
-  async clearProductsExpired(): Promise<void> {
+  clearProductsExpired(): Promise<void> {
     return new Promise((resolve, reject) => {
       const range = IDBKeyRange.upperBound(setMinutes(new Date(), -1 * this.cacheTime), true);
       const t = this.getProductStore("readwrite")

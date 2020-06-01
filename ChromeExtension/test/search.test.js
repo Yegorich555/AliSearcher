@@ -1,6 +1,6 @@
-import search from "../src/entities/search";
 import fs from "fs";
 import path from "path";
+import search from "../src/entities/search";
 
 describe("search", () => {
   const htmlGood = fs.readFileSync(path.join(__dirname, "../mock/hc-12_page1.html"), "utf8");

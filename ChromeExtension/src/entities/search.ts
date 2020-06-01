@@ -1,11 +1,11 @@
 import axios from "axios";
 import log from "./log";
 import Product from "./product";
-import { fixUrl } from "../helpers";
+import { fixUrl, excludeRange } from "../helpers";
 import SearchModel, { SortTypes, SearchParams } from "./searchModel";
 import SearchProgress from "./searchProgress";
 import Pagination from "./pagination";
-import aliStorage from "./aliStorage";
+import aliStore from "./aliStore";
 
 // provides variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
@@ -47,55 +47,103 @@ class SearchClass {
     pageInfo.url.search = window.location.search;
 
     if (!pageInfo.url.searchParams.has(SearchParams.text)) {
-      throw new Error('Url parameter "SearchText" is not defined. Please use default Aliexpress search at first time');
+      throw new Error(
+        `Url parameter "${SearchParams.text}" is not defined. Please use default Aliexpress search at first time`
+      );
+    }
+
+    // todo add sort BestMatch is "default"
+    // todo force clear params when model.prop is empty
+
+    const products: Product[] = [];
+    const progressAll: SearchProgress[] = [];
+    function mergeResult(items: Product[], progress: SearchProgress): void {
+      products.push(...items);
+      // todo result is wrong. We must calculate: +cachedItems, join pageResults
+      const i = progressAll.findIndex(v => v.text === progress.text);
+      if (i === -1) {
+        progressAll.push(progress);
+      } else {
+        progressAll[i] = progress;
+      }
+      // todo fire callback every 500ms instead of every call
+      callback &&
+        setTimeout(() =>
+          callback({
+            items: products,
+            progress: progressAll
+          })
+        );
     }
 
     /** integration model with URL-params */
-    // todo force clear params when model.prop is empty
-    // todo const searchTexts = model.textAli?.split(/;/g) || [curUrl.searchParams.get(searchParams.text)];
-    // todo smart-cache
-    const nextUrl = pageInfo.url; // todo it doesn't create new url
-    const updatedModel: Partial<SearchModel> = {};
-
-    function modelToParams<T>(
-      paramKey: keyof typeof SearchParams,
-      modelKey: keyof SearchModel,
-      parseString?: (v: string) => T
-    ): T {
-      if (model[modelKey]) {
-        nextUrl.searchParams.set(SearchParams[paramKey], model[modelKey].toString());
-        return (model as any)[modelKey] as T;
-      }
-      const param = nextUrl.searchParams.get(SearchParams[paramKey]);
-      (updatedModel as any)[modelKey] = (parseString && parseString(param)) || param;
-      return (param as unknown) as T;
-    }
-    const searchText = modelToParams("text", "textAli") as string;
-    modelToParams("minPrice", "minPrice", Number.parseFloat);
-    modelToParams("maxPrice", "maxPrice", Number.parseFloat);
-    // todo sort via modelToParams; add BestMatch is "default"
     model.sort &&
       SortTypes[model.sort].param &&
-      nextUrl.searchParams.set(SearchParams.sort, SortTypes[model.sort].param);
+      pageInfo.url.searchParams.set(SearchParams.sort, SortTypes[model.sort].param);
 
-    /** pages-calculation */
-    const products = [] as Product[];
-
-    const pagination = new Pagination({
-      pageSize: pageInfo.pageSize,
-      totalPages: 1
-    });
-
-    if (Object.keys(updatedModel).length) {
-      callback && callback({ updatedModel: { ...model, ...updatedModel } });
+    const urls: URL[] = [];
+    function addUrl(text: string, minPrice?: number, maxPrice?: number): void {
+      const url = new URL(pageInfo.url.href);
+      const params = url.searchParams;
+      params.set(SearchParams.text, text);
+      minPrice && params.set(SearchParams.minPrice, minPrice.toString());
+      maxPrice && url.searchParams.set(SearchParams.maxPrice, maxPrice.toString());
     }
 
-    const t0 = performance.now();
-    for (let i = 1; i <= pagination.totalPages; ++i) {
-      nextUrl.searchParams.set("page", i.toString());
-      log.info(nextUrl);
+    const txtSearchArr = model.textAli
+      ?.split(/[,;]/g)
+      .map(v => v.trim())
+      .filter(v => v) || [pageInfo.url.searchParams.get(SearchParams.text)];
+
+    for (let i = 0, text = txtSearchArr[0]; i < txtSearchArr.length; text = txtSearchArr[++i]) {
+      /** getting products from store (cache) */
       // eslint-disable-next-line no-await-in-loop
-      const res = await axios.get(nextUrl.href);
+      const items = await aliStore.getProducts(text, model.minPrice, model.maxPrice);
+      if (items.length) {
+        const dbMin = items.reduce((acc, v) => Math.min(acc, v.priceMin), Number.MAX_SAFE_INTEGER) - 0.01;
+        const dbMax = items.reduce((acc, v) => Math.max(acc, v.priceMin), 0) + 0.01;
+        excludeRange(model.minPrice, model.maxPrice, dbMin, dbMax).forEach(r => addUrl(text, r.min, r.max));
+      } else {
+        addUrl(text, model.minPrice, model.maxPrice);
+      }
+
+      products.push(...items);
+      progressAll.push(
+        new SearchProgress({
+          text,
+          pagination: new Pagination({ totalItems: items.length, loadedPages: 0, totalPages: 0 })
+        })
+      );
+    }
+
+    // todo if (Object.keys(updatedModel).length) {
+    //   callback && callback({ updatedModel: { ...model, ...updatedModel } });
+    // }
+
+    for (let u = 0, url = urls[u]; u < urls.length; url = urls[++u]) {
+      try {
+        this.httpIterate(url, (items, progress) => mergeResult(items, progress, url));
+      } catch (e) {
+        log.error(e);
+      }
+    }
+
+    // eslint-disable-next-line consistent-return
+    return products;
+  };
+
+  async httpIterate(url: URL, callback: (items: Product[], progress: SearchProgress) => void): Promise<void> {
+    const searchText = url.searchParams.get(SearchParams.text);
+    const pagination = new Pagination({
+      totalPages: 1
+    });
+    const t0 = performance.now();
+
+    for (let i = 1; i <= pagination.totalPages; ++i) {
+      url.searchParams.set("page", i.toString());
+      log.info(url);
+      // eslint-disable-next-line no-await-in-loop
+      const res = await axios.get(url.href);
       const { items, resultCount, resultSizePerPage } =
         typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
 
@@ -114,30 +162,21 @@ class SearchClass {
         );
       }
 
-      const nProducts = (items as any[]).map(v => new Product(v, searchText));
-      aliStorage.appendProducts(nProducts);
-      products.push(...nProducts);
+      const products = (items as any[]).map(v => new Product(v, searchText));
+      aliStore.appendProducts(products);
+      products.push(...products);
       const t1 = performance.now();
 
-      callback &&
-        // todo use callback every 500ms instead of each call
-        setTimeout(() => {
-          callback({
-            items: products,
-            progress: [
-              new SearchProgress({
-                text: searchText,
-                pagination,
-                speed: Math.round((t1 - t0) / i)
-              })
-            ]
-          });
-        });
+      callback(
+        products,
+        new SearchProgress({
+          text: searchText,
+          pagination,
+          speed: Math.round((t1 - t0) / i)
+        })
+      );
     }
-
-    // eslint-disable-next-line consistent-return
-    return products;
-  };
+  }
 
   // extracting js-assignment inside html
   extractJsObject = <T>(html: string, key: string): T => {
