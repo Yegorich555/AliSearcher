@@ -6,14 +6,14 @@ function setMinutes(date: Date, value: number): Date {
   return date;
 }
 
-export class AliStorage {
+export class AliStore {
   // todo make cacheTime configurable
   /** (Minutes) */
   cacheTime = 2 * 7 * 24 * 60; // 2 weeks
   productStoreName = "product";
 
   db: IDBDatabase;
-  ["constructor"]: typeof AliStorage;
+  ["constructor"]: typeof AliStore;
 
   connectDB(dbName: string, version?: number, upgradeFunction?: (db: IDBDatabase) => void): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
@@ -112,5 +112,5 @@ export class AliStorage {
   }
 }
 
-const aliStorage = new AliStorage();
-export default aliStorage;
+const aliStore = new AliStore();
+export default aliStore;
