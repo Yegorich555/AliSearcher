@@ -106,7 +106,7 @@ class SearchClass {
       const items = await aliStore.getProducts(text, model.minPrice, model.maxPrice);
       if (items.length) {
         const dbMin = items.reduce((acc, v) => Math.min(acc, v.priceMin), Number.MAX_SAFE_INTEGER) - 0.01;
-        const dbMax = items.reduce((acc, v) => Math.max(acc, v.priceMin), 0) + 0.01;
+        const dbMax = items.reduce((acc, v) => Math.max(acc, v.priceMax), 0) + 0.01;
         excludeRange(model.minPrice, model.maxPrice, dbMin, dbMax).forEach(r => addUrl(text, r.min, r.max));
       } else {
         addUrl(text, model.minPrice, model.maxPrice);
@@ -142,7 +142,7 @@ class SearchClass {
     const min = url.searchParams.get(SearchParams.minPrice);
     const max = url.searchParams.get(SearchParams.maxPrice);
 
-    const suffix = min == null || max == null ? "" : ` (${min != null ? min : ""};${max != null ? max : ""})`;
+    const suffix = min == null || max == null ? "" : ` (${min != null ? min : ""}..${max != null ? max : ""})`;
     const text = `${searchText}${suffix}`;
 
     const pagination = new Pagination({
