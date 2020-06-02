@@ -70,12 +70,20 @@ export class AliStore {
     product.forEach(v => store.add(v));
   }
 
-  async getProducts(searchText: string, priceMin?: number, priceMax?: number): Promise<Product[]> {
-    const items: Product[] = [];
+  async getProducts(
+    searchText: string,
+    priceMin?: number,
+    priceMax?: number
+  ): Promise<{ min: number; max: number; items: Product[] }> {
     const store = await this.getProductStore("readonly");
     const min = priceMin || 0;
     const max = priceMax || Number.MAX_SAFE_INTEGER;
 
+    const result = {
+      items: [] as Product[],
+      min: Number.MAX_SAFE_INTEGER,
+      max: 0
+    };
     return new Promise((resolve, reject) => {
       const t = store.index("searchText").openCursor(searchText);
 
@@ -87,12 +95,19 @@ export class AliStore {
         const cursor = e.target.result as IDBCursorWithValue;
         if (cursor) {
           const item = cursor.value as Product;
-          if (item.priceMin >= min && item.priceMax <= max) {
-            items.push(Object.assign(new Product(), item));
+          result.min = Math.min(result.min, item.priceMin);
+          result.max = Math.max(result.max, item.priceMin);
+
+          if (item.priceMin >= min && item.priceMin <= max) {
+            result.items.push(Object.assign(new Product(), item));
           }
           cursor.continue();
         } else {
-          resolve(items);
+          if (!result.items.length) {
+            result.min = null;
+            result.max = null;
+          }
+          resolve(result);
         }
       };
     });

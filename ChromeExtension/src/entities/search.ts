@@ -57,17 +57,19 @@ class SearchClass {
 
     const products: Product[] = [];
     const progressAll: SearchProgress[] = [];
-    function mergeResult(items: Product[], progress: SearchProgress): void {
-      products.push(...items);
-      // todo result is wrong. We must calculate: +cachedItems, join pageResults
-      const i = progressAll.findIndex(v => v.text === progress.text);
-      if (i === -1) {
-        progressAll.push(progress);
-      } else {
-        progressAll[i] = progress;
-      }
-      // todo fire callback every 500ms instead of every call
+    function mergeResult(items?: Product[], progress?: SearchProgress): void {
+      items && products.push(...items);
 
+      if (progress) {
+        const i = progressAll.findIndex(v => v.text === progress.text);
+        if (i === -1) {
+          progressAll.push(progress);
+        } else {
+          progressAll[i] = progress;
+        }
+      }
+
+      // todo fire callback every 500ms instead of every call
       callback &&
         setTimeout(() =>
           callback({
@@ -103,25 +105,27 @@ class SearchClass {
     for (let i = 0, text = txtSearchArr[0]; i < txtSearchArr.length; text = txtSearchArr[++i]) {
       /** getting products from store (cache) */
       // eslint-disable-next-line no-await-in-loop
-      const items = await aliStore.getProducts(text, model.minPrice, model.maxPrice);
-      if (items.length) {
-        const dbMin = items.reduce((acc, v) => Math.min(acc, v.priceMin), Number.MAX_SAFE_INTEGER) - 0.01;
-        const dbMax = items.reduce((acc, v) => Math.max(acc, v.priceMax), 0) + 0.01;
+      const result = await aliStore.getProducts(text, model.minPrice, model.maxPrice);
+      if (result?.items.length) {
+        const dbMin = result.min - 0.01;
+        const dbMax = result.max + 0.01;
         excludeRange(model.minPrice, model.maxPrice, dbMin, dbMax).forEach(r => addUrl(text, r.min, r.max));
+
+        products.push(...result.items);
+        progressAll.push(
+          new SearchProgress({
+            text: `${text} (cache)`,
+            pagination: new Pagination({ totalItems: result.items.length, loadedPages: 0, totalPages: 0 })
+          })
+        );
       } else {
         addUrl(text, model.minPrice, model.maxPrice);
       }
-
-      products.push(...items);
-      // todo for each url items + for cache
-      progressAll.push(
-        new SearchProgress({
-          text,
-          pagination: new Pagination({ totalItems: items.length, loadedPages: 0, totalPages: 0 })
-        })
-      );
     }
 
+    if (!urls.length) {
+      mergeResult();
+    }
     // todo if (Object.keys(updatedModel).length) {
     //   callback && callback({ updatedModel: { ...model, ...updatedModel } });
     // }
