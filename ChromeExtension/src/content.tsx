@@ -35,6 +35,7 @@ class AppContainer extends Component<any, any> {
   };
 
   formRef: BaseForm;
+  bodyOverflow: string;
 
   constructor(props) {
     super(props);
@@ -58,9 +59,15 @@ class AppContainer extends Component<any, any> {
     this.setState({ error: message });
   };
 
-  handleMaxClick = () => {
+  toggleMax = () => {
     // eslint-disable-next-line react/no-access-state-in-setstate
     const isMax = !this.state.isMax;
+    if (isMax) {
+      this.bodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = this.bodyOverflow;
+    }
     chrome.runtime.sendMessage({ type: messages.MAXIMIZE, isMax });
     this.setState({ isMax });
   };
@@ -147,7 +154,7 @@ class AppContainer extends Component<any, any> {
         <div className={styles.stickyPanel}>
           {this.state.error ? this.renderError() : null}
           <div className={styles.btnPanel}>
-            <button className={styles.btnMax} onClick={this.handleMaxClick} title="Show/Hide" />
+            <button className={styles.btnMax} onClick={this.toggleMax} title="Show/Hide" />
           </div>
         </div>
 
@@ -174,7 +181,7 @@ chrome?.runtime?.onMessage &&
         toggle();
         break;
       case messages.SET_MAXIMIZE:
-        container.handleMaxClick();
+        container.toggleMax();
         break;
       case messages.PING:
         res(true);
