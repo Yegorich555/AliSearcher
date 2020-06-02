@@ -45,28 +45,37 @@ export class AliStore {
         this.db = db;
         this.clearProductsExpired();
       })
-      // todo remove products that is expired
       .catch(e => log.error("Impossible to init IndexedDB", e));
   }
 
-  getProductStore(mode: IDBTransactionMode): IDBObjectStore {
-    return this.db.transaction(this.productStoreName, mode).objectStore(this.productStoreName);
-  }
-
-  appendProducts(product: Product[]): Promise<void> {
+  connect(): Promise<IDBDatabase> {
     return new Promise(resolve => {
-      const store = this.getProductStore("readwrite");
-      product.forEach(v => store.add(v));
-      resolve();
+      if (this.db) {
+        resolve(this.db);
+      }
+      this.connectDB("aliStore").then(db => {
+        this.db = db;
+        resolve(this.db);
+      });
     });
   }
 
-  getProducts(searchText: string, priceMin: number, priceMax: number): Promise<Product[]> {
+  async getProductStore(mode: IDBTransactionMode): Promise<IDBObjectStore> {
+    const db = await this.connect();
+    return db.transaction(this.productStoreName, mode).objectStore(this.productStoreName);
+  }
+
+  async appendProducts(product: Product[]): Promise<void> {
+    const store = await this.getProductStore("readwrite");
+    product.forEach(v => store.add(v));
+  }
+
+  async getProducts(searchText: string, priceMin: number, priceMax: number): Promise<Product[]> {
+    const items: Product[] = [];
+    const store = await this.getProductStore("readonly");
+
     return new Promise((resolve, reject) => {
-      const items: Product[] = [];
-      const t = this.getProductStore("readonly")
-        .index("searchText")
-        .openCursor(searchText);
+      const t = store.index("searchText").openCursor(searchText);
 
       t.onerror = (e): void => {
         reject(e);
@@ -84,16 +93,16 @@ export class AliStore {
           resolve(items);
         }
       };
-      // const b = store.index("priceMin").getAll(IDBKeyRange.bound(priceMin, priceMax));
     });
+
+    // const b = store.index("priceMin").getAll(IDBKeyRange.bound(priceMin, priceMax));
   }
 
-  clearProductsExpired(): Promise<void> {
+  async clearProductsExpired(): Promise<void> {
+    const store = await this.getProductStore("readwrite");
     return new Promise((resolve, reject) => {
       const range = IDBKeyRange.upperBound(setMinutes(new Date(), -1 * this.cacheTime), true);
-      const t = this.getProductStore("readwrite")
-        .index("date")
-        .openCursor(range);
+      const t = store.index("date").openCursor(range);
       t.onsuccess = (e): void => {
         // @ts-ignore
         const cursor = e.target.result as IDBCursorWithValue;
