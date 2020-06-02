@@ -53,10 +53,6 @@
     @include iconBefore($icon-fullscreen);
     font-size: 24px;
   }
-
-  .btnClose {
-    @include iconBefore($icon-close);
-  }
 }
 
 .inputGroup {

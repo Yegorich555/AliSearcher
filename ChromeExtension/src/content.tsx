@@ -147,7 +147,6 @@ class AppContainer extends Component<any, any> {
           {this.state.error ? this.renderError() : null}
           <div className={styles.btnPanel}>
             <button className={styles.btnMax} onClick={this.handleMaxClick} title="Show/Hide" />
-            <button className={styles.btnClose} onClick={toggle} title="Close" />
           </div>
         </div>
 
