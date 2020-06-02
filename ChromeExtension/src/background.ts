@@ -1,30 +1,35 @@
 import messages from "./entities/messages";
 
 let isListening = false;
-const useTabs = {};
+const useTabs = {} as Record<number, { isOpen: boolean; isMax: boolean }>;
 
-function toggleView(id) {
+function toggleView(id: number): void {
   useTabs[id].isOpen = !useTabs[id].isOpen;
   chrome.tabs.sendMessage(id, {
     type: messages.TOGGLE_PANEL
   });
 }
 
-function runScriptOrToggle(tabId) {
+function runScriptOrToggle(tabId: number, isMax = true): void {
   if (!useTabs[tabId]) {
     chrome.tabs.insertCSS(tabId, { file: "content.css" });
     chrome.tabs.executeScript(tabId, { file: "chunk-vendors.js" });
     chrome.tabs.executeScript(tabId, { file: "content.js" }, () => {
-      useTabs[tabId] = { isOpen: true };
+      useTabs[tabId] = { isOpen: true, isMax };
+      if (isMax) {
+        chrome.tabs.sendMessage(tabId, {
+          type: messages.SET_MAXIMIZE
+        });
+      }
     });
   } else {
     toggleView(tabId);
   }
 }
 
-function pingScript(tabId, failedCallback, waitMs = 500) {
+function pingScript(tabId, failedCallback, waitMs = 500): void {
   const timeout = setTimeout(failedCallback, waitMs);
-  const callback = () => {
+  const callback = (): void => {
     chrome.tabs.sendMessage(
       tabId,
       {
@@ -47,9 +52,7 @@ function pingScript(tabId, failedCallback, waitMs = 500) {
   );
 }
 
-window.pingScript = pingScript;
-
-function listen() {
+function listen(): void {
   if (isListening) {
     return;
   }
@@ -60,7 +63,7 @@ function listen() {
     if (r && info.status === "complete") {
       pingScript(id, () => {
         delete useTabs[id];
-        runScriptOrToggle(id);
+        runScriptOrToggle(id, r.isMax);
       });
     }
   });
@@ -68,11 +71,18 @@ function listen() {
   chrome.tabs.onRemoved.addListener(id => {
     delete useTabs[id];
   });
+
+  chrome.runtime.onMessage.addListener((msg, sender) => {
+    if (msg.type === messages.MAXIMIZE) {
+      const tab = useTabs[sender.tab.id];
+      tab.isMax = msg.isMax;
+    }
+  });
 }
 
 chrome.browserAction.onClicked.addListener(tab => {
   if (tab.id) {
-    runScriptOrToggle(tab.id);
     listen();
+    runScriptOrToggle(tab.id);
   }
 });

@@ -23,9 +23,11 @@ function toggle() {
   elEntry.hidden = !elEntry.hidden;
 }
 
+let container: AppContainer;
+
 class AppContainer extends Component<any, any> {
   state = {
-    isMax: true,
+    isMax: DEV_SERVER,
     error: null,
     searchProgress: null as SearchProgress[],
     items: [] as Product[],
@@ -37,6 +39,7 @@ class AppContainer extends Component<any, any> {
   constructor(props) {
     super(props);
     log.subscribe(this.handleError);
+    container = this;
   }
 
   componentDidMount() {
@@ -56,8 +59,10 @@ class AppContainer extends Component<any, any> {
   };
 
   handleMaxClick = () => {
-    const { isMax } = this.state;
-    this.setState({ isMax: !isMax });
+    // eslint-disable-next-line react/no-access-state-in-setstate
+    const isMax = !this.state.isMax;
+    chrome.runtime.sendMessage({ type: messages.MAXIMIZE, isMax });
+    this.setState({ isMax });
   };
 
   searchCallback = (obj: SearchCallbackObj) => {
@@ -167,6 +172,9 @@ chrome?.runtime?.onMessage &&
     switch (message.type) {
       case messages.TOGGLE_PANEL:
         toggle();
+        break;
+      case messages.SET_MAXIMIZE:
+        container.handleMaxClick();
         break;
       case messages.PING:
         res(true);

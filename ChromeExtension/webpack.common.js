@@ -42,7 +42,7 @@ module.exports = function(env, argv) {
         }
       : {
           content: path.resolve(srcPath, "content.tsx"),
-          background: path.resolve(srcPath, "background.js")
+          background: path.resolve(srcPath, "background.ts")
         },
     output: {
       path: destPath,
