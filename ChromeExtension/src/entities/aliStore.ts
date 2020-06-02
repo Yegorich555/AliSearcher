@@ -31,9 +31,11 @@ export class AliStore {
   }
 
   constructor() {
-    // todo remove after testing
-    window.test = this;
-    window.indexedDB.deleteDatabase("aliStore");
+    if (DEV_SERVER) {
+      // @ts-ignore
+      window.test = this;
+      window.indexedDB.deleteDatabase("aliStore");
+    }
 
     this.connectDB("aliStore", 1, db => {
       const obj = db.createObjectStore(
