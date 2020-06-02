@@ -93,7 +93,7 @@ class InsideNumberInput extends DropdownBasic {
   }
 
   get validationProps() {
-    const defValidations = { isNumber: true };
+    const defValidations = { isNumber: !this.props.isFloat };
 
     const lengthSet = this.lengthRestrictions;
     if (lengthSet) {
