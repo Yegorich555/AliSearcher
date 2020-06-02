@@ -5,6 +5,7 @@ const getUniqueId = (): number => ++id;
 
 export default class Product {
   id: number;
+
   description: string;
   link: string;
   linkImage: string;
@@ -34,11 +35,9 @@ export default class Product {
   storeOrderCount?: number;
   storeName: string;
   storeLink: string;
-  // storePositiveFeedback: string;
-  // storeFeedbackCount: number;
-  // storeFeedbackLink: string;
-  // freeShipping: boolean;
+
   searchText: string;
+  searchId: string;
   date: Date;
 
   toString(): string {
@@ -51,6 +50,7 @@ export default class Product {
       return;
     }
     this.id = parsedItem.productId || getUniqueId();
+    this.searchId = `${searchText}_${this.id}`;
 
     this.description = parsedItem.title;
     this.link = fixUrl(parsedItem.productDetailUrl);

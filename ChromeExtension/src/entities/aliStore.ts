@@ -36,7 +36,10 @@ export class AliStore {
     window.indexedDB.deleteDatabase("aliStore");
 
     this.connectDB("aliStore", 1, db => {
-      const obj = db.createObjectStore(this.productStoreName, { autoIncrement: false, keyPath: "id" });
+      const obj = db.createObjectStore(
+        this.productStoreName, //
+        { autoIncrement: false, keyPath: "searchId" }
+      );
       obj.createIndex("priceMin", "priceMin");
       obj.createIndex("searchText", "searchText");
       obj.createIndex("date", "date");
@@ -65,9 +68,9 @@ export class AliStore {
     return db.transaction(this.productStoreName, mode).objectStore(this.productStoreName);
   }
 
-  async appendProducts(product: Product[]): Promise<void> {
+  async appendProducts(items: Product[]): Promise<void> {
     const store = await this.getProductStore("readwrite");
-    product.forEach(v => store.add(v));
+    items.forEach(v => store.put(v));
   }
 
   async getProducts(
@@ -115,7 +118,8 @@ export class AliStore {
     // const b = store.index("priceMin").getAll(IDBKeyRange.bound(priceMin, priceMax));
   }
 
-  async clearProductsExpired(): Promise<void> {
+  /** Clears product that is expired and returns number of cleared */
+  async clearProductsExpired(): Promise<number> {
     const store = await this.getProductStore("readwrite");
 
     const txtArr: string[] = [];
@@ -125,6 +129,7 @@ export class AliStore {
       }
     }
 
+    let cleared = 0;
     return new Promise((resolve, reject) => {
       const range = IDBKeyRange.upperBound(setMinutes(new Date(), -1 * this.cacheTime), true);
       const t = store.index("date").openCursor(range);
@@ -133,6 +138,7 @@ export class AliStore {
         const cursor = e.target.result as IDBCursorWithValue;
         if (cursor) {
           pushUnique((cursor.value as Product).searchText);
+          ++cleared;
           cursor.delete();
           cursor.continue();
         } else {
@@ -145,10 +151,11 @@ export class AliStore {
             if (cursor2) {
               if (txtArr.includes((cursor2.value as Product).searchText)) {
                 cursor2.delete();
+                ++cleared;
               }
               cursor2.continue();
             } else {
-              resolve();
+              resolve(cleared);
             }
           };
 
