@@ -46,8 +46,10 @@ export interface SearchCallbackObj {
 }
 
 class SearchClass {
+  searchSplitter = /[;]/g;
   cachedModel: SearchModel;
   cachedItems: Product[];
+
   isCached(model: SearchModel): boolean {
     return (
       model != null &&
@@ -58,9 +60,93 @@ class SearchClass {
     );
   }
 
+  splitSearchText(text: string, splitPattern?: RegExp): string[] {
+    return text
+      .split(splitPattern || this.searchSplitter)
+      .map(v => v.trim())
+      .filter(v => v);
+  }
+
+  sortAndFilter(items: Product[], model: SearchModel): Product[] {
+    let r = items;
+    if (model.minPrice) {
+      r = r.filter(v => v.priceTotalMin >= model.minPrice);
+    }
+    if (model.maxPrice) {
+      r = r.filter(v => v.priceTotalMin <= model.maxPrice);
+    }
+    if (model.maxLotSize) {
+      r = r.filter(v => !v.lotSizeNum || v.lotSizeNum < model.maxLotSize);
+    }
+    if (model.minOrders) {
+      r = r.filter(v => v.storeOrderCount >= model.minOrders);
+    }
+    if (model.minRating) {
+      r = r.filter(v => v.rating >= model.minRating);
+    }
+
+    // todo we use OR logic but we can use OR and AND
+    if (model.text) {
+      const reg = new RegExp(this.splitSearchText(model.text).join("|"), "i");
+      r = r.filter(v => reg.test(v.description));
+    }
+    // todo we can use regex also
+    if (model.exclude) {
+      const reg = new RegExp(this.splitSearchText(model.exclude).join("|"), "i");
+      r = r.filter(v => !reg.test(v.description));
+    }
+
+    if (model.sort) {
+      // todo sort PriceByLotSize
+      switch (model.sort) {
+        case "priceMinToMax":
+          r = r.sort((a, b) => {
+            let sr = a.priceTotalMin - b.priceTotalMin;
+            if (sr === 0) {
+              sr = (a.storeOrderCount || 0) - (b.storeOrderCount || 0);
+              if (sr === 0) {
+                sr = a.rating - b.rating;
+              }
+            }
+            return sr;
+          });
+          break;
+        case "priceMaxToMin":
+          r = r.sort((a, b) => {
+            let sr = b.priceTotalMin - a.priceTotalMin;
+            if (sr === 0) {
+              sr = (a.storeOrderCount || 0) - (b.storeOrderCount || 0);
+              if (sr === 0) {
+                sr = a.rating - b.rating;
+              }
+            }
+            return sr;
+          });
+          break;
+        case "ordersMaxToMin":
+          r = r.sort((a, b) => {
+            let sr = (b.storeOrderCount || 0) - (a.storeOrderCount || 0);
+            if (sr === 0) {
+              sr = a.priceTotalMin - b.priceTotalMin;
+              if (sr === 0) {
+                sr = a.rating - b.rating;
+              }
+            }
+            return sr;
+          });
+          break;
+        default:
+          log.error("SortType is not defined");
+          break;
+      }
+    }
+
+    return r;
+  }
+
   go = async (model: SearchModel, callback?: (obj: SearchCallbackObj) => void): Promise<any> => {
     if (this.isCached(model)) {
-      return Promise.resolve(this.cachedItems);
+      return Promise.resolve(this.sortAndFilter(this.cachedItems, model));
     }
 
     /** gathering pageInfo */
@@ -82,9 +168,11 @@ class SearchClass {
 
     // todo add sort BestMatch is "default"
     // todo force clear params when model.prop is empty
-
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
     const products: Product[] = [];
     const progressAll: SearchProgress[] = [];
+
     function mergeResult(items?: Product[], progress?: SearchProgress, skipCallback?: boolean): void {
       if (items) {
         items.forEach(v => {
@@ -104,13 +192,12 @@ class SearchClass {
         }
       }
 
-      // todo fire callback every 500ms instead of every call
       !skipCallback &&
         callback &&
         throttleFunction(
           () =>
             callback({
-              items: products,
+              items: self.sortAndFilter(products, model),
               progress: progressAll
             }),
           500
@@ -123,8 +210,6 @@ class SearchClass {
       pageInfo.url.searchParams.set(SearchParams.sort, SortTypes[model.sort].param);
 
     const urls: URL[] = [];
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
     function addUrl(text: string, minPrice?: number, maxPrice?: number): void {
       const url = new URL(pageInfo.url.href);
       const params = url.searchParams;
@@ -145,10 +230,7 @@ class SearchClass {
     }
 
     const txtSearchArr = model.textAli
-      ? model.textAli
-          .split(/[,;]/g)
-          .map(v => v.trim())
-          .filter(v => v)
+      ? this.splitSearchText(model.textAli)
       : [pageInfo.url.searchParams.get(SearchParams.text)];
 
     for (let i = 0, text = txtSearchArr[0]; i < txtSearchArr.length; text = txtSearchArr[++i]) {
@@ -190,7 +272,7 @@ class SearchClass {
 
     this.cachedModel = { ...model };
     this.cachedItems = products;
-    return products;
+    return this.sortAndFilter(products, model);
   };
 
   mergeSearchText(text: string, min?: number | string, max?: number | string): string {
