@@ -3,6 +3,8 @@ import { fixUrl } from "@/helpers";
 let id = 0;
 const getUniqueId = (): number => ++id;
 
+const roundFloat = (num): number => Math.round(num * 100) / 100;
+
 export default class Product {
   id: number;
 
@@ -15,11 +17,11 @@ export default class Product {
   priceShipping?: number;
 
   get priceTotalMin(): number {
-    return this.priceMin + this.priceShipping;
+    return roundFloat(this.priceMin + this.priceShipping);
   }
 
   get priceTotalMax(): number | null {
-    return this.priceMax == null ? this.priceMax : this.priceMax + this.priceShipping;
+    return this.priceMax == null ? this.priceMax : roundFloat(this.priceMax + this.priceShipping);
   }
 
   unit: string;
@@ -28,7 +30,7 @@ export default class Product {
   get unitPrice(): number {
     const min = this.priceTotalMin;
     if (!this.lotSizeNum) return min;
-    return Math.round((min * 100) / this.lotSizeNum) / 100;
+    return roundFloat(min / this.lotSizeNum);
   }
 
   rating: number;
@@ -61,7 +63,10 @@ export default class Product {
     // this.priceCurrency = price[1];
     this.priceMin = Number.parseFloat(price[2]);
     this.priceMax = Number.parseFloat(price[3]) || null;
-    this.priceShipping = Number.parseFloat(priceReg.exec(parsedItem.logisticDesc)[2]) || 0;
+
+    // replace fixes thousands: 1,326.23
+    const priceShipping = Number.parseFloat((priceReg.exec(parsedItem.logisticsDesc)[2] || "0").replace(",", ""));
+    this.priceShipping = priceShipping ? roundFloat(priceShipping) : 0;
 
     this.unit = parsedItem.saleUnit;
     this.lotSizeNum = parsedItem.leastPackagingNum;
