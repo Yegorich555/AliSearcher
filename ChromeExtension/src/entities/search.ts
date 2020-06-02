@@ -7,6 +7,18 @@ import SearchProgress from "./searchProgress";
 import Pagination from "./pagination";
 import aliStore from "./aliStore";
 
+let thottleTimerId: NodeJS.Timeout;
+function throttleFunction(func: () => void, delay: number): void {
+  if (thottleTimerId) {
+    return;
+  }
+
+  thottleTimerId = setTimeout(() => {
+    func();
+    thottleTimerId = undefined;
+  }, delay);
+}
+
 // provides variables between isolated scopes
 function getGlobals(...params: string[]): Promise<any> {
   return new Promise(resolve => {
@@ -79,11 +91,13 @@ class SearchClass {
       // todo fire callback every 500ms instead of every call
       !skipCallback &&
         callback &&
-        setTimeout(() =>
-          callback({
-            items: products,
-            progress: progressAll
-          })
+        throttleFunction(
+          () =>
+            callback({
+              items: products,
+              progress: progressAll
+            }),
+          500
         );
     }
 
