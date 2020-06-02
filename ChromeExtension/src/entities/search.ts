@@ -57,7 +57,7 @@ class SearchClass {
 
     const products: Product[] = [];
     const progressAll: SearchProgress[] = [];
-    function mergeResult(items?: Product[], progress?: SearchProgress): void {
+    function mergeResult(items?: Product[], progress?: SearchProgress, skipCallback?: boolean): void {
       items && products.push(...items);
 
       if (progress) {
@@ -70,7 +70,8 @@ class SearchClass {
       }
 
       // todo fire callback every 500ms instead of every call
-      callback &&
+      !skipCallback &&
+        callback &&
         setTimeout(() =>
           callback({
             items: products,
@@ -85,6 +86,8 @@ class SearchClass {
       pageInfo.url.searchParams.set(SearchParams.sort, SortTypes[model.sort].param);
 
     const urls: URL[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
     function addUrl(text: string, minPrice?: number, maxPrice?: number): void {
       const url = new URL(pageInfo.url.href);
       const params = url.searchParams;
@@ -93,6 +96,15 @@ class SearchClass {
       maxPrice && url.searchParams.set(SearchParams.maxPrice, maxPrice.toString());
 
       urls.push(url);
+
+      mergeResult(
+        null,
+        new SearchProgress({
+          text: self.mergeSearchText(text, minPrice, maxPrice),
+          pagination: new Pagination()
+        }),
+        true
+      );
     }
 
     const txtSearchArr = model.textAli
@@ -104,6 +116,7 @@ class SearchClass {
 
     for (let i = 0, text = txtSearchArr[0]; i < txtSearchArr.length; text = txtSearchArr[++i]) {
       /** getting products from store (cache) */
+      // todo wrong when noPriceRange
       // eslint-disable-next-line no-await-in-loop
       const result = await aliStore.getProducts(text, model.minPrice, model.maxPrice);
       if (result?.items.length) {
@@ -111,43 +124,46 @@ class SearchClass {
         const dbMax = result.max + 0.01;
         excludeRange(model.minPrice, model.maxPrice, dbMin, dbMax).forEach(r => addUrl(text, r.min, r.max));
 
-        products.push(...result.items);
-        progressAll.push(
+        mergeResult(
+          result.items,
           new SearchProgress({
             text: `${text} (cache)`,
-            pagination: new Pagination({ totalItems: result.items.length, loadedPages: 0, totalPages: 0 })
-          })
+            pagination: new Pagination({
+              totalItems: result.items.length
+            })
+          }),
+          true
         );
       } else {
         addUrl(text, model.minPrice, model.maxPrice);
       }
     }
 
-    if (!urls.length) {
-      mergeResult();
-    }
-    // todo if (Object.keys(updatedModel).length) {
-    //   callback && callback({ updatedModel: { ...model, ...updatedModel } });
-    // }
+    // calling empty merge for firing callback
+    mergeResult();
 
+    const req = [];
     for (let u = 0, url = urls[u]; u < urls.length; url = urls[++u]) {
       try {
-        this.httpIterate(url, (items, progress) => mergeResult(items, progress));
+        req.push(this.httpIterate(url, (items, progress) => mergeResult(items, progress)));
       } catch (e) {
         log.error(e);
       }
     }
+    await Promise.all(req);
 
     return products;
   };
+
+  mergeSearchText(text: string, min?: number | string, max?: number | string): string {
+    const suffix = min == null || max == null ? "" : ` (${min != null ? min : ""}..${max != null ? max : ""})`;
+    return `${text}${suffix}`;
+  }
 
   async httpIterate(url: URL, callback: (items: Product[], progress: SearchProgress) => void): Promise<void> {
     const searchText = url.searchParams.get(SearchParams.text);
     const min = url.searchParams.get(SearchParams.minPrice);
     const max = url.searchParams.get(SearchParams.maxPrice);
-
-    const suffix = min == null || max == null ? "" : ` (${min != null ? min : ""}..${max != null ? max : ""})`;
-    const text = `${searchText}${suffix}`;
 
     const pagination = new Pagination({
       totalPages: 1
@@ -184,7 +200,7 @@ class SearchClass {
       callback(
         products,
         new SearchProgress({
-          text,
+          text: this.mergeSearchText(searchText, min, max),
           pagination,
           speed: Math.round((t1 - t0) / i)
         })

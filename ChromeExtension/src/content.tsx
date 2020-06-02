@@ -105,7 +105,7 @@ class AppContainer extends Component<any, any> {
           btnGroupClass={styles.formBtnGroup}
         >
           <div className={styles.inputGroup}>
-            <TextInput name="textAli" placeholder="Search in Aliexpress" />
+            <TextInput name="textAli" placeholder="Search in Aliexpress. Use ';' or ',' for merging several" />
           </div>
           <div className={styles.inputGroup}>
             <NumberInput name="minPrice" placeholder="Min price #.##" isFloat />
