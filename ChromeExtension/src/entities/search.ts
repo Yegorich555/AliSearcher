@@ -67,6 +67,7 @@ class SearchClass {
         progressAll[i] = progress;
       }
       // todo fire callback every 500ms instead of every call
+
       callback &&
         setTimeout(() =>
           callback({
@@ -88,12 +89,16 @@ class SearchClass {
       params.set(SearchParams.text, text);
       minPrice && params.set(SearchParams.minPrice, minPrice.toString());
       maxPrice && url.searchParams.set(SearchParams.maxPrice, maxPrice.toString());
+
+      urls.push(url);
     }
 
     const txtSearchArr = model.textAli
-      ?.split(/[,;]/g)
-      .map(v => v.trim())
-      .filter(v => v) || [pageInfo.url.searchParams.get(SearchParams.text)];
+      ? model.textAli
+          .split(/[,;]/g)
+          .map(v => v.trim())
+          .filter(v => v)
+      : [pageInfo.url.searchParams.get(SearchParams.text)];
 
     for (let i = 0, text = txtSearchArr[0]; i < txtSearchArr.length; text = txtSearchArr[++i]) {
       /** getting products from store (cache) */
@@ -108,6 +113,7 @@ class SearchClass {
       }
 
       products.push(...items);
+      // todo for each url items + for cache
       progressAll.push(
         new SearchProgress({
           text,
@@ -122,18 +128,23 @@ class SearchClass {
 
     for (let u = 0, url = urls[u]; u < urls.length; url = urls[++u]) {
       try {
-        this.httpIterate(url, (items, progress) => mergeResult(items, progress, url));
+        this.httpIterate(url, (items, progress) => mergeResult(items, progress));
       } catch (e) {
         log.error(e);
       }
     }
 
-    // eslint-disable-next-line consistent-return
     return products;
   };
 
   async httpIterate(url: URL, callback: (items: Product[], progress: SearchProgress) => void): Promise<void> {
     const searchText = url.searchParams.get(SearchParams.text);
+    const min = url.searchParams.get(SearchParams.minPrice);
+    const max = url.searchParams.get(SearchParams.maxPrice);
+
+    const suffix = min == null || max == null ? "" : ` (${min != null ? min : ""};${max != null ? max : ""})`;
+    const text = `${searchText}${suffix}`;
+
     const pagination = new Pagination({
       totalPages: 1
     });
@@ -164,13 +175,12 @@ class SearchClass {
 
       const products = (items as any[]).map(v => new Product(v, searchText));
       aliStore.appendProducts(products);
-      products.push(...products);
       const t1 = performance.now();
 
       callback(
         products,
         new SearchProgress({
-          text: searchText,
+          text,
           pagination,
           speed: Math.round((t1 - t0) / i)
         })
