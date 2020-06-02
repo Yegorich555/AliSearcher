@@ -102,6 +102,14 @@ export class AliStore {
 
   async clearProductsExpired(): Promise<void> {
     const store = await this.getProductStore("readwrite");
+
+    const txtArr: string[] = [];
+    function pushUnique(txt: string): void {
+      if (txtArr.indexOf(txt) !== -1) {
+        txtArr.push(txt);
+      }
+    }
+
     return new Promise((resolve, reject) => {
       const range = IDBKeyRange.upperBound(setMinutes(new Date(), -1 * this.cacheTime), true);
       const t = store.index("date").openCursor(range);
@@ -109,10 +117,29 @@ export class AliStore {
         // @ts-ignore
         const cursor = e.target.result as IDBCursorWithValue;
         if (cursor) {
+          pushUnique((cursor.value as Product).searchText);
           cursor.delete();
           cursor.continue();
         } else {
-          resolve();
+          const t2 = store.index("searchText").openCursor();
+
+          t2.onsuccess = (e2): void => {
+            // remove rest items with the same searchText (otherwise very difficult to calculate ranges)
+            // @ts-ignore
+            const cursor2 = e2.target.result as IDBCursorWithValue;
+            if (cursor2) {
+              if (txtArr.includes((cursor2.value as Product).searchText)) {
+                cursor2.delete();
+              }
+              cursor2.continue();
+            } else {
+              resolve();
+            }
+          };
+
+          t2.onerror = (e2): void => {
+            reject(e2);
+          };
         }
       };
 
