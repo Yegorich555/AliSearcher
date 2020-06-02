@@ -46,7 +46,23 @@ export interface SearchCallbackObj {
 }
 
 class SearchClass {
+  cachedModel: SearchModel;
+  cachedItems: Product[];
+  isCached(model: SearchModel): boolean {
+    return (
+      model != null &&
+      this.cachedModel != null &&
+      model.textAli === this.cachedModel.textAli &&
+      model.minPrice === this.cachedModel.minPrice &&
+      model.maxPrice === this.cachedModel.maxPrice
+    );
+  }
+
   go = async (model: SearchModel, callback?: (obj: SearchCallbackObj) => void): Promise<any> => {
+    if (this.isCached(model)) {
+      return Promise.resolve(this.cachedItems);
+    }
+
     /** gathering pageInfo */
     const globals = await getGlobals("runConfigs", "runParams");
     const pageInfo = {
@@ -172,6 +188,8 @@ class SearchClass {
     }
     await Promise.all(req);
 
+    this.cachedModel = { ...model };
+    this.cachedItems = products;
     return products;
   };
 
