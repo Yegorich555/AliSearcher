@@ -6,6 +6,7 @@
 }
 
 .spinner {
+  box-sizing: border-box;
   border: 5px solid $spinnerColor1;
   border-radius: 50%;
   border-top: 5px solid $spinnerColor2;
