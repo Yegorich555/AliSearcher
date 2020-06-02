@@ -23,12 +23,9 @@ function toggle() {
   elEntry.hidden = !elEntry.hidden;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-let container: AppContainer; // create new class only for intellisense
-
 class AppContainer extends Component<any, any> {
   state = {
-    isMax: !!DEV_SERVER,
+    isMax: true,
     error: null,
     searchProgress: null as SearchProgress[],
     items: [] as Product[],
@@ -39,7 +36,6 @@ class AppContainer extends Component<any, any> {
 
   constructor(props) {
     super(props);
-    container = this;
     log.subscribe(this.handleError);
   }
 
@@ -166,11 +162,14 @@ document.body.prepend(elEntry);
 
 ReactDom.render(<AppContainer />, elEntry);
 
-chrome.runtime.onMessage &&
-  chrome.runtime.onMessage.addListener(message => {
-    switch (message) {
+chrome?.runtime?.onMessage &&
+  chrome.runtime.onMessage.addListener((message, _sender, res) => {
+    switch (message.type) {
       case messages.TOGGLE_PANEL:
         toggle();
+        break;
+      case messages.PING:
+        res(true);
         break;
       default:
     }

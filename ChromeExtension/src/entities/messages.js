@@ -1,3 +1,4 @@
 export default {
-  TOGGLE_PANEL: 1
+  TOGGLE_PANEL: "ALI_TOGGLE_PANEL",
+  PING: "ALI_PING"
 };
