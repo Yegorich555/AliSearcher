@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/no-extraneous-dependencies */
 // console.clear(); // TODO: watchFix => it doesn't work properly since VSCode-terminal has bug: https://github.com/microsoft/vscode/issues/75141
 const webpack = require("webpack");
@@ -220,7 +221,7 @@ module.exports = function(env, argv) {
         chunkFilename: "[id].css",
         sourceMap: enableSourceMap
       }),
-      new CleanPlugin.CleanWebpackPlugin(), // it cleans output folder before extracting files
+      new CleanPlugin.CleanWebpackPlugin({ cleanStaleWebpackAssets: false }), // it cleans output folder before extracting files
       new CopyWebpackPlugin([
         {
           // it copies files like images, fonts etc. from 'public' path to 'destPath' (since not every file will be injected into css and js)
