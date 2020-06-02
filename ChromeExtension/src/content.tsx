@@ -44,7 +44,7 @@ class AppContainer extends Component<any, any> {
   }
 
   componentDidMount() {
-    DEV_SERVER && this.onValidSubmit({} as SearchModel);
+    DEV_SERVER && this.onValidSubmit(this.formRef.validate());
   }
 
   componentDidCatch(error: Error) {
@@ -105,7 +105,7 @@ class AppContainer extends Component<any, any> {
           btnGroupClass={styles.formBtnGroup}
         >
           <div className={styles.inputGroup}>
-            <TextInput name="textAli" placeholder="Search in Aliexpress. Use ';' or ',' for merging several" />
+            <TextInput name="textAli" placeholder="Search in Aliexpress. Use ';' for multi-search" />
           </div>
           <div className={styles.inputGroup}>
             <NumberInput name="minPrice" placeholder="Min price #.##" isFloat />
@@ -120,11 +120,11 @@ class AppContainer extends Component<any, any> {
           <div className={styles.inputGroup}>
             <NumberInput name="maxLotSize" placeholder="Max lot size" />
             <NumberInput name="minOrders" placeholder="Min orders" />
-            <NumberInput name="minRating" placeholder="Min rating" />
+            <NumberInput name="minRating" placeholder="Min rating" isFloat />
           </div>
           <div className={styles.inputGroup}>
-            <TextInput name="text" placeholder="Search in results" />
-            <TextInput name="exclude" placeholder="Exclude from results" />
+            <TextInput name="text" placeholder="Search in results. Use ';' for multi-search" />
+            <TextInput name="exclude" placeholder="Exclude from results. Use ';' for multi-conditions" />
           </div>
         </BaseForm>
         <ProductsView items={this.state.items} />
