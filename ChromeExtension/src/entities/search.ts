@@ -123,7 +123,6 @@ class SearchClass {
 
     for (let i = 0, text = txtSearchArr[0]; i < txtSearchArr.length; text = txtSearchArr[++i]) {
       /** getting products from store (cache) */
-      // todo wrong when noPriceRange
       // eslint-disable-next-line no-await-in-loop
       const result = await aliStore.getProducts(text, model.minPrice, model.maxPrice);
       if (result?.items.length) {
@@ -171,6 +170,7 @@ class SearchClass {
     const searchText = url.searchParams.get(SearchParams.text);
     const min = url.searchParams.get(SearchParams.minPrice);
     const max = url.searchParams.get(SearchParams.maxPrice);
+    const text = this.mergeSearchText(searchText, min, max);
 
     const pagination = new Pagination({
       totalPages: 1
@@ -180,8 +180,14 @@ class SearchClass {
     for (let i = 1; i <= pagination.totalPages; ++i) {
       url.searchParams.set("page", i.toString());
       log.info(url);
-      // eslint-disable-next-line no-await-in-loop
-      const res = await axios.get(url.href);
+      let res;
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        res = await axios.get(url.href);
+      } catch (e) {
+        log.error(e, `\nin [${text}]`);
+        return;
+      }
       const { items, resultCount, resultSizePerPage } =
         typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
 
@@ -207,7 +213,7 @@ class SearchClass {
       callback(
         products,
         new SearchProgress({
-          text: this.mergeSearchText(searchText, min, max),
+          text,
           pagination,
           speed: Math.round((t1 - t0) / i)
         })

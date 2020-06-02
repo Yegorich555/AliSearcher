@@ -44,7 +44,7 @@ class AppContainer extends Component<any, any> {
   }
 
   componentDidMount() {
-    DEV_SERVER && this.handleSearchClick({} as SearchModel);
+    DEV_SERVER && this.onValidSubmit({} as SearchModel);
   }
 
   componentDidCatch(error: Error) {
@@ -77,11 +77,11 @@ class AppContainer extends Component<any, any> {
     this.setState(nextState);
   };
 
-  handleSearchClick = (model: SearchModel) => {
+  onValidSubmit = (model: SearchModel) => {
     search
       .go(model, this.searchCallback)
       .then(items => this.setState({ items }))
-      .catch(err => log.error(err.message));
+      .catch((err: Error) => log.error(err));
   };
 
   handleResetClick = () => {
@@ -97,7 +97,7 @@ class AppContainer extends Component<any, any> {
             this.formRef = el;
           }}
           className={styles.form}
-          onValidSubmit={this.handleSearchClick}
+          onValidSubmit={this.onValidSubmit}
           textSubmit="SEARCH"
           defaultModel={this.state.defaultModel}
           footer={this.state.searchProgress && <TableSearchResults items={this.state.searchProgress} />}

@@ -1,9 +1,10 @@
 class LogClass {
   callback?: (message?: any, ...optionalParams: any[]) => void;
 
-  error(message?: any, ...optionalParams: any[]): void {
-    this.callback(message, ...optionalParams);
-    console.error(`Alisearcher. ${message}`, ...optionalParams);
+  error(err?: any, ...optionalParams: any[]): void {
+    this.callback(err?.message || err, ...optionalParams);
+    console.error("Alisearcher.", err, ...optionalParams);
+    console.trace();
   }
 
   warn(message?: any, ...optionalParams: any[]): void {
