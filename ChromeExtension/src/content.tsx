@@ -80,7 +80,7 @@ class AppContainer extends Component<any, any> {
   handleSearchClick = (model: SearchModel) => {
     search
       .go(model, this.searchCallback)
-      .then(items => this.setState({ items }, () => console.warn(items)))
+      .then(items => this.setState({ items }))
       .catch(err => log.error(err.message));
   };
 
@@ -108,8 +108,8 @@ class AppContainer extends Component<any, any> {
             <TextInput name="textAli" placeholder="Search in Aliexpress" />
           </div>
           <div className={styles.inputGroup}>
-            <NumberInput name="minPrice" placeholder="Min price" />
-            <NumberInput name="maxPrice" placeholder="Max price" />
+            <NumberInput name="minPrice" placeholder="Min price #.##" isFloat />
+            <NumberInput name="maxPrice" placeholder="Max price #.##" isFloat />
             <Dropdown
               name="sort"
               initValue={Object.keys(SortTypes)[0]}
