@@ -58,7 +58,14 @@ class SearchClass {
     const products: Product[] = [];
     const progressAll: SearchProgress[] = [];
     function mergeResult(items?: Product[], progress?: SearchProgress, skipCallback?: boolean): void {
-      items && products.push(...items);
+      if (items) {
+        items.forEach(v => {
+          const i = products.findIndex(p => p.id === v.id);
+          if (i === -1) {
+            products.push(v);
+          }
+        });
+      }
 
       if (progress) {
         const i = progressAll.findIndex(v => v.text === progress.text);
