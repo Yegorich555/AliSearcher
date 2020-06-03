@@ -84,7 +84,7 @@ export default class Product {
       }
     }
 
-    this.rating = Number.parseFloat(parsedItem.starRating) || null;
+    this.rating = Number.parseFloat(parsedItem.starRating) || 0;
     this.storeOrderCount = (parsedItem.tradeDesc && Number.parseInt(/(\d*)/.exec(parsedItem.tradeDesc)[1], 10)) || null;
     this.storeName = parsedItem.store?.storeName;
     this.storeLink = fixUrl(parsedItem.store?.storeUrl);
