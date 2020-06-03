@@ -207,7 +207,7 @@ elEntry.id = "aliSearcher";
 elEntry.style.position = "fixed";
 elEntry.style.right = "0px";
 elEntry.style.top = "0px";
-elEntry.style.zIndex = "999";
+elEntry.style.zIndex = "9999999";
 elEntry.setAttribute("data-theme", "dark");
 document.body.prepend(elEntry);
 
