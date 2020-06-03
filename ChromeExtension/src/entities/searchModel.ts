@@ -20,6 +20,7 @@ export default class SearchModel {
   maxPrice?: number;
   minOrders?: number;
   minRating?: number;
+  minLotSize?: number;
   maxLotSize?: number;
   text?: string;
   textAli?: string;

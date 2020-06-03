@@ -123,6 +123,7 @@ class AppContainer extends Component<any, any> {
             <NumberInput name="minPrice" placeholder="Min price #.##" isFloat />
             <NumberInput name="maxPrice" placeholder="Max price #.##" isFloat />
             <Dropdown
+              className={styles.inputPriceSort}
               name="sort"
               initValue={Object.keys(SortTypes)[0]}
               options={Object.keys(SortTypes).map(key => ({ value: key, text: SortTypes[key].text }))}
@@ -130,6 +131,7 @@ class AppContainer extends Component<any, any> {
           </div>
           <h3>Search in results</h3>
           <div className={styles.inputGroup}>
+            <NumberInput name="minLotSize" placeholder="Min lot size" />
             <NumberInput name="maxLotSize" placeholder="Max lot size" />
             <NumberInput name="minOrders" placeholder="Min orders" />
             <NumberInput name="minRating" placeholder="Min rating" isFloat />

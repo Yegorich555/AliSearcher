@@ -63,16 +63,16 @@ $panelHeight: 30px;
       display: none;
     }
     margin-bottom: 0;
-    flex: 1 1 30%;
+    flex: 1 1 33%;
     + * {
-      margin-left: 10px;
-    }
-    &:nth-child(3) {
-      flex-basis: 40%;
+      margin-left: 5px;
     }
   }
   + .inputGroup {
     margin-top: 4px;
+  }
+  .inputPriceSort {
+    min-width: 206px;
   }
 }
 

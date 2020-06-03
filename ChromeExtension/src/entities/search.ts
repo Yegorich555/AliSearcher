@@ -75,6 +75,9 @@ class SearchClass {
     if (model.maxPrice) {
       r = r.filter(v => v.priceTotalMin <= model.maxPrice);
     }
+    if (model.minLotSize) {
+      r = r.filter(v => v.lotSizeNum && v.lotSizeNum > model.minLotSize);
+    }
     if (model.maxLotSize) {
       r = r.filter(v => !v.lotSizeNum || v.lotSizeNum < model.maxLotSize);
     }
