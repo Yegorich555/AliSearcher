@@ -26,11 +26,10 @@ export default class ProductsView extends Component<ProductsViewProps> {
               <span>{`${item.priceTotalMin}${!item.priceTotalMax ? "" : ` - ${item.priceTotalMax}`}`}</span>
               <span>{`${item.lotSizeNum ? `${item.lotSizeNum}${item.lotSizeText} / ` : ""}${item.unit}`}</span>
             </div>
-            {/* todo price + shipping here <div></div> */}
             <div className={styles.ratingBar}>
-              {/* todo ui-rating */}
               <span>Rating: {item.rating}</span>
               <span>Orders {item.storeOrderCount || 0}</span>
+              <span>Sheeping {item.priceShipping}</span>
             </div>
             <a href={item.storeLink} target="_blank" rel="noreferrer" className={styles.storeLink}>
               {item.storeName}
