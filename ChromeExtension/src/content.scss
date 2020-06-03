@@ -1,14 +1,15 @@
+$panelHeight: 30px;
 .container {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - #{$panelHeight});
   overflow: auto;
 }
 
 .stickyPanel {
   display: flex;
   position: relative;
-  height: 30px;
+  height: $panelHeight;
   .error {
     color: $errorTextColor;
     padding: 2px 120px;
