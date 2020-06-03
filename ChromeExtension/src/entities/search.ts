@@ -312,7 +312,7 @@ class SearchClass {
       totalPages: 1
     });
     const t0 = performance.now();
-
+    let gotCurrency = false;
     for (let i = 1; i <= pagination.totalPages; ++i) {
       url.searchParams.set("page", i.toString());
       log.info(url);
@@ -324,8 +324,16 @@ class SearchClass {
         log.error(e, `\nin [${text}]`);
         return;
       }
-      const { items, resultCount, resultSizePerPage } =
+      const { items, resultCount, resultSizePerPage, p4pObjectConfig } =
         typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
+
+      if (!gotCurrency) {
+        const v = p4pObjectConfig?.bcfg.currencyType;
+        if (v) {
+          aliStore.currency = v;
+          gotCurrency = true;
+        }
+      }
 
       pagination.totalItems = resultCount;
       pagination.pageSize = resultSizePerPage;

@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 // eslint-disable-next-line no-unused-vars
 import Product from "@/entities/product";
+import aliStore from "@/entities/aliStore";
 import styles from "./productsView.scss";
 
 export interface ProductsViewProps {
@@ -13,7 +14,7 @@ export default class ProductsView extends Component<ProductsViewProps> {
     return this.props.items || [];
   }
   render(): JSX.Element {
-    const currency = "$";
+    const { currency } = aliStore;
     return (
       <ul className={styles.productsContainer}>
         {this.filteredItems.map(item => (

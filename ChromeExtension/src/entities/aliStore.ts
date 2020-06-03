@@ -2,6 +2,11 @@ import Product from "./product";
 import log from "./log";
 import SearchModel from "./searchModel";
 
+const currencyMapper = {
+  USD: "$",
+  EUR: "€"
+};
+
 function setMinutes(date: Date, value: number): Date {
   date.setMinutes(date.getMinutes() + value);
   return date;
@@ -12,6 +17,24 @@ export class AliStore {
   /** (Minutes) */
   cacheTime = 2 * 7 * 24 * 60; // 2 weeks
   productStoreName = "product";
+
+  modelKey = "Ali_SearchModel";
+  saveModel(model: SearchModel): void {
+    console.warn(this);
+    window.localStorage.setItem(this.modelKey, JSON.stringify(model));
+  }
+
+  getModel(): SearchModel | null {
+    return JSON.parse(window.localStorage.getItem(this.modelKey));
+  }
+
+  currencyKey = "Ali_currency";
+  get currency(): string {
+    return window.sessionStorage.getItem(this.currencyKey);
+  }
+  set currency(v) {
+    window.sessionStorage.setItem(this.currencyKey, currencyMapper[v]);
+  }
 
   db: IDBDatabase;
 
@@ -36,7 +59,7 @@ export class AliStore {
     }
     if (DEV_SERVER) {
       // @ts-ignore
-      window.test = this;
+      window.aliStore = this;
       window.indexedDB.deleteDatabase("aliStore");
     }
 
@@ -174,15 +197,6 @@ export class AliStore {
         reject(e);
       };
     });
-  }
-
-  modelKey: "Ali_SearchModel";
-  saveModel(model: SearchModel): void {
-    window.localStorage.setItem(this.modelKey, JSON.stringify(model));
-  }
-
-  getModel(): SearchModel | null {
-    return JSON.parse(window.localStorage.getItem(this.modelKey));
   }
 }
 
