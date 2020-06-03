@@ -4,8 +4,12 @@ let id = 0;
 const getUniqueId = (): number => ++id;
 
 const roundFloat = (num): number => Math.round(num * 100) / 100;
-
+const regLotByDesc = /((\d+)-)?(\d+)\s?pcs/i;
 export default class Product {
+  static lotSizeByDesc(s: string): number | null {
+    const result = regLotByDesc.exec(s);
+    return (result && Number.parseInt(result[2] || result[3], 10)) || null;
+  }
   id: number;
 
   description: string;
@@ -25,8 +29,8 @@ export default class Product {
   }
 
   unit: string;
-  lotSizeNum: number;
-  lotSizeText: string;
+  lotSizeNum?: number;
+  lotSizeText?: string;
   get unitPrice(): number {
     const min = this.priceTotalMin;
     if (!this.lotSizeNum) return min;
@@ -70,7 +74,16 @@ export default class Product {
 
     this.unit = parsedItem.saleUnit;
     this.lotSizeNum = parsedItem.leastPackagingNum;
-    this.lotSizeText = (parsedItem.saleComplexUnit || "").replace("pieces", "pcs");
+    this.lotSizeText = (parsedItem.saleComplexUnit || "").replace("pieces", "");
+
+    if (!this.lotSizeNum) {
+      const lotSize = Product.lotSizeByDesc(this.description);
+      if (lotSize && lotSize > 1) {
+        this.lotSizeNum = lotSize;
+        this.lotSizeText = "";
+        this.unit = "set";
+      }
+    }
 
     this.rating = Number.parseFloat(parsedItem.starRating) || null;
     this.storeOrderCount = (parsedItem.tradeDesc && Number.parseInt(/(\d*)/.exec(parsedItem.tradeDesc)[1], 10)) || null;
