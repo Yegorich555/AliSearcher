@@ -17,6 +17,7 @@ import ProductsView from "./components/productsView";
 import SecondaryBtn from "./elements/buttons/secondaryBtn";
 import log from "./entities/log";
 import BasicBtn from "./elements/buttons/basicBtn";
+import aliStore from "./entities/aliStore";
 
 const elEntry = document.createElement("div");
 function toggle() {
@@ -31,7 +32,7 @@ class AppContainer extends Component<any, any> {
     error: null,
     searchProgress: null as SearchProgress[],
     items: [] as Product[],
-    defaultModel: null as SearchModel
+    defaultModel: aliStore.getModel()
   };
 
   formRef: BaseForm;
@@ -86,6 +87,7 @@ class AppContainer extends Component<any, any> {
   };
 
   onValidSubmit = (model: SearchModel) => {
+    aliStore.saveModel(model);
     search
       .go(model, this.searchCallback)
       .then(items => this.setState({ items }))

@@ -1,5 +1,6 @@
 import Product from "./product";
 import log from "./log";
+import SearchModel from "./searchModel";
 
 function setMinutes(date: Date, value: number): Date {
   date.setMinutes(date.getMinutes() + value);
@@ -173,6 +174,15 @@ export class AliStore {
         reject(e);
       };
     });
+  }
+
+  modelKey: "Ali_SearchModel";
+  saveModel(model: SearchModel): void {
+    window.localStorage.setItem(this.modelKey, JSON.stringify(model));
+  }
+
+  getModel(): SearchModel | null {
+    return JSON.parse(window.localStorage.getItem(this.modelKey));
   }
 }
 
