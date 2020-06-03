@@ -59,9 +59,6 @@ $panelHeight: 30px;
 .inputGroup {
   display: flex;
   > label {
-    > span:first-child {
-      display: none;
-    }
     margin-bottom: 0;
     flex: 1 1 33%;
     + * {

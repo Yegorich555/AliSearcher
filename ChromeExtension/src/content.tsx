@@ -125,15 +125,27 @@ class AppContainer extends Component<any, any> {
         >
           <div className={styles.inputGroup}>
             <TextInput
+              label="Search in Aliexpress"
               name="textAli"
               htmlName="searchAli"
-              placeholder="Search in Aliexpress. Use ';' for multi-search"
+              placeholder="Use ';' for multi-search: battery AA; battery AAA"
             />
           </div>
           <div className={styles.inputGroup}>
-            <NumberInput name="minPrice" placeholder="Min price #.##" isFloat />
-            <NumberInput name="maxPrice" placeholder="Max price #.##" isFloat />
+            <NumberInput //
+              label="Min price"
+              name="minPrice"
+              placeholder="#.##"
+              isFloat
+            />
+            <NumberInput //
+              label="Max price"
+              name="maxPrice"
+              placeholder="#.##"
+              isFloat
+            />
             <Dropdown
+              label="Sort"
               className={styles.inputPriceSort}
               name="sort"
               initValue={Object.keys(SortTypes)[0]}
@@ -142,21 +154,23 @@ class AppContainer extends Component<any, any> {
           </div>
           <h3>Search in results</h3>
           <div className={styles.inputGroup}>
-            <NumberInput name="minLotSize" placeholder="Min lot size" />
-            <NumberInput name="maxLotSize" placeholder="Max lot size" />
-            <NumberInput name="minOrders" placeholder="Min orders" />
-            <NumberInput name="minRating" placeholder="Min rating" isFloat />
+            <NumberInput label="Min lot size" name="minLotSize" placeholder="" />
+            <NumberInput label="Max lot size" name="maxLotSize" placeholder="" />
+            <NumberInput label="Min orders" name="minOrders" placeholder="" />
+            <NumberInput label="Min rating" name="minRating" placeholder="#.#" isFloat />
           </div>
           <div className={styles.inputGroup}>
             <TextInput //
+              label="Search in results"
               name="text"
               htmlName="search"
-              placeholder="Text. Use ';' for multi or Regex"
+              placeholder="Use ';' or Regex: /battery/; AA"
             />
             <TextInput //
+              label="Exclude from results"
               name="exclude"
               htmlName="exclude"
-              placeholder="Exclude. Use ';' for multi or Regex"
+              placeholder="Use ';' or Regex: /battery/; AA"
             />
           </div>
         </BaseForm>

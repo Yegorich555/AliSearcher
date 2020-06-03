@@ -2,6 +2,7 @@ $margin: 4px;
 .control {
   margin-bottom: 20px;
   display: block;
+  position: relative;
   > fieldset {
     position: relative;
     padding: 0;
@@ -21,8 +22,14 @@ $margin: 4px;
   }
   > span {
     display: block;
-    margin-bottom: $margin;
-    position: relative;
+    position: absolute;
+    top: -4px;
+    left: 8px;
+    padding: 0 4px;
+    font-size: 11px;
+    z-index: 1;
+    background: $basicBackColor2;
+    color: $basicTextDisabledColor;
   }
 }
 
