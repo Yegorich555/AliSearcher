@@ -8,8 +8,8 @@ import styles from "./tableSearchResults.scss";
 function sumProgress(items: SearchProgress[]): Pagination {
   return {
     pageSize: 0,
-    loadedPages: items.reduce((acc, v) => acc + v.pagination.loadedPages, 0),
-    totalPages: items.reduce((acc, v) => acc + v.pagination.totalPages, 0)
+    loadedPages: items.reduce((acc, v) => acc + (v.pagination.loadedPages || 0), 0),
+    totalPages: items.reduce((acc, v) => acc + (v.pagination.totalPages || 0), 0)
   };
 }
 
@@ -43,7 +43,7 @@ export default function TableSearchResults({ items }: { items: SearchProgress[] 
         {items.length > 1 ? (
           <tr>
             <td>Summary</td>
-            <td>{items.reduce((acc, v) => acc + v.pagination.totalItems, 0)}</td>
+            <td>{items.reduce((acc, v) => acc + (v.pagination.totalItems || 0), 0)}</td>
             <td className={styles.progressColumn}>{progressBar(sumProgress(items))}</td>
             <td />
             <td />
