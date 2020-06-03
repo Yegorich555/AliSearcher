@@ -359,9 +359,9 @@ class SearchClass {
         // return JSON.parse(result[1]);
       }
     } catch (error) {
-      log.error(error, result[1]);
+      log.error("Error parsing html. Unable to define js-object-assignment", result, error);
+      throw error;
     }
-    log.error("Error parsing html. Unable to define js-object-assignment");
     return null;
   };
 }

@@ -24,7 +24,8 @@ module.exports = {
   },
   globals: {
     DEV_SERVER: true,
-    DEBUG: true
+    DEBUG: true,
+    TEST: true
   },
   plugins: ["@typescript-eslint", "json", "prettier"],
   rules: {

@@ -206,7 +206,8 @@ module.exports = function(env, argv) {
           BASE_URL: '"/"'
         },
         DEV_SERVER: isDevServer,
-        DEBUG: isDevServer
+        DEBUG: isDevServer,
+        TEST: false
       }),
       new CaseSensitivePathsPlugin(), // it fixes bugs between OS in caseSensitivePaths (since Windows isn't CaseSensitive but Linux is)
       new FriendlyErrorsWebpackPlugin(), // it provides user-friendly errors from webpack (since the last has ugly useless bug-report)

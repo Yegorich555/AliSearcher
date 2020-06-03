@@ -13,7 +13,6 @@ export class AliStore {
   productStoreName = "product";
 
   db: IDBDatabase;
-  ["constructor"]: typeof AliStore;
 
   connectDB(dbName: string, version?: number, upgradeFunction?: (db: IDBDatabase) => void): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
@@ -31,6 +30,9 @@ export class AliStore {
   }
 
   constructor() {
+    if (TEST) {
+      return;
+    }
     if (DEV_SERVER) {
       // @ts-ignore
       window.test = this;

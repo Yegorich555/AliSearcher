@@ -6,4 +6,11 @@ module.exports = {
   testMatch: [`${__dirname}/**/*.test.[jt]s?(x)`],
   testPathIgnorePatterns: ["/node_modules/", `.eslintrc.js$`, `config.js$`],
   collectCoverage: false,
+  globals: {
+    DEV_SERVER: false,
+    TEST: true
+  },
+  moduleNameMapper: {
+    "^@/(.*)": `${rootDir}/src/$1`
+  }
 };
