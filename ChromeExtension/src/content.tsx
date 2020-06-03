@@ -113,7 +113,11 @@ class AppContainer extends Component<any, any> {
           btnGroupClass={styles.formBtnGroup}
         >
           <div className={styles.inputGroup}>
-            <TextInput name="textAli" placeholder="Search in Aliexpress. Use ';' for multi-search" />
+            <TextInput
+              name="textAli"
+              htmlName="searchAli"
+              placeholder="Search in Aliexpress. Use ';' for multi-search"
+            />
           </div>
           <div className={styles.inputGroup}>
             <NumberInput name="minPrice" placeholder="Min price #.##" isFloat />
@@ -131,8 +135,16 @@ class AppContainer extends Component<any, any> {
             <NumberInput name="minRating" placeholder="Min rating" isFloat />
           </div>
           <div className={styles.inputGroup}>
-            <TextInput name="text" placeholder="Search in results. Use ';' for multi-search" />
-            <TextInput name="exclude" placeholder="Exclude from results. Use ';' for multi-conditions" />
+            <TextInput //
+              name="text"
+              htmlName="search"
+              placeholder="Search in results. Use ';' for multi-search"
+            />
+            <TextInput
+              name="exclude"
+              htmlName="exclude"
+              placeholder="Exclude from results. Use ';' for multi-conditions"
+            />
           </div>
         </BaseForm>
         <ProductsView items={this.state.items} />
