@@ -99,6 +99,15 @@ class AppContainer extends Component<any, any> {
     this.setState({ searchProgress: null });
   };
 
+  renderFormFooter = () => {
+    return (
+      <>
+        {this.state.searchProgress && <TableSearchResults items={this.state.searchProgress} />}
+        {this.state.items && <div className={styles.totalItems}>Total items: {this.state.items.length}</div>}
+      </>
+    );
+  };
+
   renderBody = () => {
     return (
       <div className={styles.container}>
@@ -110,7 +119,7 @@ class AppContainer extends Component<any, any> {
           onValidSubmit={this.onValidSubmit}
           textSubmit="SEARCH"
           defaultModel={this.state.defaultModel}
-          footer={this.state.searchProgress && <TableSearchResults items={this.state.searchProgress} />}
+          footer={this.renderFormFooter()}
           buttons={<SecondaryBtn onClick={this.handleResetClick}>RESET</SecondaryBtn>}
           btnGroupClass={styles.formBtnGroup}
         >
