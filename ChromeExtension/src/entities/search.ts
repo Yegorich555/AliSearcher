@@ -89,18 +89,25 @@ class SearchClass {
     }
 
     // todo we use OR logic but we can use OR and AND
-    if (model.text) {
-      const reg = new RegExp(this.splitSearchText(model.text).join("|"), "i");
-      r = r.filter(v => reg.test(v.description));
-    }
-    // todo we can use regex also
-    if (model.exclude) {
-      const reg = new RegExp(this.splitSearchText(model.exclude).join("|"), "i");
-      r = r.filter(v => !reg.test(v.description));
+    if (model.text || model.exclude) {
+      const filterByText = (text: string, isExclude = false): void => {
+        const arr = this.splitSearchText(text).map(v => {
+          // this is regex in string
+          if (v[0] === "/" && v[v.length - 1] === "/") {
+            return `(${v.substring(1, v.length - 1)})`;
+          }
+          return v;
+        });
+
+        const reg = new RegExp(arr.join("|"), "i");
+        r = isExclude ? r.filter(v => !reg.test(v.description)) : r.filter(v => reg.test(v.description));
+      };
+
+      model.text && filterByText(model.text);
+      model.exclude && filterByText(model.exclude, true);
     }
 
     if (model.sort) {
-      // todo sort PriceByLotSize
       switch (model.sort) {
         case "priceMinToMax":
           r = r.sort((a, b) => {

@@ -151,12 +151,12 @@ class AppContainer extends Component<any, any> {
             <TextInput //
               name="text"
               htmlName="search"
-              placeholder="Search in results. Use ';' for multi-search"
+              placeholder="Text. Use ';' for multi or Regex"
             />
-            <TextInput
+            <TextInput //
               name="exclude"
               htmlName="exclude"
-              placeholder="Exclude from results. Use ';' for multi-conditions"
+              placeholder="Exclude. Use ';' for multi or Regex"
             />
           </div>
         </BaseForm>
