@@ -1,7 +1,7 @@
 import axios from "axios";
 import log from "./log";
 import Product from "./product";
-import { fixUrl, excludeRange } from "../helpers";
+import { fixUrl, excludeRange, roundPrice } from "../helpers";
 import SearchModel, { SortTypes, SearchParams } from "./searchModel";
 import SearchProgress from "./searchProgress";
 import Pagination from "./pagination";
@@ -226,8 +226,8 @@ class SearchClass {
       const url = new URL(pageInfo.url.href);
       const params = url.searchParams;
       params.set(SearchParams.text, text);
-      minPrice && params.set(SearchParams.minPrice, minPrice.toString());
-      maxPrice && url.searchParams.set(SearchParams.maxPrice, maxPrice.toString());
+      minPrice && params.set(SearchParams.minPrice, roundPrice(minPrice).toString());
+      maxPrice && url.searchParams.set(SearchParams.maxPrice, roundPrice(maxPrice).toString());
 
       urls.push(url);
 

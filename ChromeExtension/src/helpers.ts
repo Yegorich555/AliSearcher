@@ -38,3 +38,5 @@ export function excludeRange(min: number | undefined, max: number | undefined, e
 
   return ranges;
 }
+
+export const roundPrice = (num: number): number => Math.round(num * 100) / 100;
