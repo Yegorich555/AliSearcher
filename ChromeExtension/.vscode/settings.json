@@ -1,0 +1,73 @@
+{
+  // todo-watch: path-intellisense doesn't work with none-js-files https://github.com/ChristianKohler/PathIntellisense/issues/110
+  "path-autocomplete.includeExtension": true,
+  "path-autocomplete.extensionOnImport": true,
+  "path-autocomplete.excludedItems": {
+    "**/*.+(ts|js|jsx|tsx)": { "when": "**" }, // ignore js files because VSCode works fine with ones
+    "**/*.map": { "when": "**" }, // always ignore *.map files
+    "**/{.git,node_modules}": { "when": "**" }, // always ignore .git and node_modules folders
+    "**/*": { "when": "**/*.+(less|css|scss|sass)" } //exclude for css files because VSCode works fine with ones
+  },
+  "stylelint.enable": true,
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+
+  /*
+    if you want fix by format set the following in keybindings.json:
+     {
+      "key": "shift+alt+f",
+      "command": "eslint.executeAutofix"
+     }
+  */
+  "editor.codeActionsOnSave": {
+    "source.fixAll.tslint": true,
+    "source.fixAll.eslint": true,
+    "source.fixAll.markdownlint": true,
+    "source.fixAll.stylelint": true
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "editor.formatOnSave": false,
+  "editor.formatOnPaste": true,
+
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.wordSeparators": "`!%&()[{]}|;'\",?#" // ability to select '$propery', 'json-variable', 'editor.wordSeparators', '>=0.0.2' at once
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.wordSeparators": "`~!%^&*()=+[{]}\\|;:'\",.<>/?$" // ability to select '#fff', 'font-family', '--cssVariable' at once
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.wordSeparators": "`~!%^&*()=+[{]}\\|;:'\",.<>/?" // ability to select '#fff', 'font-family', '--cssVariable', '$var' at once
+  },
+  "[less]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
+}

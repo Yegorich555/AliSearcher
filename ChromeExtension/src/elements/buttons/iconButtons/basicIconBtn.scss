@@ -1,0 +1,40 @@
+.btn {
+  position: absolute;
+  border: none;
+  padding: 4px;
+  background: none;
+  color: $btnIconColor;
+  opacity: 0.6;
+  display: flex;
+  font-size: 18px;
+  &:hover {
+    color: $btnIconHoverColor;
+  }
+  &:focus {
+    outline-color: $btnIconFocusFrameColor;
+  }
+}
+
+.btnAdd {
+  @include iconBefore($icon-add);
+}
+.btnEdit {
+  @include iconBefore($icon-edit);
+}
+.btnDelete {
+  @include iconBefore($icon-delete);
+}
+
+.btnMaximize {
+  @include iconBefore($icon-fullscreen);
+  left: 2px;
+  top: 2px;
+  padding: 0;
+  font-size: 22px;
+}
+
+.btnRefresh {
+  @include iconBefore($icon-refresh);
+  font-size: 22px;
+  opacity: initial;
+}

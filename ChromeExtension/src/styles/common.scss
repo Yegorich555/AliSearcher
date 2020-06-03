@@ -1,0 +1,54 @@
+@import "fontface.scss";
+
+#aliSearcher {
+  font: 14px Arial, sans-serif;
+  color: $basicTextColor;
+  background: $basicBackColor;
+}
+
+::placeholder {
+  text-overflow: ellipsis;
+}
+
+*:focus {
+  outline: 2px solid $focusFrameColor;
+  outline-offset: -2px;
+}
+
+input,
+textarea,
+button {
+  color: inherit;
+  font: inherit;
+  border-radius: $borderRadius;
+  padding: 4px;
+  margin: 0;
+  background: none;
+  border: none;
+  box-sizing: border-box;
+}
+
+button,
+[tabIndex="0"] {
+  cursor: pointer;
+}
+
+button[disabled],
+input[disabled] {
+  cursor: default;
+  cursor: not-allowed;
+}
+
+input[placeholder]:not([type="textarea"]) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// form {
+//   box-shadow: $basicShadow;
+//   border: solid 1px $basicBorderColor;
+//   border-radius: $borderRadius;
+//   max-width: 540px;
+//   margin: 0 auto;
+// }

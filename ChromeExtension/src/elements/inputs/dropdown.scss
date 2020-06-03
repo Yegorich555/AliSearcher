@@ -1,0 +1,28 @@
+$inputSize: 34px;
+.menu {
+  max-height: $inputSize * 7;
+  ul {
+    margin: 0;
+    padding: 0;
+    > li {
+      list-style: none;
+      padding: 9px 12px;
+      &:hover:not(.noItems) {
+        background-color: $tableHoverBackColor;
+        color: $tableHoverTextColor;
+      }
+      &[aria-selected="true"]:not(:hover) {
+        background-color: $tableSelectBackColor;
+        color: $tableSelectTextColor;
+      }
+    }
+  }
+}
+
+label .btnOpen {
+  font-weight: bolder;
+  &[aria-expanded="true"]:before {
+    display: inline-block;
+    transform: rotate(180deg);
+  }
+}

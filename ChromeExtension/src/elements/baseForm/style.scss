@@ -1,0 +1,38 @@
+.form {
+  max-width: 540px;
+  margin: auto;
+  @include boxShadow();
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  margin: initial;
+}
+
+.btnGroup {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.formError {
+  color: $errorTextColor;
+}
+
+.modalForm {
+  padding: 30px;
+  min-width: 200px;
+  min-height: 200px;
+  border: none;
+  box-shadow: none;
+  h3 {
+    text-align: left;
+    padding: 0 0 28px;
+  }
+  [type="submit"] {
+    margin: 20px auto 0;
+    min-width: 280px;
+  }
+}

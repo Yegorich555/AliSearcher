@@ -1,0 +1,7 @@
+.progressBar {
+  width: 100%;
+  box-shadow: inset 0 0 0 99999px rgba($color: black, $alpha: 0.2);
+  padding: 4px;
+  position: relative;
+  transition: all 0.3s;
+}

@@ -1,0 +1,98 @@
+$panelHeight: 30px;
+.container {
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - #{$panelHeight});
+  overflow: auto;
+}
+
+.stickyPanel {
+  display: flex;
+  position: relative;
+  height: $panelHeight;
+  .error {
+    color: $errorTextColor;
+    padding: 2px 120px;
+    z-index: 1;
+    background: $basicBackColor;
+    border: none;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    @include iconAfter($icon-close);
+    &::after {
+      margin-left: 10px;
+    }
+    &:hover {
+      opacity: 0.98;
+    }
+  }
+}
+
+.btnPanel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  background: white;
+  box-shadow: rgba(100, 115, 130, 0.15) 0 1px 4px 0;
+  max-width: fit-content;
+  margin-left: auto;
+  > button {
+    color: gray;
+    font-size: 20px;
+    line-height: 20px;
+    width: 50px;
+    &:hover {
+      color: black;
+      background-color: #adc7ed;
+    }
+  }
+
+  .btnMax {
+    @include iconBefore($icon-fullscreen);
+    font-size: 24px;
+  }
+}
+
+.inputGroup {
+  display: flex;
+  > label {
+    margin-bottom: 0;
+    flex: 1 1 33%;
+    + * {
+      margin-left: 5px;
+    }
+  }
+  + .inputGroup {
+    margin-top: 4px;
+  }
+  .inputPriceSort {
+    min-width: 206px;
+  }
+}
+
+.form {
+  h3 {
+    padding: 0;
+    margin: 6px 0;
+  }
+  .formBtnGroup {
+    margin-top: 16px;
+    font-weight: bold;
+    > * {
+      letter-spacing: 1px;
+    }
+    > *:first-child {
+      flex: 1 1 70%;
+    }
+    > *:last-child {
+      margin-left: 10px;
+      flex: 1 1 20%;
+    }
+  }
+  .totalItems {
+    margin-top: 5px;
+  }
+}

@@ -1,0 +1,19 @@
+// if you change this don't forget update .helpLink in components/theHeader.scss
+$size: 36px;
+.btn {
+  min-width: 130px;
+  height: $size;
+  font-family: $btnFont;
+  border: $btnBorder;
+  padding: 0 20px;
+  position: relative;
+
+  .spinner {
+    width: 2em;
+    height: 2em;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

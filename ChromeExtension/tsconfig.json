@@ -1,0 +1,22 @@
+{
+  // jsconfig.json === tsconfig.json with allowJs: true
+  "compilerOptions": {
+    //intellisense config for VSCode
+    "baseUrl": "./",
+    "paths": {
+      //none-js-ts files is not supported by intellisense. Use 'path-intellisense.mappings' in .vscode/settings.json instead
+      //this is should be sync with aliases in webpack
+      "@/*": ["src/*"],
+      "fonts/*": ["src/assets/fonts/*"], //it doesn't work with css and images
+      "~fonts/*": ["src/assets/fonts/*"] //it doesn't work with css and images
+    },
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "allowJs": true,
+    "outDir": "",
+    "esModuleInterop": true,
+    "noEmit": true //exlcude errors in console because it should be wrapped by webpack
+  },
+  "exclude": ["node_modules", "dist", "build", ".vscode"]
+}

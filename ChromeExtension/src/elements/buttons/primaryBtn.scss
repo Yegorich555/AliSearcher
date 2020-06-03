@@ -1,0 +1,17 @@
+.btn {
+  color: $primaryBtnTextColor;
+  background: $primaryBtnBackColor;
+  &:hover {
+    color: $primaryBtnHoverTextColor;
+    background: $primaryBtnHoverBackColor;
+  }
+  &[data-pending="true"] {
+    color: $primaryBtnDisabledTextColor;
+    background: $primaryBtnDisabledBackColor;
+  }
+
+  .spinner > div {
+    border: 5px solid $primaryBtnSpinnerColor1;
+    border-top: 5px solid $primaryBtnSpinnerColor2;
+  }
+}

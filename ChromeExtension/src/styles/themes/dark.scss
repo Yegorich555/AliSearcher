@@ -1,0 +1,56 @@
+[data-theme="dark"] {
+  --basicTextColor: #e8c9b0;
+  --basicTextDisabledColor: #90acbf;
+  --basicBackColor: #1e1e1e;
+  --basicBackColor2: #383838;
+  --basicBorderColor: #545454;
+  --descriptionTextColor: #8b7b6d;
+  --successTextColor: #63c37f;
+  --errorTextColor: #ff7d7d;
+
+  --inputBorderColor: #567395;
+  --inputDisabledBackColor: #505e6d;
+  --inputIconBackColor: #272727;
+
+  --linkColor: #96cffd;
+  --linkHoverColor: #e6e6e6;
+
+  --navLinkColor: #55a8ec;
+  --navLinkHoverColor: white;
+
+  --primaryBtnBackColor: #3a8369;
+  --primaryBtnHoverBackColor: #316f59;
+
+  --secondaryBtnBackColor: white;
+  --secondaryBtnTextColor: #3a8369;
+  --secondaryBtnHoverBackColor: #c9f7e7;
+  --secondaryBtnHoverTextColor: #32715b;
+
+  --btnIconColor: coral;
+  --btnIconHoverColor: white;
+  --btnIconFocusFrameColor: #e9de1c;
+
+  --modalOverlayBackColor: white;
+  --modalBtnCloseColor: coral;
+  --modalBtnCloseHoverColor: white;
+
+  --btnBorderColor: #3a8369;
+
+  --primaryBtnSpinnerColor1: #006c8a;
+  --primaryBtnSpinnerColor2: #f3f3f3;
+
+  --tableHeaderBackColor: #666666;
+  --tableSelectBackColor: #7fa0bb;
+  --tableHoverBackColor: #4485cf;
+  // scrollbar styles
+  // ::-webkit-scrollbar {
+  //   width: 12px;
+  //   height: 12px;
+  //   background-color: #555;
+  // }
+
+  // ::-webkit-scrollbar-thumb {
+  //   border-radius: 10px;
+  //   background-color: #7fa0bb;
+  // }
+}
