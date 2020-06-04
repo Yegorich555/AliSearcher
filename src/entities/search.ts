@@ -253,8 +253,8 @@ class SearchClass {
       const url = new URL(pageInfo.url.href);
       const params = url.searchParams;
       params.set(SearchParams.text, text);
-      minPrice && params.set(SearchParams.minPrice, roundPrice(minPrice).toString());
-      maxPrice && url.searchParams.set(SearchParams.maxPrice, roundPrice(maxPrice).toString());
+      minPrice && params.set(SearchParams.minPrice, minPrice.toString());
+      maxPrice && url.searchParams.set(SearchParams.maxPrice, maxPrice.toString());
 
       urls.push(url);
 
@@ -277,9 +277,11 @@ class SearchClass {
       // eslint-disable-next-line no-await-in-loop
       const result = await aliStore.getProducts(text, model.minPrice, model.maxPrice);
       if (result?.items.length) {
-        const dbMin = result.min - 0.01;
-        const dbMax = result.max + 0.01;
-        excludeRange(model.minPrice, model.maxPrice, dbMin, dbMax).forEach(r => addUrl(text, r.min, r.max));
+        const dbMin = roundPrice(result.min - 0.01);
+        const dbMax = roundPrice(result.max + 0.01);
+        excludeRange(model.minPrice, model.maxPrice, dbMin, dbMax)
+          // todo filter small range: 0..0.09
+          .forEach(r => addUrl(text, r.min, r.max));
 
         mergeResult(
           result.items,
