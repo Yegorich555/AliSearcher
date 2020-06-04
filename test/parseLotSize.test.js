@@ -1,6 +1,6 @@
 import Product from "../src/entities/product";
 
-describe("parseLotSize", () => {
+describe("Product.parseLotSize", () => {
   const arr = [
     { text: "5pcs/lot some package", value: 5 },
     { text: "5pcs", value: 5 },

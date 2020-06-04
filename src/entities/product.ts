@@ -1,4 +1,4 @@
-import { fixUrl, roundPrice } from "@/helpers";
+import { fixUrl, roundPrice, parseFloatUniv } from "@/helpers";
 
 let id = 0;
 const getUniqueId = (): number => ++id;
@@ -9,6 +9,7 @@ export default class Product {
     const result = regLotByDesc.exec(s);
     return (result && Number.parseInt(result[2] || result[3], 10)) || null;
   }
+
   id: number;
 
   description: string;
@@ -61,15 +62,14 @@ export default class Product {
     this.link = fixUrl(parsedItem.productDetailUrl);
     this.linkImage = fixUrl(parsedItem.imageUrl);
 
-    const priceReg = /^(\D*)(\d*[.,]*\d*)\s*-{0,1}\s*(\d*[.,]*\d*)/;
+    const priceReg = /^(\D*)(\d*[.,]*\d*)\s*-?\s*(\d*[.,]*\d*)/;
     const price = priceReg.exec(parsedItem.price);
     // this.priceCurrency = price[1];
-    this.priceMin = Number.parseFloat(price[2]);
-    this.priceMax = Number.parseFloat(price[3]) || null;
+    this.priceMin = parseFloatUniv(price[2]);
+    this.priceMax = parseFloatUniv(price[3]);
 
-    // replace fixes thousands: 1,326.23
-    const priceShipping = Number.parseFloat((priceReg.exec(parsedItem.logisticsDesc)[2] || "0").replace(",", ""));
-    this.priceShipping = priceShipping ? roundPrice(priceShipping) : 0;
+    const priceShipping = priceReg.exec(parsedItem.logisticsDesc);
+    this.priceShipping = parseFloatUniv(priceShipping[2]) || 0;
 
     this.unit = parsedItem.saleUnit;
     this.lotSizeNum = parsedItem.leastPackagingNum;
