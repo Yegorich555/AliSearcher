@@ -96,6 +96,9 @@ export class AliStore {
   }
 
   async appendProducts(items: Product[]): Promise<void> {
+    if (!items.length) {
+      return;
+    }
     const store = await this.getProductStore("readwrite");
     items.forEach(v => store.put(v));
   }

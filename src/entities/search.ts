@@ -331,18 +331,25 @@ class SearchClass {
     const t0 = performance.now();
     let gotCurrency = false;
     for (let i = 1; i <= pagination.totalPages; ++i) {
-      url.searchParams.set("page", i.toString());
+      i !== 1 && url.searchParams.set("page", i.toString());
       log.info(url);
       let res;
+
       try {
         // eslint-disable-next-line no-await-in-loop
         res = await axios.get(url.href);
       } catch (e) {
-        log.error(e, `\nin [${text}]`);
+        // todo maybe detect redirect here
+        log.error(`${e.message}. Request for '${text}' page: ${i}`, e);
         return;
       }
-      const { items, resultCount, resultSizePerPage, p4pObjectConfig } =
-        typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
+      const parsedObj = typeof res.data === "string" ? this.extractJsObject(res.data, "runParams") : res.data;
+      if (!parsedObj || (!(parsedObj.items || []).length && i > 1)) {
+        // todo detect oops-page
+        throw new Error("No data. Reload the page and try again");
+      }
+
+      const { items = [], resultCount, resultSizePerPage, p4pObjectConfig } = parsedObj;
 
       if (!gotCurrency) {
         const v = p4pObjectConfig?.bcfg.currencyType;
@@ -356,11 +363,7 @@ class SearchClass {
       pagination.pageSize = resultSizePerPage;
       pagination.loadedPages = i;
       pagination.totalPages = Math.ceil(pagination.totalItems / pagination.pageSize);
-      if (!items) {
-        log.error("No items\n", res);
-        throw new Error("No items");
-        // todo pause here
-      }
+
       if (pagination.totalPages > 200) {
         throw new Error(
           `Too much pages: ${pagination.totalPages} for '${searchText}'. Expected < 201. Improve your search`
