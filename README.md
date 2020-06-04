@@ -56,3 +56,8 @@ React version: 16.x
 - Prettier - Code formatter: <https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode>
 - Import Cost: <https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost>
 - Markdownlint: <https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint>
+
+## Screenshots
+
+![View form](View_form.png)
+![View page](View.png)
