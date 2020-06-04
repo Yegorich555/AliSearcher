@@ -30,7 +30,7 @@ export default class ProductsView extends Component<ProductsViewProps> {
             <div className={styles.ratingBar}>
               <span>Rating: {item.rating}</span>
               <span>Orders {item.storeOrderCount || 0}</span>
-              <span>Sheeping {item.priceShipping}</span>
+              <span>Shipping {item.priceShipping}</span>
             </div>
             <a href={item.storeLink} target="_blank" rel="noreferrer" className={styles.storeLink}>
               {item.storeName}
