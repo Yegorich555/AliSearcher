@@ -57,9 +57,11 @@ export class AliStore {
       return;
     }
     if (DEV_SERVER) {
+      window.indexedDB.deleteDatabase("aliStore");
+    }
+    if (DEBUG) {
       // @ts-ignore
       window.aliStore = this;
-      window.indexedDB.deleteDatabase("aliStore");
     }
 
     this.connectDB("aliStore", 1, db => {
@@ -99,6 +101,7 @@ export class AliStore {
     if (!items.length) {
       return;
     }
+
     const store = await this.getProductStore("readwrite");
     items.forEach(v => store.put(v));
   }

@@ -206,7 +206,7 @@ module.exports = function(env, argv) {
           BASE_URL: '"/"'
         },
         DEV_SERVER: isDevServer,
-        DEBUG: isDevServer,
+        DEBUG: mode !== "production",
         TEST: false
       }),
       new CaseSensitivePathsPlugin(), // it fixes bugs between OS in caseSensitivePaths (since Windows isn't CaseSensitive but Linux is)

@@ -6,13 +6,13 @@ export default webpackMockServer.add(app => {
   app.get("/mock", (req, res) => {
     const { SearchText } = req.query;
     const { page } = req.query;
-    res.sendFile(nodePath.join(__dirname, `./${SearchText}_page${page}.html`));
+    res.sendFile(nodePath.join(__dirname, `./${SearchText}_page${page || 1}.html`));
   });
 
   // ali-api
   app.get("/glosearch/api/product", (req, res) => {
     const { SearchText } = req.query;
     const { page } = req.query;
-    res.sendFile(nodePath.join(__dirname, `./${SearchText}_page${page}.json`));
+    res.sendFile(nodePath.join(__dirname, `./${SearchText}_page${page || 1}.json`));
   });
 });

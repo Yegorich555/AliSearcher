@@ -7,6 +7,7 @@ module.exports = {
   testPathIgnorePatterns: ["/node_modules/", `.eslintrc.js$`, `config.js$`],
   collectCoverage: false,
   globals: {
+    DEBUG: false,
     DEV_SERVER: false,
     TEST: true
   },

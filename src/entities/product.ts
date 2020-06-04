@@ -1,5 +1,10 @@
 import { fixUrl, roundPrice, parseFloatUniv } from "@/helpers";
 
+if (DEBUG) {
+  // @ts-ignore
+  window.aliItems = [];
+}
+
 let id = 0;
 const getUniqueId = (): number => ++id;
 
@@ -51,10 +56,16 @@ export default class Product {
   }
 
   constructor(parsedItem?: any, searchText?: string) {
-    this.date = new Date();
     if (!parsedItem) {
       return;
     }
+    if (DEBUG) {
+      // @ts-ignore
+      window.aliItems.push(this);
+      // @ts-ignore
+      this._rawItem = parsedItem;
+    }
+    this.date = new Date();
     this.id = parsedItem.productId || getUniqueId();
     this.searchId = `${searchText}_${this.id}`;
 
