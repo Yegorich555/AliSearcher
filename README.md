@@ -8,7 +8,8 @@ Aliexpress search is very poor:
 
 - you can't search by lot size or the most affordable lot
 - you can't multi-search: when you need to find 'atmega8' item you must search separately 'atmega8', 'atmega8a', 'atmega8a-pu' etc. Because of Aliexpress searches only by whole word but a lot of descriptions hasn't strict naming
-- you can't search by minPrice including sheeping
+- you can't search by minPrice including shipping price
+- you can't do complex search (via Regex patter etc.)
 
 With this extensions you can do everything mentioned above!
 

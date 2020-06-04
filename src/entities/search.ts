@@ -88,20 +88,29 @@ class SearchClass {
       r = r.filter(v => v.rating >= model.minRating);
     }
 
-    // todo we use OR logic but we can use OR and AND
+    // supports the following string: led && 300mA; led && 400mA; /someRegexHere/; led && /someRegex/
     if (model.text || model.exclude) {
       const filterByText = (text: string, isExclude = false): void => {
-        const arr = this.splitSearchText(text).map(v => {
-          // this is regex in string
-          if (v[0] === "/" && v[v.length - 1] === "/") {
-            return `(${v.substring(1, v.length - 1)})`;
-          }
-          // escape strings that are not part of regex
-          return v.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
+        const orGroup = this.splitSearchText(text).map(s => {
+          const andGroup = [] as RegExp[];
+          s.split(/&&/g).forEach(a => {
+            const v = a.trim();
+            if (!v) {
+              return;
+            }
+            // this is regex in string
+            if (v[0] === "/" && v[v.length - 1] === "/") {
+              andGroup.push(new RegExp(`(${v.substring(1, v.length - 1)})`, "i"));
+            } else {
+              // escape strings that are not part of regex
+              andGroup.push(new RegExp(v.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"), "i"));
+            }
+          });
+          return andGroup;
         });
 
-        const reg = new RegExp(arr.join("|"), "i");
-        r = isExclude ? r.filter(v => !reg.test(v.description)) : r.filter(v => reg.test(v.description));
+        const test = (v: string): boolean => orGroup.some(andGroup => andGroup.every(reg => reg.test(v)));
+        r = isExclude ? r.filter(v => !test(v.description)) : r.filter(v => test(v.description));
       };
 
       model.text && filterByText(model.text);
