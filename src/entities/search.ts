@@ -96,7 +96,8 @@ class SearchClass {
           if (v[0] === "/" && v[v.length - 1] === "/") {
             return `(${v.substring(1, v.length - 1)})`;
           }
-          return v;
+          // escape strings that are not part of regex
+          return v.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
         });
 
         const reg = new RegExp(arr.join("|"), "i");
