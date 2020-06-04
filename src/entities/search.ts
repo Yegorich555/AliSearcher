@@ -88,19 +88,26 @@ class SearchClass {
       r = r.filter(v => v.rating >= model.minRating);
     }
 
-    // supports the following string: led && 300mA; led && 400mA; /someRegexHere/; led && /someRegex/
+    // supports the following string: led && 300mA; led && (300mA, 400mA); /someRegexHere/; led && /someRegex/
     if (model.text || model.exclude) {
       const filterByText = (text: string, isExclude = false): void => {
         const orGroup = this.splitSearchText(text).map(s => {
           const andGroup = [] as RegExp[];
           s.split(/&&/g).forEach(a => {
             const v = a.trim();
-            if (!v) {
+            if (v === "") {
               return;
             }
-            // this is regex in string
             if (v[0] === "/" && v[v.length - 1] === "/") {
-              andGroup.push(new RegExp(`(${v.substring(1, v.length - 1)})`, "i"));
+              // this is regex in string
+              const regStr = v.substring(1, v.length - 1);
+              andGroup.push(new RegExp(`(${regStr})`, "i"));
+            } else if (v[0] === "(" && v[v.length - 1] === ")") {
+              // these items that have to be merged with OR-logic
+              const regStr = this.splitSearchText(v.substring(1, v.length - 1), /[,]/g)
+                .map(b => b.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"))
+                .join("|");
+              andGroup.push(new RegExp(`(${regStr})`, "i"));
             } else {
               // escape strings that are not part of regex
               andGroup.push(new RegExp(v.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&"), "i"));

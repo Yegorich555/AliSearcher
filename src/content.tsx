@@ -164,13 +164,13 @@ class AppContainer extends Component<any, any> {
               label="Search in results"
               name="text"
               htmlName="textComplex"
-              placeholder="led && 300mA; led && 400mA; /Regex/"
+              placeholder="led && (300mA, 400mA); /Regex/"
             />
             <TextInput //
               label="Exclude from results"
               name="exclude"
               htmlName="excludeComplex"
-              placeholder="led && /Regex/; /Regex/"
+              placeholder="/Regex/; led && /Regex/"
             />
           </div>
         </BaseForm>
