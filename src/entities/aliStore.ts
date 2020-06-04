@@ -20,7 +20,6 @@ export class AliStore {
 
   modelKey = "Ali_SearchModel";
   saveModel(model: SearchModel): void {
-    console.warn(this);
     window.localStorage.setItem(this.modelKey, JSON.stringify(model));
   }
 
