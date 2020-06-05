@@ -279,9 +279,9 @@ class SearchClass {
       if (result?.items.length) {
         const dbMin = roundPrice(result.min - 0.01);
         const dbMax = roundPrice(result.max + 0.01);
-        excludeRange(model.minPrice, model.maxPrice, dbMin, dbMax)
-          // todo filter small range: 0..0.09
-          .forEach(r => addUrl(text, r.min, r.max));
+        excludeRange(model.minPrice, model.maxPrice, dbMin, dbMax).forEach(
+          r => r.max - r.min >= 0.2 && addUrl(text, r.min, r.max)
+        );
 
         mergeResult(
           result.items,
