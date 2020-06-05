@@ -30,7 +30,7 @@ let container: AppContainer;
 class AppContainer extends Component<any, any> {
   state = {
     isMax: DEV_SERVER,
-    isConfigOpen: DEV_SERVER,
+    isConfigOpen: false,
     error: null,
     searchProgress: null as SearchProgress[],
     items: [] as Product[],
@@ -84,10 +84,6 @@ class AppContainer extends Component<any, any> {
     let nextState = this.state; // required for intellisense
     // @ts-ignore
     nextState = {};
-    if (obj.updatedModel) {
-      // todo defaultModel doesn't work: only by componentInit
-      nextState.defaultModel = obj.updatedModel;
-    }
     nextState.searchProgress = obj.progress;
     nextState.items = obj.items;
     this.setState(nextState);
