@@ -2,8 +2,7 @@ export const SortTypes = {
   priceMinToMax: { text: "Price: min to max", param: "price_asc" },
   priceMaxToMin: { text: "Price: max to min", param: "price_desc" },
   priceMinToMaxPcs: { text: "Price (pcs): min to max", param: "price_asc" },
-  // minToMaxPieces: {text: "Pcs: min to max"},
-  // maxToMinPieces: {text: "Pcs: min to max"},
+  // sort BestMatch is "default" for aliExpress
   ordersMaxToMin: { text: "Orders: max to min", param: "total_tranpro_desc" }
 };
 

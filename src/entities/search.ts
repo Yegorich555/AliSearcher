@@ -6,6 +6,7 @@ import SearchModel, { SortTypes, SearchParams } from "./searchModel";
 import SearchProgress from "./searchProgress";
 import Pagination from "./pagination";
 import aliStore from "./aliStore";
+import { PageInfo } from "./pageInfo";
 
 let thottleTimerId: NodeJS.Timeout;
 function throttleFunction(func: () => void, delay: number): void {
@@ -183,11 +184,20 @@ class SearchClass {
     return r;
   }
 
-  go = async (model: SearchModel, callback?: (obj: SearchCallbackObj) => void): Promise<any> => {
-    if (this.isCached(model)) {
-      return Promise.resolve(this.sortAndFilter(this.cachedItems, model));
-    }
+  async getPageModel(): Promise<SearchModel> {
+    const info = await this.getPageInfo();
+    const params = info.url.searchParams;
+    const sortParam = params.get(SearchParams.sort);
+    const sortTypeKey = Object.keys(SortTypes).find(k => SortTypes[k].param === sortParam);
+    return {
+      textAli: params.get(SearchParams.text),
+      minPrice: Number.parseFloat(params.get(SearchParams.minPrice)) || null,
+      maxPrice: Number.parseFloat(params.get(SearchParams.maxPrice)) || null,
+      sort: sortTypeKey as keyof typeof SortTypes
+    };
+  }
 
+  async getPageInfo(): Promise<PageInfo> {
     /** gathering pageInfo */
     const globals = await getGlobals("runConfigs", "runParams");
     const pageInfo = {
@@ -198,15 +208,22 @@ class SearchClass {
     };
     // searchAjaxUrl isn't updated by user interaction only if the page reloads - in this case we need get url only to API part and params get from href
     pageInfo.url.search = window.location.search;
+    return pageInfo;
+  }
 
+  async go(model: SearchModel, callback?: (obj: SearchCallbackObj) => void): Promise<any> {
+    if (this.isCached(model)) {
+      return Promise.resolve(this.sortAndFilter(this.cachedItems, model));
+    }
+
+    /** gathering pageInfo */
+    const pageInfo = await this.getPageInfo();
     if (!pageInfo.url.searchParams.has(SearchParams.text)) {
       throw new Error(
         `Url parameter "${SearchParams.text}" is not defined. Please use default Aliexpress search at first time`
       );
     }
 
-    // todo add sort BestMatch is "default"
-    // todo force clear params when model.prop is empty
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     const products: Product[] = [];
@@ -253,8 +270,16 @@ class SearchClass {
       const url = new URL(pageInfo.url.href);
       const params = url.searchParams;
       params.set(SearchParams.text, text);
-      minPrice && params.set(SearchParams.minPrice, minPrice.toString());
-      maxPrice && url.searchParams.set(SearchParams.maxPrice, maxPrice.toString());
+      if (minPrice) {
+        params.set(SearchParams.minPrice, minPrice.toString());
+      } else {
+        params.delete(SearchParams.minPrice);
+      }
+      if (maxPrice) {
+        url.searchParams.set(SearchParams.maxPrice, maxPrice.toString());
+      } else {
+        params.delete(SearchParams.maxPrice);
+      }
 
       urls.push(url);
 
@@ -314,7 +339,7 @@ class SearchClass {
     this.cachedModel = { ...model };
     this.cachedItems = products;
     return this.sortAndFilter(products, model);
-  };
+  }
 
   mergeSearchText(text: string, min?: number | string, max?: number | string): string {
     const suffix = min == null || max == null ? "" : ` (${min != null ? min : ""}..${max != null ? max : ""})`;
