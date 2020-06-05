@@ -51,6 +51,7 @@ module.exports = {
     "react/jsx-filename-extension": 0,
     "react/state-in-constructor": 0,
     "react/button-has-type": 0,
+    "react/no-access-state-in-setstate": "off",
     "import/extensions": 0,
     "no-underscore-dangle": 0,
     "no-unused-expressions": ["error", { allowShortCircuit: true }],

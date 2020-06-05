@@ -19,6 +19,9 @@ $margin: 4px;
     &:focus {
       outline-offset: -1px;
     }
+    &[disabled] {
+      background-color: $inputDisabledBackColor;
+    }
   }
   > span {
     display: block;

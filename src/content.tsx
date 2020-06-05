@@ -31,7 +31,8 @@ class AppContainer extends Component<any, any> {
     error: null,
     searchProgress: null as SearchProgress[],
     items: [] as Product[],
-    defaultModel: aliStore.getModel()
+    defaultModel: aliStore.getModel(),
+    isDisabledInputs: false
   };
 
   formRef: BaseForm;
@@ -69,7 +70,6 @@ class AppContainer extends Component<any, any> {
   };
 
   toggleMax = () => {
-    // eslint-disable-next-line react/no-access-state-in-setstate
     const isMax = !this.state.isMax;
     if (isMax) {
       this.bodyOverflow = document.body.style.overflow;
@@ -82,7 +82,6 @@ class AppContainer extends Component<any, any> {
   };
 
   toggleConfig = () => {
-    // eslint-disable-next-line react/no-access-state-in-setstate
     this.setState({ isConfigOpen: !this.state.isConfigOpen });
   };
 
@@ -101,11 +100,13 @@ class AppContainer extends Component<any, any> {
       model.textAli = (await search.getPageModel()).textAli;
       this.setState({ defaultModel: model });
     }
+    this.setState({ isDisabledInputs: true });
     aliStore.saveModel(model);
     return search
       .go(model, this.searchCallback)
       .then(items => this.setState({ items }))
-      .catch((err: Error) => log.error(err));
+      .catch((err: Error) => log.error(err))
+      .finally(() => this.setState({ isDisabledInputs: false }));
   };
 
   handleResetClick = () => {
@@ -139,6 +140,7 @@ class AppContainer extends Component<any, any> {
         >
           <div className={styles.inputGroup}>
             <TextInput
+              disabled={this.state.isDisabledInputs}
               label="Search in Aliexpress"
               name="textAli"
               htmlName="searchAli"
@@ -147,18 +149,21 @@ class AppContainer extends Component<any, any> {
           </div>
           <div className={styles.inputGroup}>
             <NumberInput //
+              disabled={this.state.isDisabledInputs}
               label="Min price"
               name="minPrice"
               placeholder="#.##"
               isFloat
             />
             <NumberInput //
+              disabled={this.state.isDisabledInputs}
               label="Max price"
               name="maxPrice"
               placeholder="#.##"
               isFloat
             />
             <Dropdown
+              disabled={this.state.isDisabledInputs}
               label="Sort"
               className={styles.inputPriceSort}
               name="sort"
