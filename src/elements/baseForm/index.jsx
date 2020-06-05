@@ -13,6 +13,25 @@ class BaseForm extends Component {
     };
     this.inputs = [];
   }
+  /** @inheritdoc */
+  shouldComponentUpdate(nextProps) {
+    // try to update init value if it's not changed
+    if (nextProps.defaultModel !== this.props.defaultModel) {
+      this.inputs.forEach(v => {
+        const ctrl = v.component;
+        if (
+          ctrl.props.defaultValue === undefined &&
+          (ctrl.state.value === ctrl.defaultValue || ctrl.state.value === ctrl.constructor.initValue)
+        ) {
+          const nextValue = nextProps.defaultModel[ctrl.props.name];
+          nextValue !== undefined && ctrl.setState({ value: nextProps.defaultModel[ctrl.props.name] });
+        }
+      });
+    }
+
+    // otherwise use base logic
+    return true;
+  }
 
   componentWillUnmount() {
     this.isUnMounted = true;

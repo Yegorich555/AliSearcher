@@ -10,9 +10,7 @@ export default function baseFormConnector(WrappedComponent) {
           throw new Error("Form Input requires a name property when used");
         }
         if (!this.provideValue) {
-          throw new Error(
-            "Form Input requires a provideValue property when used"
-          );
+          throw new Error("Form Input requires a provideValue property when used");
         }
       }
       this.context.attachToForm(this);
@@ -37,6 +35,7 @@ export default function baseFormConnector(WrappedComponent) {
             this.validate = fn;
           }}
           formDefaultModel={this.context.defaultModel}
+          init={el => (this.component = el)}
         />
       );
     }

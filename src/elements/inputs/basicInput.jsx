@@ -47,6 +47,7 @@ export default class BasicInput extends Component {
         });
       });
     this.props.validate && this.props.validate(() => this.validate(this.state.value));
+    this.props.init && this.props.init(this);
     this.renderInput = this.renderInput.bind(this); // Such bind is important for inheritance and using super...(): https://stackoverflow.com/questions/46869503/es6-arrow-functions-trigger-super-outside-of-function-or-class-error
     this.renderBefore = this.renderBefore.bind(this); // Such bind is important for inheritance and using super...(): https://stackoverflow.com/questions/46869503/es6-arrow-functions-trigger-super-outside-of-function-or-class-error
 
@@ -74,6 +75,10 @@ export default class BasicInput extends Component {
 
   get validationProps() {
     return this.props.validations;
+  }
+
+  setValue(value) {
+    this.setState({ value });
   }
 
   // wrapped with memoise
