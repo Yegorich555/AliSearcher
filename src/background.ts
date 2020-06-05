@@ -1,7 +1,7 @@
 import messages from "./entities/messages";
 
 let isListening = false;
-const useTabs = {} as Record<number, { isOpen: boolean; isMax: boolean }>;
+const useTabs = {} as Record<number, { isOpen: boolean }>;
 
 function toggleView(id: number): void {
   useTabs[id].isOpen = !useTabs[id].isOpen;
@@ -10,17 +10,12 @@ function toggleView(id: number): void {
   });
 }
 
-function runScriptOrToggle(tabId: number, isMax = true): void {
+function runScriptOrToggle(tabId: number): void {
   if (!useTabs[tabId]) {
     chrome.tabs.insertCSS(tabId, { file: "content.css" });
     chrome.tabs.executeScript(tabId, { file: "chunk-vendors.js" });
     chrome.tabs.executeScript(tabId, { file: "content.js" }, () => {
-      useTabs[tabId] = { isOpen: true, isMax };
-      if (isMax) {
-        chrome.tabs.sendMessage(tabId, {
-          type: messages.SET_MAXIMIZE
-        });
-      }
+      useTabs[tabId] = { isOpen: true };
     });
   } else {
     toggleView(tabId);
@@ -63,20 +58,13 @@ function listen(): void {
     if (r && info.status === "complete") {
       pingScript(id, () => {
         delete useTabs[id];
-        runScriptOrToggle(id, r.isMax);
+        runScriptOrToggle(id);
       });
     }
   });
 
   chrome.tabs.onRemoved.addListener(id => {
     delete useTabs[id];
-  });
-
-  chrome.runtime.onMessage.addListener((msg, sender) => {
-    if (msg.type === messages.MAXIMIZE) {
-      const tab = useTabs[sender.tab.id];
-      tab.isMax = msg.isMax;
-    }
   });
 }
 

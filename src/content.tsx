@@ -24,12 +24,9 @@ const elEntry = document.createElement("div");
 function toggle() {
   elEntry.hidden = !elEntry.hidden;
 }
-
-let container: AppContainer;
-
 class AppContainer extends Component<any, any> {
   state = {
-    isMax: DEV_SERVER,
+    isMax: aliStore.isMaximized,
     isConfigOpen: false,
     error: null,
     searchProgress: null as SearchProgress[],
@@ -43,11 +40,10 @@ class AppContainer extends Component<any, any> {
   constructor(props) {
     super(props);
     log.subscribe(this.handleError);
-    container = this;
   }
 
   componentDidMount() {
-    DEV_SERVER && this.onValidSubmit(this.formRef.validate());
+    DEV_SERVER && this.state.isMax && this.onValidSubmit(this.formRef.validate());
   }
 
   componentDidCatch(error: Error) {
@@ -71,7 +67,7 @@ class AppContainer extends Component<any, any> {
     } else {
       document.body.style.overflow = this.bodyOverflow;
     }
-    chrome.runtime.sendMessage({ type: messages.MAXIMIZE, isMax });
+    aliStore.isMaximized = isMax;
     this.setState({ isMax });
   };
 
@@ -223,9 +219,6 @@ chrome?.runtime?.onMessage &&
     switch (message.type) {
       case messages.TOGGLE_PANEL:
         toggle();
-        break;
-      case messages.SET_MAXIMIZE:
-        container.toggleMax();
         break;
       case messages.PING:
         res(true);

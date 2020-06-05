@@ -14,24 +14,27 @@ function setMinutes(date: Date, value: number): Date {
 
 export class AliStore {
   /** (Minutes) */
-  cacheTimeKey = "Ali_cacheTime";
-  // default 1 week;
   get cacheTime(): number {
-    return Number.parseInt(window.localStorage.getItem(this.cacheTimeKey), 10) || 1 * 7 * 24 * 60;
+    // default 1 week;
+    return Number.parseInt(window.localStorage.getItem("Ali_cacheTime"), 10) || 1 * 7 * 24 * 60;
   }
   set cacheTime(v) {
-    window.localStorage.setItem(this.cacheTimeKey, v.toString());
+    window.localStorage.setItem("Ali_cacheTime", v.toString());
   }
 
-  productStoreName = "product";
+  get isMaximized(): boolean {
+    return JSON.parse(window.localStorage.getItem("Ali_isMax")) !== false;
+  }
+  set isMaximized(v) {
+    window.localStorage.setItem("Ali_isMax", JSON.stringify(v));
+  }
 
-  modelKey = "Ali_SearchModel";
   saveModel(model: SearchModel): void {
-    window.localStorage.setItem(this.modelKey, JSON.stringify(model));
+    window.localStorage.setItem("Ali_SearchModel", JSON.stringify(model));
   }
 
   getModel(): SearchModel | null {
-    return JSON.parse(window.localStorage.getItem(this.modelKey));
+    return JSON.parse(window.localStorage.getItem("Ali_SearchModel"));
   }
 
   currencyKey = "Ali_currency";
@@ -58,6 +61,7 @@ export class AliStore {
       };
     });
   }
+  productStoreName = "product";
 
   constructor() {
     if (TEST) {
