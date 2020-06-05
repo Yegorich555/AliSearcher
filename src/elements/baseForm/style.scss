@@ -15,24 +15,12 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  font-weight: bold;
+  > * + * {
+    margin-left: 10px;
+  }
 }
 
 .formError {
   color: $errorTextColor;
-}
-
-.modalForm {
-  padding: 30px;
-  min-width: 200px;
-  min-height: 200px;
-  border: none;
-  box-shadow: none;
-  h3 {
-    text-align: left;
-    padding: 0 0 28px;
-  }
-  [type="submit"] {
-    margin: 20px auto 0;
-    min-width: 280px;
-  }
 }

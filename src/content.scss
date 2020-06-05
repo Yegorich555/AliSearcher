@@ -10,6 +10,7 @@ $panelHeight: 30px;
   display: flex;
   position: relative;
   height: $panelHeight;
+  z-index: 10;
   .error {
     color: $errorTextColor;
     padding: 2px 120px;
@@ -54,6 +55,11 @@ $panelHeight: 30px;
     @include iconBefore($icon-fullscreen);
     font-size: 24px;
   }
+
+  .btnConfig {
+    @include iconBefore($icon-cog);
+    font-size: 20px;
+  }
 }
 
 .inputGroup {
@@ -80,7 +86,6 @@ $panelHeight: 30px;
   }
   .formBtnGroup {
     margin-top: 16px;
-    font-weight: bold;
     > * {
       letter-spacing: 1px;
     }
@@ -88,7 +93,6 @@ $panelHeight: 30px;
       flex: 1 1 70%;
     }
     > *:last-child {
-      margin-left: 10px;
       flex: 1 1 20%;
     }
   }

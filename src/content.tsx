@@ -18,6 +18,7 @@ import SecondaryBtn from "./elements/buttons/secondaryBtn";
 import log from "./entities/log";
 import BasicBtn from "./elements/buttons/basicBtn";
 import aliStore from "./entities/aliStore";
+import ConfigView from "./components/configView";
 
 const elEntry = document.createElement("div");
 function toggle() {
@@ -29,6 +30,7 @@ let container: AppContainer;
 class AppContainer extends Component<any, any> {
   state = {
     isMax: DEV_SERVER,
+    isConfigOpen: DEV_SERVER,
     error: null,
     searchProgress: null as SearchProgress[],
     items: [] as Product[],
@@ -71,6 +73,11 @@ class AppContainer extends Component<any, any> {
     }
     chrome.runtime.sendMessage({ type: messages.MAXIMIZE, isMax });
     this.setState({ isMax });
+  };
+
+  toggleConfig = () => {
+    // eslint-disable-next-line react/no-access-state-in-setstate
+    this.setState({ isConfigOpen: !this.state.isConfigOpen });
   };
 
   searchCallback = (obj: SearchCallbackObj) => {
@@ -194,8 +201,10 @@ class AppContainer extends Component<any, any> {
           {this.state.error ? this.renderError() : null}
           <div className={styles.btnPanel}>
             <button className={styles.btnMax} onClick={this.toggleMax} title="Show/Hide" />
+            <button className={styles.btnConfig} onClick={this.toggleConfig} title="Config" />
           </div>
         </div>
+        {this.state.isConfigOpen ? <ConfigView onClose={this.toggleConfig} /> : null}
 
         {this.state.isMax ? this.renderBody() : null}
       </>

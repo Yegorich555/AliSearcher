@@ -13,9 +13,16 @@ function setMinutes(date: Date, value: number): Date {
 }
 
 export class AliStore {
-  // todo make cacheTime configurable
   /** (Minutes) */
-  cacheTime = 2 * 7 * 24 * 60; // 2 weeks
+  cacheTimeKey = "Ali_cacheTime";
+  // default 1 week;
+  get cacheTime(): number {
+    return Number.parseInt(window.localStorage.getItem(this.cacheTimeKey), 10) || 1 * 7 * 24 * 60;
+  }
+  set cacheTime(v) {
+    window.localStorage.setItem(this.cacheTimeKey, v.toString());
+  }
+
   productStoreName = "product";
 
   modelKey = "Ali_SearchModel";
@@ -149,6 +156,11 @@ export class AliStore {
     });
 
     // const b = store.index("priceMin").getAll(IDBKeyRange.bound(priceMin, priceMax));
+  }
+
+  async clearProducts(): Promise<void> {
+    const store = await this.getProductStore("readwrite");
+    store.clear();
   }
 
   /** Clears product that is expired and returns number of cleared */
