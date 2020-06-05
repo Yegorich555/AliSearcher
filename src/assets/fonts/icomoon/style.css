@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'icomoon';
   src:
-    url('fonts/icomoon.ttf?e4p1pk') format('truetype'),
-    url('fonts/icomoon.woff?e4p1pk') format('woff'),
-    url('fonts/icomoon.svg?e4p1pk#icomoon') format('svg');
+    url('fonts/icomoon.ttf?atg1a8') format('truetype'),
+    url('fonts/icomoon.woff?atg1a8') format('woff'),
+    url('fonts/icomoon.svg?atg1a8#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -26,14 +26,6 @@
 
 .icon-dropdown:before {
   content: "\e90c";
-}
-.icon-add:before {
-  content: "\e90b";
-  color: #8f8e8e;
-}
-.icon-edit:before {
-  content: "\e909";
-  color: #8f8e8e;
 }
 .icon-delete:before {
   content: "\e90a";
@@ -59,6 +51,9 @@
 }
 .icon-notification:before {
   content: "\ea08";
+}
+.icon-cog:before {
+  content: "\e994";
 }
 .icon-check:before {
   content: "\e903";
