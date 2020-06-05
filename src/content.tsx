@@ -43,7 +43,17 @@ class AppContainer extends Component<any, any> {
   }
 
   componentDidMount() {
-    DEV_SERVER && this.state.isMax && this.onValidSubmit(this.formRef.validate());
+    if (!this.state.defaultModel) {
+      search.getPageModel().then(m => {
+        this.setState({ defaultModel: m });
+      });
+    }
+
+    if (DEV_SERVER) {
+      if (this.state.isMax) {
+        setTimeout(() => this.onValidSubmit(this.formRef.validate()), 100);
+      }
+    }
   }
 
   componentDidCatch(error: Error) {
@@ -85,9 +95,14 @@ class AppContainer extends Component<any, any> {
     this.setState(nextState);
   };
 
-  onValidSubmit = (model: SearchModel) => {
+  onValidSubmit = async (model: SearchModel) => {
+    if (!model.textAli) {
+      // eslint-disable-next-line no-param-reassign
+      model.textAli = (await search.getPageModel()).textAli;
+      this.setState({ defaultModel: model });
+    }
     aliStore.saveModel(model);
-    search
+    return search
       .go(model, this.searchCallback)
       .then(items => this.setState({ items }))
       .catch((err: Error) => log.error(err));
