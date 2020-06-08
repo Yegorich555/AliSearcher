@@ -314,7 +314,7 @@ class SearchClass {
         const dbMin = roundPrice(result.min - 0.01);
         const dbMax = roundPrice(result.max + 0.01);
         excludeRange(model.minPrice, model.maxPrice, dbMin, dbMax).forEach(
-          r => r.max - r.min >= 0.2 && addUrl(text, r.min, r.max)
+          r => (r.max || Number.MAX_VALUE) - (r.min || 0) >= 0.2 && addUrl(text, r.min, r.max)
         );
 
         mergeResult(
@@ -363,7 +363,7 @@ class SearchClass {
   }
 
   mergeSearchText(text: string, min?: number | string, max?: number | string): string {
-    const suffix = min == null || max == null ? "" : ` (${min != null ? min : ""}..${max != null ? max : ""})`;
+    const suffix = min == null && max == null ? "" : ` (${min != null ? min : ""}..${max != null ? max : ""})`;
     return `${text}${suffix}`;
   }
 
@@ -389,7 +389,7 @@ class SearchClass {
 
       try {
         // eslint-disable-next-line no-await-in-loop
-        res = await PromiseWait(axios.get(url.href), 1000);
+        res = await axios.get(url.href);
       } catch (e) {
         // todo maybe detect redirect here
         log.error(`${e.message}. Request for '${text}' page: ${i}`, e);
