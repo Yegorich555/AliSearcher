@@ -50,6 +50,7 @@ class SearchClass {
   searchSplitter = /[;]/g;
   cachedModel: SearchModel;
   cachedItems: Product[];
+  isBusy = false;
 
   isCached(model: SearchModel): boolean {
     return (
@@ -216,6 +217,8 @@ class SearchClass {
       return Promise.resolve(this.sortAndFilter(this.cachedItems, model));
     }
 
+    this.isBusy = true;
+
     /** gathering pageInfo */
     const pageInfo = await this.getPageInfo();
     if (!pageInfo.url.searchParams.has(SearchParams.text)) {
@@ -334,7 +337,9 @@ class SearchClass {
         log.error(e);
       }
     }
-    await Promise.all(req);
+    await Promise.all(req).finally(() => {
+      this.isBusy = false;
+    });
 
     this.cachedModel = { ...model };
     this.cachedItems = products;

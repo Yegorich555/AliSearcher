@@ -246,3 +246,10 @@ chrome?.runtime?.onMessage &&
       default:
     }
   });
+
+window.onbeforeunload = () => {
+  if (search.isBusy) {
+    return "Leave site? Search process will be stopped.";
+  }
+  return false;
+};
