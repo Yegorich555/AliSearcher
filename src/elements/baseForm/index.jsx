@@ -92,7 +92,10 @@ class BaseForm extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    if (this.isPending) return;
+    if (this.isPending) {
+      this.props.onStopSubmit && this.props.onStopSubmit();
+      return;
+    }
 
     const model = this.validate();
     if (!model) {
@@ -172,6 +175,7 @@ class BaseForm extends Component {
             onBlur={this.handleBtnBlur}
             disabled={this.props.disabled}
             isPending={this.state.isPending}
+            enablePendingClick
           >
             {this.props.textSubmit || "SUBMIT"}
           </PrimaryBtn>

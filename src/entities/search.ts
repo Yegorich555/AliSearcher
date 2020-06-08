@@ -1,7 +1,7 @@
 import axios from "axios";
 import log from "./log";
 import Product from "./product";
-import { fixUrl, excludeRange, roundPrice } from "../helpers";
+import { fixUrl, excludeRange, roundPrice, PromiseWait } from "../helpers";
 import SearchModel, { SortTypes, SearchParams } from "./searchModel";
 import SearchProgress from "./searchProgress";
 import Pagination from "./pagination";
@@ -51,6 +51,11 @@ class SearchClass {
   cachedModel: SearchModel;
   cachedItems: Product[];
   isBusy = false;
+  _isCancelling = false;
+
+  cancel(): void {
+    this._isCancelling = this.isBusy;
+  }
 
   isCached(model: SearchModel): boolean {
     return (
@@ -218,6 +223,7 @@ class SearchClass {
     }
 
     this.isBusy = true;
+    this._isCancelling = false;
 
     /** gathering pageInfo */
     const pageInfo = await this.getPageInfo();
@@ -332,17 +338,27 @@ class SearchClass {
     const req = [];
     for (let u = 0, url = urls[u]; u < urls.length; url = urls[++u]) {
       try {
+        if (this._isCancelling) {
+          break;
+        }
         req.push(this.httpIterate(url, (items, progress) => mergeResult(items, progress)));
       } catch (e) {
         log.error(e);
       }
     }
+
+    let isStopped = this._isCancelling;
     await Promise.all(req).finally(() => {
+      isStopped = this._isCancelling;
       this.isBusy = false;
+      this._isCancelling = false;
     });
 
-    this.cachedModel = { ...model };
-    this.cachedItems = products;
+    if (!isStopped) {
+      this.cachedModel = { ...model };
+      this.cachedItems = products;
+    }
+
     return this.sortAndFilter(products, model);
   }
 
@@ -363,13 +379,17 @@ class SearchClass {
     const t0 = performance.now();
     let gotCurrency = false;
     for (let i = 1; i <= pagination.totalPages; ++i) {
+      if (this._isCancelling) {
+        break;
+      }
+
       i !== 1 && url.searchParams.set("page", i.toString());
       log.info(url);
       let res;
 
       try {
         // eslint-disable-next-line no-await-in-loop
-        res = await axios.get(url.href);
+        res = await PromiseWait(axios.get(url.href), 1000);
       } catch (e) {
         // todo maybe detect redirect here
         log.error(`${e.message}. Request for '${text}' page: ${i}`, e);

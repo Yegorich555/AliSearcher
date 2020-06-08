@@ -32,7 +32,7 @@ class AppContainer extends Component<any, any> {
     searchProgress: null as SearchProgress[],
     items: [] as Product[],
     defaultModel: aliStore.getModel(),
-    isDisabledInputs: false
+    isSeachBusy: false
   };
 
   formRef: BaseForm;
@@ -52,7 +52,9 @@ class AppContainer extends Component<any, any> {
 
     if (DEV_SERVER) {
       if (this.state.isMax) {
-        setTimeout(() => this.onValidSubmit(this.formRef.validate()), 100);
+        setTimeout(() => {
+          (document.querySelector('[type="submit"]') as HTMLButtonElement).click();
+        }, 100);
       }
     }
   }
@@ -100,13 +102,13 @@ class AppContainer extends Component<any, any> {
       model.textAli = (await search.getPageModel()).textAli;
       this.setState({ defaultModel: model });
     }
-    this.setState({ isDisabledInputs: true });
+    this.setState({ isSeachBusy: true });
     aliStore.saveModel(model);
     return search
       .go(model, this.searchCallback)
       .then(items => this.setState({ items }))
       .catch((err: Error) => log.error(err))
-      .finally(() => this.setState({ isDisabledInputs: false }));
+      .finally(() => this.setState({ isSeachBusy: false }));
   };
 
   handleResetClick = () => {
@@ -131,8 +133,11 @@ class AppContainer extends Component<any, any> {
             this.formRef = el;
           }}
           className={styles.form}
+          onStopSubmit={() => {
+            search.cancel();
+          }}
           onValidSubmit={this.onValidSubmit}
-          textSubmit="SEARCH"
+          textSubmit={this.state.isSeachBusy ? "CANCEL SEARCH" : "SEARCH"}
           defaultModel={this.state.defaultModel}
           footer={this.renderFormFooter()}
           buttons={<SecondaryBtn onClick={this.handleResetClick}>RESET</SecondaryBtn>}
@@ -140,7 +145,7 @@ class AppContainer extends Component<any, any> {
         >
           <div className={styles.inputGroup}>
             <TextInput
-              disabled={this.state.isDisabledInputs}
+              disabled={this.state.isSeachBusy}
               label="Search in Aliexpress"
               name="textAli"
               htmlName="searchAli"
@@ -149,21 +154,21 @@ class AppContainer extends Component<any, any> {
           </div>
           <div className={styles.inputGroup}>
             <NumberInput //
-              disabled={this.state.isDisabledInputs}
+              disabled={this.state.isSeachBusy}
               label="Min price"
               name="minPrice"
               placeholder="#.##"
               isFloat
             />
             <NumberInput //
-              disabled={this.state.isDisabledInputs}
+              disabled={this.state.isSeachBusy}
               label="Max price"
               name="maxPrice"
               placeholder="#.##"
               isFloat
             />
             <Dropdown
-              disabled={this.state.isDisabledInputs}
+              disabled={this.state.isSeachBusy}
               label="Sort"
               className={styles.inputPriceSort}
               name="sort"
@@ -247,9 +252,13 @@ chrome?.runtime?.onMessage &&
     }
   });
 
-window.onbeforeunload = () => {
-  if (search.isBusy) {
-    return "Leave site? Search process will be stopped.";
-  }
-  return false;
-};
+if (!DEV_SERVER) {
+  window.addEventListener("beforeunload", (e: BeforeUnloadEvent) => {
+    if (search.isBusy) {
+      e.returnValue = "Leave site? Search process will be stopped.";
+      return e.returnValue;
+    }
+    delete e.returnValue;
+    return false;
+  });
+}

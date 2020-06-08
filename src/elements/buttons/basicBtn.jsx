@@ -6,13 +6,16 @@ export default function BasicBtn(props) {
   const elProps = { ...props };
   if (props.isPending) {
     elProps["data-pending"] = true;
-    elProps.onClick = e => {
-      e.preventDefault();
-    };
+    if (!props.enablePendingClick) {
+      elProps.onClick = e => {
+        e.preventDefault();
+      };
+    }
   }
   delete elProps.isDenied;
   delete elProps.isPending;
   delete elProps.spinnerClass;
+  delete elProps.enablePendingClick;
 
   return (
     <button //
