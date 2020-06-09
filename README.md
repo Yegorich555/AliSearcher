@@ -32,9 +32,9 @@ With this extensions you can do everything mentioned above!
 
 ## Development
 
-Webpack version: 4.x
-NodeJS version: 10+
-React version: 16.x
+- Webpack version: 4.x
+- NodeJS version: 10+
+- React version: 16.x
 
 ### How to run project
 
