@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "AliSearcher",
+  "description": "Rich searcher for aliexpress",
+  "version": "1.0",
+  "icons": {
+    "19": "icon.png"
+  },
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["tabs", "\u003Call_urls>", "unlimitedStorage"],
+  "web_accessible_resources": ["*.css"]
+}

@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD024 -->
 <!-- markdownlint-disable MD041 -->
 
-## 2.0 (Jun xx, 2020)
+## 2.0 (Jun 9, 2020)
 
 * implement Chrome extension instead of WebAPI. Rewrite solution
 

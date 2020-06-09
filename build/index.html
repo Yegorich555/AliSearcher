@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <title>UI_test</title>
+
+    <!-- optional: it clear console (for debug purpose) -->
+    <script>
+        console.clear();
+        window.runConfigs = {
+            searchAjaxUrl: '/glosearch/api/product?ltype=affiliate&trafficChannel=af&d=y&CatId=0&SearchText=hc-12&SortType=default&page=1',
+        };
+        const items = [];
+        for (let i = 0; i < 60; ++i) {
+            items.push({
+                "imageHeight": 220,
+                "imageUrl": "//ae01.alicdn.com/kf/H69c31adab27545eb8448b0fb4b10621fR/214-Square-rectangle-diamond-triangle-circle-3D-Back-glue-Nail-decal-Nail-sticker-Nail-decoration-Nail.jpg_220x220xz.jpg",
+                "imageWidth": 220,
+                "logisticsDesc": "Free Shipping",
+                "price": "US $1." + i,
+                "productDetailUrl": "//www.aliexpress.com/item/4001063100931.html?algo_pvid=bd352f22-b4b1-4a6b-b29d-e80c8dbf66e5&algo_expid=bd352f22-b4b1-4a6b-b29d-e80c8dbf66e5-8&btsid=0be3769015903973883581525e40fc&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_",
+                "productId": 40010631009 + i,
+                "productType": "ordinary_product",
+                "saleMode": "single-piece_sale",
+                "saleUnit": "piece",
+                "store": {
+                    "aliMemberId": 239390991,
+                    "storeId": 53821 + i,
+                    "storeName": "LannieNailstickerwholesale Store",
+                    "storeUrl": "//www.aliexpress.com/store/5382148"
+                },
+                "tags": {},
+                "title": "Nail-Decal Square Rectangle Diamond 3D 214 Circle Back-Glue",
+                "traceInfo": {
+                    "displayCategoryId": "200002553",
+                    "algo_pvid": "bd352f22-b4b1-4a6b-b29d-e80c8dbf66e5",
+                    "postCategoryId": "200001152",
+                    "ownerMemberId": "cn1529213680jxck",
+                    "algo_expid": "bd352f22-b4b1-4a6b-b29d-e80c8dbf66e5-8"
+                }
+            })
+        }
+        window.runParams = {
+            resultCount: 201,
+            items: items
+        }
+    </script>
+<link href="/content.css" rel="stylesheet"></head>
+
+<body>
+    <noscript>
+        <strong>
+            We're sorry but this doesn't work properly without JavaScript enabled.
+            Please enable it to continue.
+        </strong>
+    </noscript>
+    <!-- built files will be auto injected -->
+<script type="text/javascript" src="/chunk-vendors.js"></script><script type="text/javascript" src="/content.js"></script><script type="text/javascript" src="/background.js"></script></body>
