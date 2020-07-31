@@ -36,10 +36,15 @@ export default class Product {
   unit: string;
   lotSizeNum?: number;
   lotSizeText?: string;
-  get unitPrice(): number {
+
+  get unitPriceRaw(): number {
     const min = this.priceTotalMin;
     if (!this.lotSizeNum) return min;
-    return roundPrice(min / this.lotSizeNum);
+    return min / this.lotSizeNum;
+  }
+
+  get unitPrice(): number {
+    return roundPrice(this.unitPriceRaw);
   }
 
   rating: number;

@@ -159,7 +159,7 @@ class SearchClass {
           break;
         case "priceMinToMaxPcs":
           r = r.sort((a, b) => {
-            let sr = a.unitPrice - b.unitPrice;
+            let sr = a.unitPriceRaw - b.unitPriceRaw;
             if (sr === 0) {
               sr = (a.storeOrderCount || 0) - (b.storeOrderCount || 0);
               if (sr === 0) {
